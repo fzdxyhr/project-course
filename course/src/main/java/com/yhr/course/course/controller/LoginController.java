@@ -20,14 +20,14 @@ public class LoginController {
     @Autowired
     private UserRepository userRepository;
 
-    public String login(@RequestBody UserVo userVo) throws Exception {
+    public boolean login(@RequestBody UserVo userVo) throws Exception {
         if (userVo == null) {
-            return null;
+            return false;
         }
         User user = userRepository.findByAccountAndPassword(userVo.getAccount(), userVo.getPassword());
         if (user == null) {
             throw new ServiceException("不存在对应的【" + userVo.getAccount() + "】账户");
         }
-        return "";
+        return true;
     }
 }
