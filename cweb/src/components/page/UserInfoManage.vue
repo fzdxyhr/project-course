@@ -71,7 +71,7 @@
 					this.tableData = message.items;
 					this.page.total = message.total;
 				}, (response) => {
-					this.$message.error('获取老师失败');
+					this.$message.error('获取用户失败');
 				});
 			},
 			handleUpdate(){
