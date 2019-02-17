@@ -24,7 +24,7 @@ public class LoginController {
         if (userVo == null) {
             return false;
         }
-        User user = userRepository.findByAccountAndPassword(userVo.getAccount(), userVo.getPassword());
+        User user = userRepository.findByAccountAndPasswordAndIsAdminAndStatus(userVo.getAccount(), userVo.getPassword(), 1, 1);
         if (user == null) {
             throw new ServiceException("不存在对应的【" + userVo.getAccount() + "】账户");
         }
