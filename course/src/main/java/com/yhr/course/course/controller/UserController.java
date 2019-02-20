@@ -3,8 +3,14 @@ package com.yhr.course.course.controller;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.PagerHelper;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -43,6 +49,23 @@ public class UserController {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)
     public User get(@PathVariable("id") Integer id) throws Exception {
         return userService.get(id);
+    }
+
+    @ApiOperation(value = "下载学生表模板", notes = "")
+    @GetMapping(value = "/users/download")
+    public void downloadTemplate(HttpServletResponse response) throws Exception {
+        userService.downloadTemplate(response);
+    }
+
+    @ApiOperation(value = "导入学生表数据", notes = "")
+    @PostMapping(value = "/users/import")
+    public void parseExcel(@ApiParam(value = "附件流", required = true) MultipartHttpServletRequest multiReq) throws Exception {
+        MultipartFile multipartFile = null;
+        for (String key : multiReq.getMultiFileMap().keySet()) {
+            multipartFile = multiReq.getFile(key);
+            break;
+        }
+        userService.parseExcel(multipartFile);
     }
 
 }

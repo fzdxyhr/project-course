@@ -19,12 +19,12 @@
 				<ul class="fixclear">
 					<li>
 						<div>
-							<el-form :model="loginData" :rules="registerRules" ref="registerData">
+							<el-form :model="registerData" :rules="registerRules" ref="registerData">
 								<!--<el-form-item prop="email">
 									<el-input v-model="loginData.email" placeholder="邮箱" auto-complete="off"></el-input>
 								</el-form-item>-->
-								<el-form-item prop="username">
-									<el-input type="text" placeholder="用户名" v-model="registerData.username" auto-complete="off"></el-input>
+								<el-form-item prop="user_name">
+									<el-input type="text" placeholder="用户名" v-model="registerData.user_name" auto-complete="off"></el-input>
 								</el-form-item>
 								<el-form-item prop="password">
 									<el-input type="password" placeholder="密码" v-model="registerData.password" auto-complete="off"></el-input>
@@ -44,8 +44,8 @@
 					<li>
 						<div>
 							<el-form :model="loginData" :rules="loginRules" ref="loginData">
-								<el-form-item prop="username">
-									<el-input type="text" placeholder="用户名" v-model="loginData.username" auto-complete="off"></el-input>
+								<el-form-item prop="user_name">
+									<el-input type="text" placeholder="用户名" v-model="loginData.user_name" auto-complete="off"></el-input>
 								</el-form-item>
 								<el-form-item prop="password">
 									<el-input type="password" placeholder="密码" v-model="loginData.password" auto-complete="off"></el-input>
@@ -70,14 +70,14 @@
 	export default {
 		data() {
 			var checkUserName = (rule, value, callback) => {
-				if(value === '') {
+				if (value === '') {
 					callback(new Error('请输入用户名'));
 				} else {
 					callback();
 				}
 			};
 			var checkPassWord = (rule, value, callback) => {
-				if(value === '') {
+				if (value === '') {
 					callback(new Error('请输入密码'));
 				} else {
 					callback();
@@ -90,17 +90,15 @@
 				isBtnLogin: false,
 				isBtnRegister: false,
 				loginData: {
-					'username': '',
+					'user_name': '',
 					'password': '',
 				},
 				registerData: {
-					'email': '',
-					'username': '',
-					'password': '',
-					'checkPass': ''
+					'user_name': '',
+					'password': ''
 				},
 				loginRules: {
-					'username': [{
+					'user_name': [{
 						validator: checkUserName,
 						trigger: 'blur,change'
 					}],
@@ -121,22 +119,40 @@
 			},
 			login(formName) {
 				this.$refs[formName].validate((valid) => {
-					if(valid) {
+					if (valid) {
 						this.isBtnLogin = !this.isBtnLogin;
-						this.$router.push('/Content');
+						this.loginData.password = this.$md5(this.loginData.password);
+						this.$http.post("/v1/login", this.loginData).then((response) => {
+							let message = response.data;
+							console.log('message:',message)
+							localStorage.setItem("USER",JSON.stringify(message));
+							if (message) {
+								this.$router.push('/Content');
+							}
+						}, (response) => {
+							this.$message.error('登录失败');
+						});
 					} else {
-						this.$message.error('登录失败');
 						return false;
 					}
 				});
 			},
 			register(formName) {
 				this.$refs[formName].validate((valid) => {
-					if(valid) {
+					if (valid) {
 						this.isBtnRegister = !this.isBtnRegister;
-						//this.$router.push('/content');
+						this.registerData.password = this.$md5(this.registerData.password);
+						this.$http.post("/v1/register", this.registerData).then((response) => {
+							console.log(response)
+							let message = response.data;
+							this.switchSignin();
+							this.$message.success('注册成功');
+						}, (response) => {
+							this.isBtnRegister = !this.isBtnRegister;
+							this.$message.error('注册失败');
+						});
 					} else {
-						this.$message.error('登录失败');
+						this.$message.error('注册失败');
 						return false;
 					}
 				});

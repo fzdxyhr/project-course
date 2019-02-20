@@ -13,7 +13,7 @@
       				</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>
-							<a href="/logout">退出</a>
+							<a style="padding: 2px 30px;" href="/logout">退出</a>
 						</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
@@ -32,6 +32,12 @@
 					name: "Admin",
 					icon: iconImg
 				}
+			}
+		},
+		mounted() {
+			const user = JSON.parse(localStorage.getItem("USER"));
+			if(user) {
+				this.user.name = user.user_name;
 			}
 		},
 		methods: {

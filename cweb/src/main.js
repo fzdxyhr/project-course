@@ -6,7 +6,12 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-default/index.css'
 import './assets/css/reset1.2.css'
 import './assets/css/pagePublic.css'
+import md5 from 'js-md5'
+
 Vue.config.productionTip = false
+
+Vue.prototype.$md5 = md5
+
 Vue.use(ElementUI);
 Vue.use(vueResource);
 new Vue({

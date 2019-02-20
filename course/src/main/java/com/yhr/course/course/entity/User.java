@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "t_user")
+@Table(name = "s_user")
 public class User {
 
     @Id

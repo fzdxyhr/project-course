@@ -7,6 +7,7 @@ import com.yhr.course.course.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -20,14 +21,30 @@ public class LoginController {
     @Autowired
     private UserRepository userRepository;
 
-    public boolean login(@RequestBody UserVo userVo) throws Exception {
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public User login(@RequestBody UserVo userVo) throws Exception {
         if (userVo == null) {
-            return false;
+            return new User();
         }
         User user = userRepository.findByAccountAndPasswordAndIsAdminAndStatus(userVo.getAccount(), userVo.getPassword(), 1, 1);
         if (user == null) {
             throw new ServiceException("不存在对应的【" + userVo.getAccount() + "】账户");
         }
+        return user;
+    }
+
+    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    public boolean register(@RequestBody UserVo userVo) throws Exception {
+        if (userVo == null) {
+            return false;
+        }
+        User user = new User();
+        user.setAccount(userVo.getAccount());
+        user.setUserName(userVo.getUserName());
+        user.setPassword(userVo.getPassword());
+        user.setIsAdmin(1);
+        user.setStatus(1);
+        userRepository.save(user);
         return true;
     }
 }

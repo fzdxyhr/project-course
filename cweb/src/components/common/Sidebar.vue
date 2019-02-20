@@ -3,7 +3,7 @@
 		<el-submenu index="user">
 			<template slot="title"><i class="el-icon-menu"></i>用户管理</template>
 			<el-menu-item index="UserInfoManage">信息管理</el-menu-item>
-			<el-menu-item index="PermissionsManage">权限管理</el-menu-item>
+			<!-- <el-menu-item index="PermissionsManage">权限管理</el-menu-item> -->
 		</el-submenu>
 		<el-menu-item index="CourseManage">
 			<i class="el-icon-setting"></i>课程管理

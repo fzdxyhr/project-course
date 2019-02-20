@@ -2,7 +2,7 @@
 	<div>
 		<div class="top-content">
 			<el-button type="primary" @click="go2Add">新增用户</el-button>
-			<el-button type="primary">导入用户</el-button>
+			<el-button type="primary" @click="go2Import">导入用户</el-button>
 		</div>
 		<div class="secction diyscrollbar">
 			<el-table :data="tableData" border>
@@ -44,13 +44,22 @@
 				 :page-sizes="[10, 20, 50, 100]" :page-size="page.page_size" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
 				</el-pagination>
 			</div>
-
 		</div>
+		<rjDialog></rjDialog>
 	</div>
 </template>
 
 <script>
+	import rjDialog from '@components/common/dialog.vue'
+	import UploadImportData from '@components/common/UploadImportData.vue'
+	import addUser from '@components/page/user/addUser.vue'
+	
 	export default {
+		components: {
+			rjDialog,
+			addUser,
+			UploadImportData
+		},
 		data() {
 			return {
 				tableData: [],
@@ -78,7 +87,30 @@
 				
 			},
 			go2Add(){
-				
+				this.rjDialog.
+				title("新增用户").
+				width("600px").
+				top("2%").
+				currentView(addUser, {
+				}).
+				showClose(true).
+				then((opt) => {
+					this.findUsers();
+				}).show();
+			},
+			go2Import(){
+				this.rjDialog.
+				title("导入学生").
+				width("600px").
+				top("2%").
+				currentView(UploadImportData, {
+					uploadUrl:"/v1/users/import",
+					downloadUrl:"/v1/users/download"
+				}).
+				showClose(true).
+				then((opt) => {
+					this.findUsers();
+				}).show();
 			},
 			handleSizeChange(val) {
 				this.page.page_size = val;

@@ -1,5 +1,6 @@
 package com.yhr.course.course.service.impl;
 
+import com.yhr.course.course.contants.Contants;
 import com.yhr.course.course.dao.CourseRepository;
 import com.yhr.course.course.dao.TagRepository;
 import com.yhr.course.course.entity.Course;
@@ -102,14 +103,13 @@ public class CourseServiceImpl implements CourseService {
             return "";
         }
         String fileName = multipartFile.getOriginalFilename();
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource(".").getPath();
         String relativePath = "image";
         InputStream inputStream = multipartFile.getInputStream();
-        File destDir = new File(rootPath + relativePath);
+        File destDir = new File(Contants.UPLOAD_FILE_PATH + relativePath);
         if (!destDir.exists()) {
             FileUtils.forceMkdir(destDir);
         }
-        File destFile = new File(rootPath + relativePath + File.separator + fileName);
+        File destFile = new File(Contants.UPLOAD_FILE_PATH + relativePath + File.separator + fileName);
         OutputStream outputStream = new FileOutputStream(destFile);
         int len = 0;
         byte[] buffer = new byte[1024];
@@ -121,14 +121,14 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void downloadImage(String relativePath, HttpServletResponse response) throws Exception {
-        String rootPath = Thread.currentThread().getContextClassLoader().getResource(".").getPath();
-        String path = rootPath +"image" +File.separator+ relativePath;
+        String rootPath = Contants.UPLOAD_FILE_PATH;
+        String path = rootPath + "image" + File.separator + relativePath;
         OutputStream outputStream = response.getOutputStream();
         InputStream iStream = new FileInputStream(new File(path));
         int len = 0;
         byte[] buffer = new byte[1024];
         while ((len = iStream.read(buffer)) != -1) {
-            outputStream.write(buffer,0,len);
+            outputStream.write(buffer, 0, len);
         }
     }
 }
