@@ -9,6 +9,7 @@ import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.ExcelUtils;
+import com.yhr.course.course.utils.MD5Utils;
 import com.yhr.course.course.utils.PagerHelper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -113,7 +114,7 @@ public class UserServiceImpl implements UserService {
             User user = new User();
             Map<String, Integer> sexMap = getSexMap();
             user.setUserName(datas.get(i).length > 0 ? datas.get(i)[1].trim() : null);
-            user.setPassword(datas.get(i).length > 1 ? datas.get(i)[1].trim() : null);
+            user.setPassword(datas.get(i).length > 1 ? MD5Utils.MD5Encode(datas.get(i)[1].trim(), "utf8") : null);
             user.setSex(datas.get(i).length > 2 ? Integer.parseInt(sexMap.get(datas.get(i)[2].trim()).toString()) : null);
             user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim() : null);
             user.setTelephone(datas.get(i).length > 4 ? datas.get(i)[4].trim() : null);
