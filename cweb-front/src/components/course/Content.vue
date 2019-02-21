@@ -8,27 +8,32 @@
 
 		<el-row>
 			<el-col :span="16">
-				<div class="c-describe">
-					简介：{{course.description}}
-				</div>
-				<el-collapse>
-					<el-collapse-item v-for="(s,i) in course.sections" :title="(i+1+'.')+s.name" :name="i">
-						{{s.description}}
-						<div class="labels">
-							<span v-for="tag in s.tags">
-							{{tag.name}}
-							</span>
+				<el-tabs v-model="activeName">
+					<el-tab-pane label="基本信息" name="first">
+						<div class="c-describe">
+							简介：{{course.description}}
 						</div>
-						<div class="articles-title">
-							<div v-for="tag in s.tags">
-								<a href="article.html" target="view_window" v-for="(a,j) in tag.articles">{{(i+1)+'.'+(j+1)+a.title}}</a>
-							</div>
-							<span class="getMore-articles-title" title="获取更多">
-								获取更多<i class="el-icon-caret-bottom"></i>
-							</span>
-						</div>
-					</el-collapse-item>
-				</el-collapse>
+						<el-collapse>
+							<el-collapse-item v-for="(s,i) in course.sections" :title="(i+1+'.')+s.name" :name="i">
+								{{s.description}}
+								<div class="labels">
+									<span v-for="tag in s.tags">
+										{{tag.name}}
+									</span>
+								</div>
+								<div class="articles-title">
+									<div v-for="tag in s.tags">
+										<a href="article.html" target="view_window" v-for="(a,j) in tag.articles">{{(i+1)+'.'+(j+1)+a.title}}</a>
+									</div>
+									<span class="getMore-articles-title" title="获取更多">
+										获取更多<i class="el-icon-caret-bottom"></i>
+									</span>
+								</div>
+							</el-collapse-item>
+						</el-collapse>
+					</el-tab-pane>
+					<el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+				</el-tabs>
 			</el-col>
 			<el-col :span="8">
 				<course-aside :prompt-content="course.prompt"></course-aside>
@@ -37,7 +42,12 @@
 	</div>
 </template>
 <script>
-	import { Collapse, CollapseItem, Row, Col } from 'element-ui'
+	import {
+		Collapse,
+		CollapseItem,
+		Row,
+		Col
+	} from 'element-ui'
 	import CourseAside from './Aside.vue'
 	export default {
 		name: 'courseContehtmlnt',
@@ -56,6 +66,7 @@
 		data() {
 			return {
 				course: {},
+				activeName: "first"
 			};
 		},
 		methods: {
