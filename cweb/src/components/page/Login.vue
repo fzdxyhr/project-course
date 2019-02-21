@@ -48,7 +48,7 @@
 									<el-input type="text" placeholder="用户名" v-model="loginData.user_name" auto-complete="off"></el-input>
 								</el-form-item>
 								<el-form-item prop="password">
-									<el-input type="password" placeholder="密码" v-model="loginData.password" auto-complete="off"></el-input>
+									<el-input type="password" placeholder="密码" v-model="loginData.password" auto-complete="off"  @keyup.enter.native="login('loginData')"></el-input>
 								</el-form-item>
 								<el-form-item>
 									<el-button type="primary" :loading="isBtnLogin" @click="login('loginData')">登录</el-button>
@@ -120,7 +120,7 @@
 			login(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						this.isBtnLogin = !this.isBtnLogin;
+						this.isBtnLogin = true;
 						this.loginData.password = this.$md5(this.loginData.password);
 						this.$http.post("/v1/login", this.loginData).then((response) => {
 							let message = response.data;
@@ -130,7 +130,8 @@
 								this.$router.push('/Content');
 							}
 						}, (response) => {
-							this.$message.error('登录失败');
+							this.$message.error('账号或密码错误');
+							this.isBtnLogin = false;
 						});
 					} else {
 						return false;
@@ -140,7 +141,7 @@
 			register(formName) {
 				this.$refs[formName].validate((valid) => {
 					if (valid) {
-						this.isBtnRegister = !this.isBtnRegister;
+						this.isBtnRegister = true;
 						this.registerData.password = this.$md5(this.registerData.password);
 						this.$http.post("/v1/register", this.registerData).then((response) => {
 							console.log(response)
@@ -148,7 +149,7 @@
 							this.switchSignin();
 							this.$message.success('注册成功');
 						}, (response) => {
-							this.isBtnRegister = !this.isBtnRegister;
+							this.isBtnRegister = false;
 							this.$message.error('注册失败');
 						});
 					} else {
