@@ -1,8 +1,7 @@
 <template>
 	<article>
 		<section>
-			<homePage-carousel>
-			</homePage-carousel>
+			<homePage-carousel></homePage-carousel>
 		</section>
 		<section>
 			<homePage-content></homePage-content>
@@ -13,11 +12,14 @@
 	//主页内容
 	import Carousel from './Carousel.vue'
 	import Content from './Content.vue'
-	import { Row, Col } from 'element-ui'
+	import {
+		Row,
+		Col
+	} from 'element-ui'
 	export default {
 		name: 'homePageLayout',
 		components: {
-			'homePage-carousel':Carousel,
+			'homePage-carousel': Carousel,
 			'homePage-content': Content,
 		},
 	}

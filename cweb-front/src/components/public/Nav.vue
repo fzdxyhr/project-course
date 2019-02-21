@@ -3,31 +3,25 @@
 		<nav>
 			<el-menu class="menu-ul" theme="dark" :default-active="activeIndex" menu-trigger="hover" mode="horizontal">
 				<li class="nav-logo">
-					<a href="index.html">iCollege</a>
+					<a href="javascript:" @click="go2Page('courseManage')">iCollege</a>
 				</li>
-
-				<el-menu-item index="1">
-					<a href="homePage.html">
-						主页</a>
+				<el-menu-item index="1" @click="go2Page('courseManage')">
+					主页
 				</el-menu-item>
-
-				<el-menu-item index="2">
-					<a href="articlesList.html">
-						文章列表
-					</a>
+				<el-menu-item index="2" @click="go2Page('articleManage')">
+					文章列表
 				</el-menu-item>
-
-				<li class="nav-search">
+				<!-- <li class="nav-search">
 					<el-input placeholder="搜索文章" icon="search" v-model="search" :on-icon-click="handleIconClick">
 					</el-input>
-				</li>
+				</li> -->
 				<li class="nav-user">
 					<el-dropdown>
 						<span class="el-dropdown-link">
-   							<a href="#" class="user-icon">
+							<a href="#" class="user-icon">
 								<img src="../../../static/img/carousel.jpg" />
 							</a>
-  						</span>
+						</span>
 						<el-dropdown-menu slot="dropdown">
 							<el-dropdown-item>
 								<a href="#">
@@ -49,23 +43,13 @@
 </template>
 
 <script>
-	//导航栏
-	import { Menu, MenuItem, Submenu, Input, Dropdown, DropdownMenu, DropdownItem } from 'element-ui'
 	export default {
-		components: {
-			'el-menu': Menu,
-			'el-menu-item': MenuItem,
-			'el-submenu': Submenu,
-			'el-input': Input,
-			'el-dropdown': Dropdown,
-			'el-dropdown-menu': DropdownMenu,
-			'el-dropdown-item': DropdownItem,
-		},
+		components: {},
 		name: 'nav',
-		props: ['activeIndex'],
 		data: function() {
 			return {
-				search: ''
+				search: '',
+				activeIndex:"1"
 			};
 		},
 		methods: {
@@ -75,6 +59,11 @@
 			handleIconClick(ev) {
 				console.log(ev);
 			},
+			go2Page(url) {
+				this.$router.push({
+					name: url
+				});
+			}
 		}
 	}
 </script>
@@ -101,6 +90,7 @@
 		line-height: 60px;
 		font-size: 22px;
 	}
+
 	/*.nav-logo img {
 		max-width: 60px;
 		max-height: 40px;

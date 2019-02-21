@@ -19,7 +19,6 @@
 </template>
 
 <script>
-	import { Button } from 'element-ui'
 	export default {
 		name: 'courseList',
 		props: ['searchText'],
@@ -32,15 +31,13 @@
 
 			}
 		},
-		components: {
-			'el-button': Button,
-		},
 		created() {
 			this.getCourses();
 		},
 		methods: {
 			getCourses() { //获取数据(页数，每页多少条，关键词)
-				this.$http.get("../../../static/testData/courses.json?searchStr=" + this.searchText + "&page=" + this.page + "&size=" + this.rows).then((response) => {
+				this.$http.get("../../../static/testData/courses.json?searchStr=" + this.searchText + "&page=" + this.page +
+					"&size=" + this.rows).then((response) => {
 					//this.courseslist = response.data.data.content;
 					console.log(response.data);
 					response.data.forEach((c) => {

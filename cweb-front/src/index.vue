@@ -2,7 +2,7 @@
 	<div class="home">
 		<v-head></v-head>
 		<div class="content">
-      sssssssssssss
+			<router-view></router-view>
 		</div>
 		<v-footer></v-footer>
 	</div>

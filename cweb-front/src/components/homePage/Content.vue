@@ -22,11 +22,12 @@
 						<span class="label" v-for="(tag,index) in tags" v-if="index<4">
 							{{tag.name}}
 						</span>
-						<el-button @click="btnShowMordLabel">{{labelMore.btnText}}<i :style="{transform: 'rotate('+labelMore.iconRotate+'deg)'}" class="el-icon-caret-bottom"></i></el-button>
+						<el-button @click="btnShowMordLabel">{{labelMore.btnText}}<i :style="{transform: 'rotate('+labelMore.iconRotate+'deg)'}"
+							 class="el-icon-caret-bottom"></i></el-button>
 						<div class="cll-more" :class="{showMore:this.labelMore.state}">
 							<span class="label" v-for="(tag,index) in tags" v-if="index>=4">
-							{{tag.name}}
-						</span>
+								{{tag.name}}
+							</span>
 						</div>
 					</div>
 				</el-col>
@@ -37,17 +38,11 @@
 </template>
 <script scoped>
 	import coursesList from './coursesList.vue'
-	import { Input, Row, Col, Tag, Button } from 'element-ui'
 	//主页走马灯下的内容
 	export default {
 		name: "home-content",
 		components: {
 			coursesList,
-			'el-input': Input,
-			'el-row': Row,
-			'el-col': Col,
-			'el-tag': Tag,
-			'el-button': Button,
 		},
 		data: () => {
 			return {
@@ -66,7 +61,7 @@
 			},
 			btnShowMordLabel() {
 				const l = this.labelMore;
-				if(!l.state) {
+				if (!l.state) {
 					//未展开
 					l.state = !l.state;
 					l.btnText = '收起';
@@ -82,7 +77,7 @@
 			getAllTags() {
 				this.$http.get('../../../static/testData/tags.json').then((response) => {
 					//console.log(response.data);
-					this.tags=response.data;
+					this.tags = response.data;
 				}, (response) => {
 					console.log("获取所有标签失败");
 				});
@@ -95,7 +90,7 @@
 </script>
 <style>
 	.content {
-		margin-top: 50px;
+		margin-top: 5px;
 	}
 
 	.title-coursesList {
@@ -152,7 +147,8 @@
 		margin: 0 20px 20px 0;
 	}
 
-	.cl-labels .label:hover ,.cl-labels .label.active{
+	.cl-labels .label:hover,
+	.cl-labels .label.active {
 		border-color: #20A0FF;
 		color: #1D8CE0;
 	}

@@ -2,7 +2,6 @@
 	<article>
 		<section>
 			<div class="search">
-
 				<el-input placeholder="文章名/标签名" icon="search" v-model="searchInput" :on-icon-click="handleIconClick">
 				</el-input>
 			</div>
@@ -30,17 +29,13 @@
 	</article>
 </template>
 <script>
-	import { Row, Col, Input } from 'element-ui'
 	import ArticlesList from './ArticlesList.vue'
-	import Aside from '../public/Aside.vue'
+	import Aside from '@components/public/Aside.vue'
 	export default {
 		name: 'articles',
 		components: {
-			'el-row': Row,
-			'el-col': Col,
 			'articles-iist': ArticlesList,
 			'articles-aside': Aside,
-			'el-input': Input,
 		},
 		data() {
 			return {
@@ -78,15 +73,16 @@
 			getArticlesListBytagId(tagId) {
 				this.isGetAll = false;
 				this.tagId = tagId;
-				this.$http.get("../../../static/testData/articles.json?page=" + this.page + "&size=" + this.rows + "&tid=" + tagId).then((response) => {
-					this.articlesList = response.data;
-				}, (response) => {
-					this.$message.error('获取文章失败');
-				});
+				this.$http.get("../../../static/testData/articles.json?page=" + this.page + "&size=" + this.rows + "&tid=" + tagId)
+					.then((response) => {
+						this.articlesList = response.data;
+					}, (response) => {
+						this.$message.error('获取文章失败');
+					});
 			},
 			laodMore() {
 				this.rows += 10;
-				if(this.isGetAll) {
+				if (this.isGetAll) {
 					this.getArticlesList();
 				} else {
 					this.getArticlesListBytagId(this.tagId)

@@ -7,8 +7,6 @@
 </template>
 
 <script>
-	import './assets/css/reset1.2.css'
-	import 'element-ui/lib/theme-default/index.css'
 	import Layout from './components/homepage/Layout.vue'
 	import Nav from './components/public/Nav.vue'
 	import Footer from './components/public/Footer.vue'
@@ -21,7 +19,6 @@
 		data: () => {
 			return {
 				index: "1",
-
 			}
 		}
 	}
