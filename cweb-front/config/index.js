@@ -4,10 +4,6 @@ var path = require('path')
 module.exports = {
 	build: {
 		env: require('./prod.env'),
-		homePage: path.resolve(__dirname, '../dist/homePage.html'),
-		course: path.resolve(__dirname, '../dist/course.html'),
-		article: path.resolve(__dirname, '../dist/article.html'),
-		articlesList: path.resolve(__dirname, '../dist/articlesList.html'),
 		assetsRoot: path.resolve(__dirname, '../dist'),
 		assetsSubDirectory: 'showPage',
 		assetsPublicPath: './',

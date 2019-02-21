@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
+
 /**
  * Created by Administrator on 2019/2/17.
  */
@@ -44,6 +46,7 @@ public class LoginController {
         user.setPassword(userVo.getPassword());
         user.setIsAdmin(1);
         user.setStatus(1);
+        user.setCreateTime(new Date());
         userRepository.save(user);
         return true;
     }
