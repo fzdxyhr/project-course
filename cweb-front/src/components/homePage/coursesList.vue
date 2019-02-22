@@ -1,20 +1,19 @@
 <template>
 	<div class="courseslist">
-		<a href="course.html" target="view_window" class="c-item" v-for="c in courseslist">
+		<div @click="go2CourseDetail" target="view_window" class="c-item" v-for="c in courseslist">
 			<img class="c-img" :src="c.imgUrl" />
 			<div class="course">
-				<div class="c-title">{{c.name}}</div>
+				<div class="title">{{c.name}}</div>
 				<div class="c-describe">
 					{{c.description}}
 				</div>
 			</div>
 			<div class="c-label">
 			</div>
-		</a>
+		</div>
 		<div class="getMode">
 			<el-button type="primary" @click="getModeCourse" :loading="loadMoreCourse">加载更多</el-button>
 		</div>
-
 	</div>
 </template>
 
@@ -54,96 +53,101 @@
 				this.loadMoreCourse = true;
 				this.getCourses()
 			},
+      go2CourseDetail(){
+        this.$router.push({
+          name:"courseDetail"
+        })
+      }
 		}
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.courseslist {
 		overflow: hidden;
 		margin-bottom: 20px;
 		position: relative;
 		padding-bottom: 60px;
+    
+    .c-item {
+    		width: 260px;
+    		height: 272px;
+    		background: #fff;
+    		display: inline-block;
+    		position: relative;
+    		cursor: pointer;
+    		border-radius: 4px;
+    		-webkit-box-shadow: 0 8px 16px rgba(7, 17, 27, .2);
+    		-moz-box-shadow: 0 8px 16px rgba(7, 17, 27, .2);
+    		box-shadow: 0 8px 16px rgba(7, 17, 27, .2);
+    		overflow: hidden;
+    		margin: 20px 20px 30px;
+    	}
+    
+    	.c-item:hover .course {
+    		top: 50px;
+    	}
+    
+    	.c-img {
+    		width: 100%;
+    		height: 142px;
+    		border-radius: 4px;
+    		border-top-left-radius: 5px;
+    		border-top-right-radius: 5px;
+    	}
+    
+    	.c-label {
+    		position: absolute;
+    		bottom: 0;
+    		left: 0;
+    		right: 0;
+    		height: 29px;
+    		background-color: #FFFFFF;
+    		padding: 15px 28px 0;
+    		overflow: hidden;
+    		color: #324057;
+    	}
+    
+    	.course {
+    		background-color: #FFFFFF;
+    		position: absolute;
+    		left: 0;
+    		right: 0;
+    		top: 110px;
+    		height: 150px;
+    		transition: top .5s;
+    		padding: 30px 28px 0;
+    		text-align: left;
+    	}
+    
+    	.title {
+    		max-height: 48px;
+    		font-size: 16px;
+    		line-height: 24px;
+    		color: #07111b;
+    		font-weight: 700;
+    		margin-bottom: 6px;
+    		padding-bottom: 15px;
+    		border-bottom: 1px solid #d9dde1;
+    	}
+    
+    	.c-describe {
+    		color: #93999f;
+    		font-size: 12px;
+    		line-height: 20px;
+    	}
+    
+    	.getMode {
+    		position: absolute;
+    		bottom: 0;
+    		left: 50%;
+    		width: 120px;
+    		margin-left: -60px;
+    	}
+      .el-button {
+      	width: 120px;
+      	text-align: center;
+      }
 	}
 
-	.c-item {
-		width: 260px;
-		height: 272px;
-		background: #fff;
-		display: inline-block;
-		position: relative;
-		cursor: pointer;
-		border-radius: 4px;
-		-webkit-box-shadow: 0 8px 16px rgba(7, 17, 27, .2);
-		-moz-box-shadow: 0 8px 16px rgba(7, 17, 27, .2);
-		box-shadow: 0 8px 16px rgba(7, 17, 27, .2);
-		overflow: hidden;
-		margin: 20px 20px 30px;
-	}
-
-	.c-item:hover .course {
-		top: 50px;
-	}
-
-	.c-img {
-		width: 100%;
-		height: 142px;
-		border-radius: 4px;
-		border-top-left-radius: 5px;
-		border-top-right-radius: 5px;
-	}
-
-	.c-label {
-		position: absolute;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		height: 29px;
-		background-color: #FFFFFF;
-		padding: 15px 28px 0;
-		overflow: hidden;
-		color: #324057;
-	}
-
-	.course {
-		background-color: #FFFFFF;
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 110px;
-		height: 150px;
-		transition: top .5s;
-		padding: 30px 28px 0;
-		text-align: left;
-	}
-
-	.c-title {
-		max-height: 48px;
-		font-size: 16px;
-		line-height: 24px;
-		color: #07111b;
-		font-weight: 700;
-		margin-bottom: 6px;
-		padding-bottom: 15px;
-		border-bottom: 1px solid #d9dde1;
-	}
-
-	.c-describe {
-		color: #93999f;
-		font-size: 12px;
-		line-height: 20px;
-	}
-
-	.getMode {
-		position: absolute;
-		bottom: 0;
-		left: 50%;
-		width: 120px;
-		margin-left: -60px;
-	}
-
-	.courseslist .el-button {
-		width: 120px;
-		text-align: center;
-	}
 </style>

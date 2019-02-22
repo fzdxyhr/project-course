@@ -8,7 +8,7 @@
 
 		<el-row>
 			<el-col :span="16">
-				<el-tabs v-model="activeName">
+				<el-tabs v-model="activeName" style="margin-top: 10px;">
 					<el-tab-pane label="基本信息" name="first">
 						<div class="c-describe">
 							简介：{{course.description}}
@@ -32,7 +32,10 @@
 							</el-collapse-item>
 						</el-collapse>
 					</el-tab-pane>
-					<el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
+					<el-tab-pane label="评价" name="second">
+						<comment-content></comment-content>
+					</el-tab-pane>
+					<el-tab-pane label="提问" name="third">配置管理</el-tab-pane>
 				</el-tabs>
 			</el-col>
 			<el-col :span="8">
@@ -42,21 +45,14 @@
 	</div>
 </template>
 <script>
-	import {
-		Collapse,
-		CollapseItem,
-		Row,
-		Col
-	} from 'element-ui'
 	import CourseAside from './Aside.vue'
+	import commentContent from '@components/course/comment.vue'
+
 	export default {
 		name: 'courseContehtmlnt',
 		components: {
-			'el-collapse': Collapse,
-			'el-collapse-item': CollapseItem,
-			'el-col': Col,
-			'el-row': Row,
 			'course-aside': CourseAside,
+			commentContent
 		},
 		created() {
 			var urlStr = location.search;
@@ -80,96 +76,102 @@
 		}
 	}
 </script>
-<style>
+<style lang="scss">
 	.course {
 		margin: 0 auto;
 		min-height: 800px;
-	}
 
-	.title-background {
-		height: 200px;
-		width: 100%;
-		background-color: rgba(0, 0, 0, .4);
-		background-repeat: no-repeat;
-		background-size: cover;
-		background-position: center;
-	}
+		.title-background {
+			height: 200px;
+			width: 100%;
+			background-color: rgba(0, 0, 0, .4);
+			background-repeat: no-repeat;
+			background-size: cover;
+			background-position: center;
+		}
 
-	.c-title {
-		font-size: 48px;
-		line-height: 137px;
-		color: #FFFFFF;
-	}
+		.c-title {
+			font-size: 48px;
+			line-height: 137px;
+			color: #FFFFFF;
+		}
 
-	.c-title,
-	.el-row {
-		max-width: 1200px;
-		min-width: 800px;
-		margin: 0 auto;
-	}
+		.c-title,
+		.el-row {
+			max-width: 1200px;
+			min-width: 800px;
+			margin: 0 auto;
+		}
 
-	.c-describe {
-		font-size: 14px;
-		font-weight: 400;
-		color: #888;
-		padding: 30px 0 30px;
-		line-height: 30px;
-	}
+		.c-describe {
+			font-size: 14px;
+			font-weight: 400;
+			color: #888;
+			padding: 30px 0 30px;
+			line-height: 30px;
+		}
 
-	div.el-collapse {
-		border-left-width: 0;
-		border-right-width: 0;
-	}
+		div.el-collapse {
+			border-left-width: 0;
+			border-right-width: 0;
+		}
 
-	div.el-collapse-item__header {
-		padding: 7px 10px 7px 10px;
-		font-weight: 700;
-		font-size: 14px;
-	}
+		div.el-collapse-item__header {
+			padding: 7px 10px 7px 10px;
+			font-weight: 700;
+			font-size: 14px;
+		}
 
-	.course .labels {
-		margin: 10px 0 5px;
-	}
+		.course .labels {
+			margin: 10px 0 5px;
+		}
 
-	.course .labels span {
-		display: inline-block;
-		font-size: 13px;
-		border: 1px solid #20A0FF;
-		padding: 0 8px;
-		margin-right: 5px;
-		border-radius: 40px;
-		cursor: pointer;
-		color: #1D8CE0;
-	}
+		.course .labels span {
+			display: inline-block;
+			font-size: 13px;
+			border: 1px solid #20A0FF;
+			padding: 0 8px;
+			margin-right: 5px;
+			border-radius: 40px;
+			cursor: pointer;
+			color: #1D8CE0;
+		}
 
-	.articles-title a {
-		display: block;
-		font-size: 16px;
-		width: 100%;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		margin: 3px 0;
-	}
+		.articles-title a {
+			display: block;
+			font-size: 16px;
+			width: 100%;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			margin: 3px 0;
+		}
+    
+    .el-tabs__item {
+    	font-size: 16px !important;
+    	color: #000 !important;
+    	font-weight: 600 !important;
+    }
 
-	.articles-title a:hover {
-		color: #888;
-	}
+		.articles-title a:hover {
+			color: #888;
+		}
 
-	.getMore-articles-title {
-		cursor: pointer;
-		display: block;
-		width: 70px;
-		margin: 0 auto;
-		font-size: 14px;
-		transition: color ease .3s;
-	}
+		.getMore-articles-title {
+			cursor: pointer;
+			display: block;
+			width: 70px;
+			margin: 0 auto;
+			font-size: 14px;
+			transition: color ease .3s;
+		}
 
-	.getMore-articles-title:hover {
-		color: #999;
-	}
+		.getMore-articles-title:hover {
+			color: #999;
+		}
 
-	.articles-title a:hover {
-		color: red;
+		.articles-title a:hover {
+			color: red;
+		}
 	}
 </style>

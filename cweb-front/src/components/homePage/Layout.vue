@@ -12,10 +12,7 @@
 	//主页内容
 	import Carousel from './Carousel.vue'
 	import Content from './Content.vue'
-	import {
-		Row,
-		Col
-	} from 'element-ui'
+  
 	export default {
 		name: 'homePageLayout',
 		components: {

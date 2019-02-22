@@ -90,7 +90,6 @@
 </script>
 <style>
 	.content {
-		margin-top: 5px;
 	}
 
 	.title-coursesList {
