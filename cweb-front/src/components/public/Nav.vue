@@ -1,7 +1,8 @@
 <template>
 	<header>
 		<nav>
-			<el-menu class="menu-ul" theme="dark" :default-active="activeIndex" menu-trigger="hover" mode="horizontal">
+			<el-menu class="menu-ul" theme="dark" background-color="#324157" text-color="#fff" active-text-color="#ffd04b"
+			 :default-active="activeIndex" menu-trigger="hover" mode="horizontal">
 				<li class="nav-logo">
 					<a href="javascript:" @click="go2Page('courseManage')">iCollege</a>
 				</li>
@@ -49,7 +50,7 @@
 		data: function() {
 			return {
 				search: '',
-				activeIndex:"1"
+				activeIndex: "1"
 			};
 		},
 		methods: {
