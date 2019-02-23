@@ -19,15 +19,18 @@
 				</div>
 			</el-card>
 		</div>
+		<rjDialog></rjDialog>
 	</div>
 </template>
 
 <script>
-	import crDialog from '@components/common/dialog'
+	import rjDialog from '@components/common/dialog.vue'
+	import commentAdd from '@components/course/commentAdd.vue'
 
 	export default {
 		components: {
-			crDialog
+			rjDialog,
+			commentAdd
 		},
 		data() {
 			return {
@@ -57,11 +60,12 @@
 				});
 			},
 			go2Comment() {
-				this.crDialog.
-				title("导入学生").
+				this.rjDialog.
+				title("撰写《课程》的评价").
 				width("600px").
 				top("2%").
-				currentView(UploadImportData, {}).
+				closeOnClickModal(false).
+				currentView(commentAdd, {}).
 				showClose(true).
 				then((opt) => {}).show();
 			}

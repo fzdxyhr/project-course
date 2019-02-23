@@ -46,7 +46,7 @@
 </template>
 <script>
 	import CourseAside from './Aside.vue'
-	import commentContent from '@components/course/comment.vue'
+	import commentContent from '@components/course/commentList.vue'
 
 	export default {
 		name: 'courseContehtmlnt',
