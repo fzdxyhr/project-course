@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import courseManage from '@components/homePage/Layout'
 import articleManage from '@components/articlesList/index'
 import courseDetail from '@components/course/Content'
+import myStudy from '@components/study/index'
 
 Vue.use(Router)
 
@@ -33,6 +34,10 @@ export default new Router({
 				path: 'courseDetail',
 				name: "courseDetail",
 				component: courseDetail,
+			}, {
+				path: 'myStudy',
+				name: "myStudy",
+				component: myStudy,
 			}]
 		}
 	]

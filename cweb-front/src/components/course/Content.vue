@@ -1,5 +1,5 @@
 <template>
-	<div class="course">
+	<div class="course-detail">
 		<div class="title-background" :style="{'background-image':'url(../'+(course.imgUrl&&course.imgUrl)+')'}">
 			<div class="c-title">
 				{{course.name}}
@@ -35,7 +35,9 @@
 					<el-tab-pane label="评价" name="second">
 						<comment-content></comment-content>
 					</el-tab-pane>
-					<el-tab-pane label="提问" name="third">配置管理</el-tab-pane>
+					<el-tab-pane label="提问" name="third">
+						<questionList></questionList>
+					</el-tab-pane>
 				</el-tabs>
 			</el-col>
 			<el-col :span="8">
@@ -47,12 +49,14 @@
 <script>
 	import CourseAside from './Aside.vue'
 	import commentContent from '@components/course/commentList.vue'
+	import questionList from '@components/course/questionList.vue'
 
 	export default {
 		name: 'courseContehtmlnt',
 		components: {
 			'course-aside': CourseAside,
-			commentContent
+			commentContent,
+			questionList
 		},
 		created() {
 			var urlStr = location.search;
@@ -77,7 +81,7 @@
 	}
 </script>
 <style lang="scss">
-	.course {
+	.course-detail {
 		margin: 0 auto;
 		min-height: 800px;
 
