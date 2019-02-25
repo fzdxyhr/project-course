@@ -23,6 +23,8 @@
 	}
 </script>
 
-<style>
-
+<style lang="scss">
+.content {
+  position: relative;
+}
 </style>

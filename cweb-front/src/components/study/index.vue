@@ -34,12 +34,19 @@
 				</ul>
 			</div>
 		</div>
-		<div class="clearfix"></div>
+		<div class="content-body">
+        <myCourseList v-if="selectCurrent == 'myCourse'"></myCourseList>
+		</div>
 	</div>
 </template>
 
 <script>
+  import myCourseList from './myCourseList.vue'
+  
 	export default {
+    components:{
+      myCourseList
+    },
 		data() {
 			return {
 				userName: "测试",
@@ -51,7 +58,7 @@
 		},
 		methods: {
 			changeTab(key) {
-        this.selectCurrent = key;
+				this.selectCurrent = key;
 			}
 		},
 	}
@@ -62,7 +69,6 @@
 		position: relative;
 		width: 1200px;
 		margin: 0 auto;
-		height: 610px;
 
 		.side-bar {
 			position: absolute;
@@ -98,10 +104,10 @@
 					background: rgba(240, 20, 20, .8);
 					border-radius: 8px 0 0 8px;
 				}
-        
-        .ul-body a.active i {
-        	color: #fff;
-        }
+
+				.ul-body a.active i {
+					color: #fff;
+				}
 
 				.ul-body a {
 					position: relative;
@@ -148,5 +154,10 @@
 				}
 			}
 		}
+    .content-body {
+    	margin-left: 300px;
+    	height: 630px;
+      // overflow: auto;
+    }
 	}
 </style>
