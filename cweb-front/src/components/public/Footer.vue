@@ -12,7 +12,7 @@
 			<a href="">帮助</a>
 		</p>
 		<p>
-			版权所有&#169;helloyoucan-2017
+			版权所有&#169;yanhuorong-2019
 		</p>
 	</footer>
 
