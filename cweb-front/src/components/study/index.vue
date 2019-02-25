@@ -156,7 +156,6 @@
 		}
     .content-body {
     	margin-left: 300px;
-    	height: 630px;
       // overflow: auto;
     }
 	}
