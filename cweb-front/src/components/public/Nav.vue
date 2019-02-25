@@ -36,7 +36,8 @@
 					</el-dropdown>
 				</li>
 				<li class="not-login">
-					<a href="#">未登录</a>
+					<a v-if="userName" href="javascript:">{{userName}}</a>
+					<a v-if="!userName" href="javascript:" @click="go2Page('login')">未登录</a>
 				</li>
 			</el-menu>
 		</nav>
@@ -50,8 +51,16 @@
 		data: function() {
 			return {
 				search: '',
-				activeIndex: "1"
+				activeIndex: "1",
+				userName:""
 			};
+		},
+		mounted() {
+			if(localStorage.getItem("WEBFRONT_USER")) {
+				
+			}
+			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
+			this.userName = user.loginName;
 		},
 		methods: {
 			handleSelect(key, keyPath) {
@@ -140,7 +149,7 @@
 			color: #bfcbd9;
 			line-height: 60px;
 			padding: 0 5px;
-			font-size: 13px;
+			font-size: 15px;
 		}
 	}
 </style>

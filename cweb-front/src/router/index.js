@@ -4,6 +4,7 @@ import courseManage from '@components/homePage/Layout'
 import articleManage from '@components/articlesList/index'
 import courseDetail from '@components/course/Content'
 import myStudy from '@components/study/index'
+import login from '@components/login/index'
 
 Vue.use(Router)
 
@@ -12,10 +13,11 @@ export default new Router({
 			path: '/',
 			redirect: '/index'
 		},
-		// 		{
-		// 			path: '/Login',
-		// 			component: resolve => require(['@components/page/Login.vue'], resolve)
-		// 		},
+		{
+			path: '/login',
+			name: "login",
+			component: login,
+		},
 		{
 			path: '/index',
 			component: () => import('../index.vue'),

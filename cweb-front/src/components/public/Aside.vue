@@ -23,11 +23,9 @@
 </template>
 <script scoped>
 	//文章列表和文章中引用
-	import { Button } from 'element-ui'
 	export default {
 		name: 'Adide',
 		components: {
-			'el-button': Button,
 		},
 		data: () => {
 			let articles = [{

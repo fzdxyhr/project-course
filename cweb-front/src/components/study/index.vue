@@ -35,18 +35,24 @@
 			</div>
 		</div>
 		<div class="content-body">
-        <myCourseList v-if="selectCurrent == 'myCourse'"></myCourseList>
+			<myCourseList v-if="selectCurrent == 'myCourse'"></myCourseList>
+			<myCommentList v-if="selectCurrent == 'myComment'"></myCommentList>
+			<myQuestionList v-if="selectCurrent == 'myQuestion'"></myQuestionList>
 		</div>
 	</div>
 </template>
 
 <script>
-  import myCourseList from './myCourseList.vue'
-  
+	import myCourseList from './myCourseList.vue'
+	import myCommentList from './myCommentList.vue'
+	import myQuestionList from './myQuestionList.vue'
+
 	export default {
-    components:{
-      myCourseList
-    },
+		components: {
+			myCourseList,
+			myCommentList,
+			myQuestionList
+		},
 		data() {
 			return {
 				userName: "测试",
@@ -154,9 +160,10 @@
 				}
 			}
 		}
-    .content-body {
-    	margin-left: 300px;
-      // overflow: auto;
-    }
+
+		.content-body {
+			margin-left: 300px;
+			// overflow: auto;
+		}
 	}
 </style>
