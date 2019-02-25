@@ -29,7 +29,7 @@
 									<i class="fa fa-user fa-fw"></i> 我的学习
 								</div>
 							</el-dropdown-item>
-							<el-dropdown-item>
+							<el-dropdown-item @click="go2Logout">
 								<i class="fa fa-sign-out fa-fw"></i> 退出登录
 							</el-dropdown-item>
 						</el-dropdown-menu>
@@ -41,12 +41,19 @@
 				</li>
 			</el-menu>
 		</nav>
+		<rjDialog></rjDialog>
 	</header>
 </template>
 
 <script>
+	import logout from '@components/login/logout.vue'
+	import rjDialog from '@components/common/dialog.vue'
+	
 	export default {
-		components: {},
+		components: {
+			logout,
+			rjDialog
+		},
 		name: 'nav',
 		data: function() {
 			return {
@@ -73,6 +80,18 @@
 				this.$router.push({
 					name: url
 				});
+			},
+			go2Logout() {
+				console.log("aaaaaaaaaaaaaa")
+				this.rjDialog.
+				title("退出提示").
+				width("600px").
+				top("2%").
+				closeOnClickModal(false).
+				currentView(logout, {}).
+				sizeSelf("logout-index").
+				showClose(true).
+				then((opt) => {}).show();
 			}
 		}
 	}
