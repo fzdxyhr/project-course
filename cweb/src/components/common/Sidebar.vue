@@ -1,5 +1,5 @@
 <template>
-	<el-menu class="diyscrollbar" :default-active="onRoutes" @select="handleSelect"  unique-opened router>
+	<el-menu class="diyscrollbar" background-color="#324157" text-color="#fff" :default-active="onRoutes" @select="handleSelect"  unique-opened router>
 		<el-submenu index="user">
 			<template slot="title"><i class="el-icon-menu"></i>用户管理</template>
 			<el-menu-item index="UserInfoManage">信息管理</el-menu-item>
@@ -7,6 +7,9 @@
 		</el-submenu>
 		<el-menu-item index="CourseManage">
 			<i class="el-icon-setting"></i>课程管理
+		</el-menu-item>
+		<el-menu-item index="ClassManage">
+			<i class="el-icon-setting"></i>班级管理
 		</el-menu-item>
 		<el-menu-item index="ArticlesManage">
 			<i class="el-icon-document"></i>文章管理
@@ -32,6 +35,7 @@
 					UserInfoManage: "信息管理",
 					PermissionsManage: "权限管理",
 					CourseManage: "课程管理",
+					ClassManage:"班级管理",
 					ArticlesManage: "文章管理",
 					TagsManage: "标签管理",
 				};
@@ -48,7 +52,7 @@
 <style>
 	.el-menu {
 		height: 100%;
-		background-color: white!important;
+		/* background-color: white!important; */
 		overflow: auto;
 	}
 </style>

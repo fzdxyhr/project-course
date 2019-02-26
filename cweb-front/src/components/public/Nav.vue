@@ -84,7 +84,6 @@
 				});
 			},
 			go2Logout() {
-				console.log("aaaaaaaaaaaaaa")
 				this.rjDialog.
 				title("退出提示").
 				width("500px").

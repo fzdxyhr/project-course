@@ -13,18 +13,26 @@
       				</span>
 					<el-dropdown-menu slot="dropdown">
 						<el-dropdown-item>
-							<a style="padding: 2px 30px;" href="/logout">退出</a>
+							<a style="padding: 2px 30px;" @click="go2Exit" href="javascript:">退出</a>
 						</el-dropdown-item>
 					</el-dropdown-menu>
 				</el-dropdown>
 			</div>
 		</nav>
+		<rjDialog></rjDialog>
 	</header>
 </template>
 
 <script>
 	var iconImg = require("../../assets/img/user-icon.jpg");
+	import logout from '@components/page/user/logout.vue'
+	import rjDialog from '@components/common/dialog.vue'
+	
 	export default {
+		components:{
+			logout,
+			rjDialog
+		},
 		name: 'Header',
 		data() {
 			return {
@@ -41,7 +49,17 @@
 			}
 		},
 		methods: {
-
+			go2Exit(){
+				this.rjDialog.
+				title("退出提示").
+				width("500px").
+				top("2%").
+				closeOnClickModal(false).
+				currentView(logout, {}).
+				sizeSelf("admin-logout-index").
+				showClose(true).
+				then((opt) => {}).show();
+			}
 		}
 	}
 </script>

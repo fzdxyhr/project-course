@@ -7,8 +7,8 @@
 			<el-card v-for="tag in sonTagsList" class="box-card">
 				<div slot="header" class="card-top clearfix">
 					<span :title="tag.tag_name" class="tag">{{tag.tag_name}}</span>
-					<el-button @click="amendTag(tag)" type="primary" icon="edit"></el-button>
-					<el-button @click="delTag(tag)" type="danger" icon="delete"></el-button>
+					<el-button @click="delTag(tag)" type="danger" icon="el-icon-delete"></el-button>
+					<el-button @click="amendTag(tag)" type="primary" icon="el-icon-edit"></el-button>
 				</div>
 				<div class="t-describe" :title="tag.tag_desc">
 					{{tag.tag_desc}}

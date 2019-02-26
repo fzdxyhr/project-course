@@ -1,7 +1,7 @@
 <template>
 	<div class="user-info-index">
 		<div class="top-content">
-			<el-button type="primary" @click="go2Add">新增用户</el-button>
+			<el-button type="primary" @click="go2Add" icon="el-icon-plus">新增用户</el-button>
 			<el-button type="primary" @click="go2Import">导入用户</el-button>
 		</div>
 		<div class="secction diyscrollbar">
@@ -32,10 +32,10 @@
 				</el-table-column>
 				<el-table-column prop="create_time" label="创建时间" min-width="120px">
 				</el-table-column>
-				<el-table-column label="操作" min-width="100px">
+				<el-table-column label="操作" min-width="140px">
 					<template scope="scope">
-						<el-button size="small" type="primary" @click="handleUpdate(scope.$index, scope.row)">修改</el-button>
-						<el-button size="small" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+						<el-button size="small" icon="el-icon-edit" type="primary" @click="handleUpdate(scope.$index, scope.row)">修改</el-button>
+						<el-button size="small" icon="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -91,7 +91,7 @@
 				this.rjDialog.
 				title("新增用户").
 				width("600px").
-				top("5%").
+				top("1%").
 				currentView(addUser, {}).
 				showClose(true).
 				then((opt) => {
@@ -102,7 +102,7 @@
 				this.rjDialog.
 				title("导入学生").
 				width("600px").
-				top("15%").
+				top("8%").
 				currentView(UploadImportData, {
 					uploadUrl: "/v1/users/import",
 					downloadUrl: "/v1/users/download"

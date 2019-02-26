@@ -6,9 +6,10 @@ Vue.use(Router)
 export default new Router({
 	routes: [{
 		path: '/',
-		redirect: '/Login'
+		redirect: '/login'
 	}, {
-		path: '/Login',
+		path: '/login',
+		name:"login",
 		component: resolve => require(['../components/page/Login.vue'], resolve)
 	}, {
 		path: '/Content',
@@ -22,6 +23,9 @@ export default new Router({
 		}, {
 			path: '/UserInfoManage',
 			component: resolve => require(['../components/page/UserInfoManage.vue'], resolve)
+		},{
+			path: '/ClassManage',
+			component: resolve => require(['../components/page/class/index.vue'], resolve)
 		}, {
 			path: '/PermissionsManage',
 			component: resolve => require(['../components/page/PermissionsManage.vue'], resolve)
