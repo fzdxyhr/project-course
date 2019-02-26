@@ -29,8 +29,10 @@
 									<i class="fa fa-user fa-fw"></i> 我的学习
 								</div>
 							</el-dropdown-item>
-							<el-dropdown-item @click="go2Logout">
-								<i class="fa fa-sign-out fa-fw"></i> 退出登录
+							<el-dropdown-item>
+								<div @click="go2Logout">
+									<i class="fa fa-sign-out fa-fw"></i> 退出登录
+								</div>
 							</el-dropdown-item>
 						</el-dropdown-menu>
 					</el-dropdown>
@@ -48,7 +50,7 @@
 <script>
 	import logout from '@components/login/logout.vue'
 	import rjDialog from '@components/common/dialog.vue'
-	
+
 	export default {
 		components: {
 			logout,
@@ -59,12 +61,12 @@
 			return {
 				search: '',
 				activeIndex: "1",
-				userName:""
+				userName: ""
 			};
 		},
 		mounted() {
-			if(localStorage.getItem("WEBFRONT_USER")) {
-				
+			if (localStorage.getItem("WEBFRONT_USER")) {
+
 			}
 			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
 			this.userName = user.loginName;
@@ -85,7 +87,7 @@
 				console.log("aaaaaaaaaaaaaa")
 				this.rjDialog.
 				title("退出提示").
-				width("600px").
+				width("500px").
 				top("2%").
 				closeOnClickModal(false).
 				currentView(logout, {}).
@@ -105,7 +107,7 @@
 			max-width: 1200px;
 			margin: 0 auto !important;
 		}
-		
+
 		.el-menu.el-menu--horizontal {
 			border-bottom: none !important;
 		}
