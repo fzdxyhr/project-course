@@ -50,7 +50,7 @@
 		},
 		methods: {
 			getTags() { //获取数据
-				this.$http.get('/v1/tags?key='+this.key+"&page_no=1&page_size=10000000").then((response) => {
+				this.$axios.get('/v1/tags?key='+this.key+"&page_no=1&page_size=10000000").then((response) => {
 					this.tagsList = response.data.items;
 				}, (response) => {
 					this.$message.error('获取标签失败');
@@ -76,7 +76,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$http.post("url", {
+					this.$axios.post("url", {
 						"id": tag.id
 					}).then((response) => {
 						this.$message.error('删除标签成功');
@@ -96,7 +96,7 @@
 			},
 			onSubmit() { //处理添加或修改标签
 				if(!this.dialog.form.id) { //添加标签
-					this.$http.post("/v1/tags",this.dialog.form).then((response) => {
+					this.$axios.post("/v1/tags",this.dialog.form).then((response) => {
 						this.dialog.control = false;
 						this.getTags();
 						this.$message.success('添加成功');
@@ -104,7 +104,7 @@
 						this.$message.error('添加失败');
 					});
 				} else { //修改标签
-					this.$http.put("/v1/tags/"+this.dialog.form.id, this.dialog.form).then((response) => {
+					this.$axios.put("/v1/tags/"+this.dialog.form.id, this.dialog.form).then((response) => {
 						this.dialog.control = false;
 						this.$message.success('修改成功');
 						this.getTags();

@@ -66,7 +66,7 @@
 </template>
 
 <script>
-	import '../../../static/vendor/font-awesome-4.7.0/css/font-awesome.min.css'
+	// import '../../../static/vendor/font-awesome-4.7.0/css/font-awesome.min.css'
 	import { Button, Tag } from 'element-ui'
 	import { markdown } from 'markdown';
 	export default {

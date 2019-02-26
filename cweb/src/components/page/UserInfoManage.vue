@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="user-info-index">
 		<div class="top-content">
 			<el-button type="primary" @click="go2Add">新增用户</el-button>
 			<el-button type="primary" @click="go2Import">导入用户</el-button>
@@ -41,7 +41,8 @@
 			</el-table>
 			<div class="paging">
 				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.page_no"
-				 :page-sizes="[10, 20, 50, 100]" :page-size="page.page_size" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
+				 :page-sizes="[10, 20, 50, 100]" :page-size="page.page_size" layout="total, sizes, prev, pager, next, jumper"
+				 :total="page.total">
 				</el-pagination>
 			</div>
 		</div>
@@ -53,7 +54,7 @@
 	import rjDialog from '@components/common/dialog.vue'
 	import UploadImportData from '@components/common/UploadImportData.vue'
 	import addUser from '@components/page/user/addUser.vue'
-	
+
 	export default {
 		components: {
 			rjDialog,
@@ -63,10 +64,10 @@
 		data() {
 			return {
 				tableData: [],
-				page:{
-					page_no:1,
-					page_size:10,
-					total:0
+				page: {
+					page_no: 1,
+					page_size: 10,
+					total: 0
 				}
 			}
 		},
@@ -74,8 +75,8 @@
 			this.findUsers();
 		},
 		methods: {
-			findUsers(){
-				this.$http.get("/v1/users?page_no="+this.page.page_no+"&page_size="+this.page.page_size).then((response) => {
+			findUsers() {
+				this.$axios.get("/v1/users?page_no=" + this.page.page_no + "&page_size=" + this.page.page_size).then((response) => {
 					let message = response.data;
 					this.tableData = message.items;
 					this.page.total = message.total;
@@ -83,29 +84,28 @@
 					this.$message.error('获取用户失败');
 				});
 			},
-			handleUpdate(){
-				
+			handleUpdate() {
+
 			},
-			go2Add(){
+			go2Add() {
 				this.rjDialog.
 				title("新增用户").
 				width("600px").
-				top("2%").
-				currentView(addUser, {
-				}).
+				top("5%").
+				currentView(addUser, {}).
 				showClose(true).
 				then((opt) => {
 					this.findUsers();
 				}).show();
 			},
-			go2Import(){
+			go2Import() {
 				this.rjDialog.
 				title("导入学生").
 				width("600px").
-				top("2%").
+				top("15%").
 				currentView(UploadImportData, {
-					uploadUrl:"/v1/users/import",
-					downloadUrl:"/v1/users/download"
+					uploadUrl: "/v1/users/import",
+					downloadUrl: "/v1/users/download"
 				}).
 				showClose(true).
 				then((opt) => {
@@ -123,7 +123,7 @@
 				console.log(`当前页: ${val}`);
 			},
 			handleDelete(index, row) {
-				this.$http.delete("/v1/users/"+row.id).then((response) => {
+				this.$axios.delete("/v1/users/" + row.id).then((response) => {
 					let message = response.data;
 					this.findUsers();
 					this.$message.success('删除用户成功');
@@ -135,17 +135,20 @@
 	}
 </script>
 
-<style>
-	.el-table {
-		margin: 5px;
-		width: calc(100% - 10px);
-	}
+<style lang="scss">
+	.user-info-index {
+		.el-table {
+			margin: 5px;
+			width: calc(100% - 10px);
+		}
 
-	.paging {
-		text-align: right;
-		margin-top: 15px;
-	}
-	.top-content {
-		margin: 10px 0;
+		.paging {
+			text-align: right;
+			margin-top: 15px;
+		}
+
+		.top-content {
+			margin: 10px 0;
+		}
 	}
 </style>

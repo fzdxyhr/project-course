@@ -31,23 +31,23 @@
 				<div class="right"><img :src="`/v1/courses/images/download?relative_path=`+c.course_image_url" /></div>
 			</div>
 			<div class="c-operation">
-				<el-button @click="readCourse(c)" title="查看课程" class="btn-c-read" icon="view" :plain="true" type="info"></el-button>
-				<el-button @click="amendCourse(c)" title="修改课程信息" class="btn-c-edit" icon="edit" :plain="true" type="warning"></el-button>
-				<el-button @click="delCourse(c)" title="删除课程" class="btn-c-del" icon="delete" :plain="true" type="danger"></el-button>
+				<el-button @click="readCourse(c)" title="查看课程" class="btn-c-read" icon="el-icon-zoom-in" :plain="true" type="info"></el-button>
+				<el-button @click="amendCourse(c)" title="修改课程信息" class="btn-c-edit" icon="el-icon-edit" :plain="true" type="warning"></el-button>
+				<el-button @click="delCourse(c)" title="删除课程" class="btn-c-del" icon="el-icon-delete" :plain="true" type="danger"></el-button>
 			</div>
 			<div class="c-sections">
 				<div class="cc-title">
 					章节列表
 					<el-button @click="switchSort()" type="text">{{btnSwitchSortText}}</el-button>
-					<el-button @click="addChapter(c)" title="添加章" icon="plus">添加章</el-button>
+					<el-button @click="addChapter(c)" title="添加章" class="el-icon-circle-plus-outline">添加章</el-button>
 				</div>
 
 				<el-collapse :class="{isSwitchSort:isSwitchSort}">
 					<el-collapse-item v-for="(ch,chapterIndex) in c.sections">
 						<template slot="title">
 							{{ch.name&&ch.name}}
-							<el-button @click.stop="amendChapter(ch)" title="修改章" icon="edit" :plain="true" type="warning"></el-button>
-							<el-button @click.stop="delChapter(ch)" title="删除章" icon="delete" :plain="true" type="danger"></el-button>
+							<el-button @click.stop="amendChapter(ch)" title="修改章" icon="el-icon-edit" :plain="true" type="warning"></el-button>
+							<el-button @click.stop="delChapter(ch)" title="删除章" icon="el-icon-delete" :plain="true" type="danger"></el-button>
 							<div class="sort-butGroup">
 								<el-button @click.stop="moveUpChapter(c.sections,chapterIndex,courseIndex)" :disabled="chapterIndex==0" title="上移" icon="caret-top" :plain="true" type="info"></el-button>
 								<el-button @click.stop="moveDowmChapter(c.sections,chapterIndex,courseIndex)" :disabled="chapterIndex==c.sections.length-1" title="下移" icon="caret-bottom" :plain="true" type="info"></el-button>
@@ -191,7 +191,7 @@
 					type: 'warning'
 				}).then(() => {
 					console.log("删除章vvv" + ch.id);
-					this.$http.delete("/admin/section/" + ch.id).then((response) => {
+					this.$axios.delete("/admin/section/" + ch.id).then((response) => {
 						this.dialog.control = false;
 						console.log(response);
 						this.$emit('childGetCourses', this.page.currentPage, this.page.currentNum, this.page.searchText);
@@ -223,7 +223,7 @@
 			onSubmit() { //处理添加或修改章
 				var se = JSON.parse(JSON.stringify(this.dialog.form));
 				if(!this.dialog.form.id) { //添加章
-					this.$http.post("/admin/section", {
+					this.$axios.post("/admin/section", {
 						"courseId": this.readCourseId,
 						"description": se.description,
 						"id": se.id,
@@ -238,7 +238,7 @@
 						this.$message.error('添加失败');
 					});
 				} else { //修改章
-					this.$http.put("/admin/section", {
+					this.$axios.put("/admin/section", {
 						"courseId": this.readCourseId,
 						"description": se.description,
 						"id": se.id,
@@ -290,7 +290,7 @@
 				this.handleInputConfirm();
 			},
 			getAllTags() { //获取所有标签提供输入提示
-				this.$http.get('../../../../static/testData/tags.json').then((response) => {
+				this.$axios.get('../../../../static/testData/tags.json').then((response) => {
 					console.log(response.data);
 					response.data.forEach((tag) => {
 						this.dialog.restaurants.push({

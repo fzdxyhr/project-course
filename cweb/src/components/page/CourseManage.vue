@@ -1,5 +1,5 @@
 <template>
-	<div>
+	<div class="course-manager-index">
 		<div class="secction diyscrollbar">
 			<v-list-top placeholder="输入课程名查找" btnText="添加课程" @addBtn="addCourse" @search="searchCourseAction"></v-list-top>
 			<v-courses-list @setSearchText="setSearchText" @setCurrentNum="setCurrentNum" @setCurrentPage="setCurrentPage" :page="page"
@@ -112,7 +112,7 @@
 				this.page.searchText = keyText;
 			},
 			findTeachers() {
-				this.$http.get("/v1/users?role=teacher&page_no=1&page_size=1000000").then((response) => {
+				this.$axios.get("/v1/users?role=teacher&page_no=1&page_size=1000000").then((response) => {
 					let message = response.data;
 					message.items.forEach((item) => {
 						let temp = {};
@@ -125,7 +125,7 @@
 				});
 			},
 			findTags() {
-				this.$http.get("/v1/tags?page_no=1&page_size=1000000").then((response) => {
+				this.$axios.get("/v1/tags?page_no=1&page_size=1000000").then((response) => {
 					let message = response.data;
 					message.items.forEach((item) => {
 						let temp = {};
@@ -138,7 +138,7 @@
 				});
 			},
 			getCourses(page, rows, search) { //获取数据(页数，每页多少条，关键词)
-				this.$http.get("/v1/courses?key=" + search + "&page_no=" + page + "&page_size=" + rows).then((response) => {
+				this.$axios.get("/v1/courses?key=" + search + "&page_no=" + page + "&page_size=" + rows).then((response) => {
 					let message = response.data;
 					this.coursesList = message.items;
 					this.page.totalCourses = message.total;
@@ -165,14 +165,14 @@
 			},
 			fatherAmendCourse(course) { //显示修改的dialog
 				this.dialog.form = JSON.parse(JSON.stringify(course));
-				if(this.dialog.form.tag_id) {
-					let temp =this.dialog.form.tag_id.split(",");
+				if (this.dialog.form.tag_id) {
+					let temp = this.dialog.form.tag_id.split(",");
 					this.dialog.form.tag_id = [];
 					temp.forEach((item) => {
 						this.dialog.form.tag_id.push(parseInt(item));
 					});
 				}
-				if(this.dialog.form.course_image_url) {
+				if (this.dialog.form.course_image_url) {
 					this.showImage = true;
 				}
 				this.dialog.control = true;
@@ -184,7 +184,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$http.delete("/admin/course/" + id).then((response) => {
+					this.$axios.delete("/admin/course/" + id).then((response) => {
 						if (response.data.data) {
 							this.$message.success('删除成功');
 							this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
@@ -210,7 +210,7 @@
 				let tempTagId = this.dialog.form.tag_id;
 				this.dialog.form.tag_id = this.dialog.form.tag_id.join(",");
 				if (!this.dialog.form.id) { //添加课程
-					this.$http.post("/v1/courses", this.dialog.form).then((response) => {
+					this.$axios.post("/v1/courses", this.dialog.form).then((response) => {
 						if (response.data.status == 200) {
 							this.dialog.control = false;
 							this.$message.success('添加成功');
@@ -224,7 +224,7 @@
 						this.$message.error('链接失败');
 					});
 				} else { //修改课程
-					this.$http.put("/v1/courses/"+this.dialog.form.id,
+					this.$axios.put("/v1/courses/" + this.dialog.form.id,
 						this.dialog.form
 					).then((response) => {
 						if (response.data.status == 200) {
@@ -273,53 +273,55 @@
 	}
 </script>
 
-<style>
-	.avatar-uploader .el-upload {
-		border: 1px dashed #d9d9d9;
-		border-radius: 6px;
-		cursor: pointer;
-		position: relative;
-		overflow: hidden;
-		width: 100%;
-		height: 100%;
-		max-width: 300px;
-		max-height: 169px;
-	}
+<style lang="scss">
+	.course-manager-index {
+		.avatar-uploader .el-upload {
+			border: 1px dashed #d9d9d9;
+			border-radius: 6px;
+			cursor: pointer;
+			position: relative;
+			overflow: hidden;
+			width: 100%;
+			height: 100%;
+			max-width: 300px;
+			max-height: 169px;
+		}
 
-	.button-new-tag {
-		margin-left: 10px;
-		height: 32px;
-		line-height: 30px;
-		padding-top: 0;
-		padding-bottom: 0;
-	}
+		.button-new-tag {
+			margin-left: 10px;
+			height: 32px;
+			line-height: 30px;
+			padding-top: 0;
+			padding-bottom: 0;
+		}
 
-	.input-new-tag {
-		width: 90px;
-		height: 32px;
-		line-height: 29px;
-		margin-left: 10px;
-		vertical-align: bottom;
-	}
+		.input-new-tag {
+			width: 90px;
+			height: 32px;
+			line-height: 29px;
+			margin-left: 10px;
+			vertical-align: bottom;
+		}
 
-	.avatar-uploader .el-upload:hover {
-		border-color: #20a0ff;
-	}
+		.avatar-uploader .el-upload:hover {
+			border-color: #20a0ff;
+		}
 
-	.avatar-uploader-icon {
-		font-size: 28px;
-		color: #8c939d;
-		width: 100%;
-		height: 100%;
-		line-height: 178px;
-		text-align: center;
-	}
+		.avatar-uploader-icon {
+			font-size: 28px;
+			color: #8c939d;
+			width: 100%;
+			height: 100%;
+			line-height: 178px;
+			text-align: center;
+		}
 
-	.avatar {
-		width: 100%;
-		height: 100%;
-		max-width: 300px;
-		max-height: 169px;
-		display: block;
+		.avatar {
+			width: 100%;
+			height: 100%;
+			max-width: 300px;
+			max-height: 169px;
+			display: block;
+		}
 	}
 </style>

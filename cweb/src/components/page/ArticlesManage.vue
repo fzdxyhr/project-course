@@ -55,7 +55,7 @@
 			},
 			getArticles(page, rows, search) { //获取数据
 				this.currentNum = rows;
-				this.$http.get("../../../../static/testData/articles.json?searchStr=" + search + "&page=" + (page - 1) + "&size=" + rows).then((response) => {
+				this.$axios.get("../../../../static/testData/articles.json?searchStr=" + search + "&page=" + (page - 1) + "&size=" + rows).then((response) => {
 					this.articlesList = response.data;
 				}, (response) => {
 					this.$message.error('获取文章失败');
@@ -63,7 +63,7 @@
 
 			},
 			publishArtcile(a) {
-				this.$http.post('/admin/article/release', {
+				this.$axios.post('/admin/article/release', {
 					"id": a.id,
 					"title": a.title,
 					"tagSet": a.tagSet,
@@ -114,7 +114,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$http.delete("/admin/article/" + article.id).then((response) => {
+					this.$axios.delete("/admin/article/" + article.id).then((response) => {
 						if(response.data) {
 							this.$message.success('删除成功');
 							this.getArticles(this.page.currentPage, this.page.currentNum, this.page.searchText);

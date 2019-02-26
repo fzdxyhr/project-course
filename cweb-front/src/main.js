@@ -13,6 +13,10 @@ Vue.prototype.$md5 = md5;
 Vue.use(ElementUI);
 Vue.use(vueResource);
 
+router.afterEach((to,from,next) => {
+  window.scrollTo(0,0);
+});
+
 new Vue({
 	el: '#app',
 	router,
