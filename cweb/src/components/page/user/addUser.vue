@@ -4,8 +4,11 @@
 			<el-form-item label="用户名称">
 				<el-input v-model="form.user_name"></el-input>
 			</el-form-item>
+			<el-form-item label="账号">
+				<el-input v-model="form.account"></el-input>
+			</el-form-item>
 			<el-form-item label="密码">
-				<el-input v-model="form.password"></el-input>
+				<el-input type="password" v-model="form.password"></el-input>
 			</el-form-item>
 			<el-form-item label="性别">
 				<el-radio-group v-model="form.sex">
@@ -40,6 +43,7 @@
 			return {
 				form: {
 					user_name: "",
+					account:"",
 					password: "",
 					sex: 1,
 					id_card: "",

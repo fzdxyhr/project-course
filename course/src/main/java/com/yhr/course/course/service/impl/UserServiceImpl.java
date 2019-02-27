@@ -100,7 +100,7 @@ public class UserServiceImpl implements UserService {
         Map<String, String> operationMap = new HashMap<String, String>();
         Map<String, Object> valueMap = new HashMap<String, Object>();
         String fileName = "学生模板";
-        String[] headers = new String[]{"用户名称", "密码", "性别", "身份证", "手机号码"};
+        String[] headers = new String[]{"用户名称", "账号", "性别", "身份证", "手机号码"};
         exportExcelUtil.exportExcel(fileName, headers, new ArrayList<>(), "yyyy-MM-dd HH:mm:ss", fileName, response, operationMap, valueMap);
     }
 
@@ -113,8 +113,9 @@ public class UserServiceImpl implements UserService {
         for (int i = 0; i < datas.size(); i++) {
             User user = new User();
             Map<String, Integer> sexMap = getSexMap();
-            user.setUserName(datas.get(i).length > 0 ? datas.get(i)[1].trim() : null);
-            user.setPassword(datas.get(i).length > 1 ? MD5Utils.MD5Encode(datas.get(i)[1].trim(), "utf8") : null);
+            user.setUserName(datas.get(i).length > 0 ? datas.get(i)[0].trim() : null);
+            user.setAccount(datas.get(i).length > 1 ? datas.get(i)[1].trim() : null);
+            user.setPassword(MD5Utils.MD5Encode("123456", "utf8"));
             user.setSex(datas.get(i).length > 2 ? Integer.parseInt(sexMap.get(datas.get(i)[2].trim()).toString()) : null);
             user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim() : null);
             user.setTelephone(datas.get(i).length > 4 ? datas.get(i)[4].trim() : null);

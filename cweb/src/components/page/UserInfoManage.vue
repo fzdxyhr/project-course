@@ -8,6 +8,8 @@
 			<el-table :data="tableData" border>
 				<el-table-column prop="user_name" label="用户名">
 				</el-table-column>
+				<el-table-column prop="account" label="账号">
+				</el-table-column>
 				<el-table-column prop="sex" label="性别">
 					<template scope="scope">
 						{{scope.row.sex == 1?"男":"女"}}
@@ -20,11 +22,11 @@
 						{{scope.row.status == 0?"失效":"有效"}}
 					</template>
 				</el-table-column>
-				<el-table-column prop="is_admin" label="是否管理员">
+				<!-- <el-table-column prop="is_admin" label="是否管理员">
 					<template scope="scope">
 						{{scope.row.is_admin == 0?"否":"是"}}
 					</template>
-				</el-table-column>
+				</el-table-column> -->
 				<el-table-column prop="role" label="角色">
 					<template scope="scope">
 						{{scope.row.role == 'admin'? "管理员" : scope.row.role == 'teacher' ? "老师" : "学生"}}
