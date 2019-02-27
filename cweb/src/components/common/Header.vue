@@ -2,7 +2,7 @@
 	<header>
 		<nav>
 			<div class="nav-title">
-				后台管理
+				课程管理后台
 			</div>
 			<div class="user_info">
 				<img :src="user.icon" />
@@ -73,7 +73,7 @@
 
 	.nav-title {
 		float: left;
-		width: 90px;
+		width: 150px;
 		height: 60px;
 		color: white;
 		line-height: 60px;

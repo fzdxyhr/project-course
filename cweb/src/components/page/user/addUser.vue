@@ -19,7 +19,7 @@
 			<el-form-item label="手机号码">
 				<el-input v-model="form.telephone"></el-input>
 			</el-form-item>
-			<el-form-item label="活动形式">
+			<el-form-item label="用户图片">
 				<el-upload name="editormd-image-file" class="avatar-uploader" :action="`/v1/courses/images/upload`" :show-file-list="false"
 				 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 					<img v-if="showImage" :src="imageUrl" class="avatar">
@@ -70,7 +70,7 @@
 				return isLt2M;
 			},
 			go2Add() {
-				this.$http.delete("/v1/users/" + row.id).then((response) => {
+				this.$axios.delete("/v1/users/" + row.id).then((response) => {
 					let message = response.data;
 					this.findUsers();
 					this.$message.success('删除用户成功');

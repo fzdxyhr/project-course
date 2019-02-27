@@ -27,7 +27,7 @@
 				</el-table-column>
 				<el-table-column prop="role" label="角色">
 					<template scope="scope">
-						{{scope.row.role == 'teacher'?"老师":"学生"}}
+						{{scope.row.role == 'admin'? "管理员" : scope.row.role == 'teacher' ? "老师" : "学生"}}
 					</template>
 				</el-table-column>
 				<el-table-column prop="create_time" label="创建时间" min-width="120px">
