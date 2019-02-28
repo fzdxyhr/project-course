@@ -31,7 +31,8 @@
 			</el-form-item>
 		</el-form>
 		<div style="text-align: right;">
-			<el-button type="primary" @click="go2Add">创建</el-button>
+			<el-button v-if="!form.id" type="primary" @click="go2Add">创建</el-button>
+			<el-button v-if="form.id" type="primary" @click="go2Add">修改</el-button>
 			<el-button @click="doCancel">取消</el-button>
 		</div>
 	</div>
@@ -43,7 +44,7 @@
 			return {
 				form: {
 					user_name: "",
-					account:"",
+					account: "",
 					password: "",
 					sex: 1,
 					id_card: "",
@@ -54,7 +55,9 @@
 			}
 		},
 		mounted() {
-
+			if (this.rjDialogParams().data) {
+				this.form = JSON.parse(JSON.stringify(this.rjDialogParams().data));
+			}
 		},
 		computed: {
 			imageUrl() {
@@ -74,13 +77,23 @@
 				return isLt2M;
 			},
 			go2Add() {
-				this.$axios.delete("/v1/users/" + row.id).then((response) => {
-					let message = response.data;
-					this.findUsers();
-					this.$message.success('删除用户成功');
-				}, (response) => {
-					this.$message.error('删除用户失败');
-				});
+				if(this.form.id) {
+					this.$axios.put("/v1/users/"+this.form.id,this.form).then((response) => {
+						let message = response.data;
+						this.$message.success('修改用户成功');
+						this.closeRjDialog();
+					}, (response) => {
+						this.$message.error('修改用户失败');
+					});
+				} else {
+					this.$axios.post("/v1/users",this.form).then((response) => {
+						let message = response.data;
+						this.$message.success('新增用户成功');
+						this.closeRjDialog();
+					}, (response) => {
+						this.$message.error('新增用户失败');
+					});
+				}
 			},
 			doCancel() {
 				this.closeRjDialog();

@@ -123,6 +123,7 @@
 					if (valid) {
 						this.isBtnLogin = true;
 						this.loginData.password = this.$md5(this.loginData.password);
+						this.loginData.account = this.loginData.user_name;
 						this.$axios.post("/v1/login", this.loginData).then((response) => {
 							let message = response.data;
 							localStorage.setItem("USER", JSON.stringify(message));

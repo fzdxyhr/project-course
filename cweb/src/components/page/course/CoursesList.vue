@@ -28,7 +28,7 @@
 				<div class="left">
 					课程背景图&nbsp;:&nbsp;
 				</div>
-				<div class="right"><img :src="`/v1/courses/images/download?relative_path=`+c.course_image_url" /></div>
+				<div class="right"><img :src="`http://localhost:8085/v1/courses/images/download?relative_path=`+c.course_image_url" /></div>
 			</div>
 			<div class="c-operation">
 				<el-button @click="readCourse(c)" title="查看课程" class="btn-c-read" icon="el-icon-zoom-in" :plain="true" type="info"></el-button>
@@ -72,7 +72,7 @@
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.currentPage" :page-sizes="[20, 50, 80, 100,500,1000]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="page.totalCourses">
 			</el-pagination>
 		</div>
-		<el-dialog :title="dialog.title" v-model="dialog.control">
+		<el-dialog :title="dialog.title" :visible.sync="dialog.control">
 			<el-form label-width="70px" :model="dialog.form">
 				<el-form-item label="章名称">
 					<el-input v-model="dialog.form.name"></el-input>

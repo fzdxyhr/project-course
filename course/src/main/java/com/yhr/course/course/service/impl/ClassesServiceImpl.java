@@ -1,9 +1,11 @@
 package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.dao.ClassesRepository;
+import com.yhr.course.course.dao.SignRepository;
 import com.yhr.course.course.dao.TagRepository;
 import com.yhr.course.course.dao.UserRepository;
 import com.yhr.course.course.entity.Classes;
+import com.yhr.course.course.entity.Sign;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.exception.ServiceException;
@@ -19,6 +21,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -30,11 +33,14 @@ import java.util.*;
 @Service
 public class ClassesServiceImpl implements ClassesService {
 
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     @Autowired
     private ClassesRepository classesRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private SignRepository signRepository;
     @Autowired
     private UserService userService;
     @Autowired
@@ -111,10 +117,15 @@ public class ClassesServiceImpl implements ClassesService {
             return Collections.emptyList();
         }
         List<StudentVo> studentVos = new ArrayList<>();
+        Classes classes = classesRepository.getOne(classId);
         for (User user : users) {
+            Sign sign = signRepository.findByStudentIdAndTeacherIdAndCreateTime(user.getId(), classes.getTeacherId(), simpleDateFormat.format(new Date()));
             StudentVo studentVo = new StudentVo();
-
+            studentVo.setUserName(user.getUserName());
+            studentVo.setAccount(user.getAccount());
+            studentVo.setSign(sign == null ? 0 : 1);
+            studentVos.add(studentVo);
         }
-        return null;
+        return studentVos;
     }
 }

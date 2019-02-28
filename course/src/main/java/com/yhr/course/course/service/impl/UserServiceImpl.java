@@ -1,8 +1,10 @@
 package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.contants.RoleEnum;
+import com.yhr.course.course.dao.ClassesRepository;
 import com.yhr.course.course.dao.TagRepository;
 import com.yhr.course.course.dao.UserRepository;
+import com.yhr.course.course.entity.Classes;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.exception.ServiceException;
@@ -33,6 +35,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
+    private ClassesRepository classesRepository;
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
@@ -56,6 +60,12 @@ public class UserServiceImpl implements UserService {
         params.add(startIndex);
         params.add(pageSize);
         List<User> users = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<User>(User.class));
+        if (CollectionUtils.isNotEmpty(users)) {
+            Map<Integer, Classes> classesMap = getAllClassesMap();
+            for (User user : users) {
+                user.setClassName(user.getClassId() == null || classesMap.get(user.getClassId()) == null ? "" : classesMap.get(user.getClassId()).getClassName());
+            }
+        }
         result.setTotal(total);
         result.setItems(users);
         return result;
@@ -139,6 +149,18 @@ public class UserServiceImpl implements UserService {
             userMap.put(user.getId(), user);
         }
         return userMap;
+    }
+
+    public Map<Integer, Classes> getAllClassesMap() {
+        List<Classes> classesList = classesRepository.findAll();
+        if (CollectionUtils.isEmpty(classesList)) {
+            return new HashMap<>();
+        }
+        Map<Integer, Classes> classesMap = new HashMap<>();
+        for (Classes classes : classesList) {
+            classesMap.put(classes.getId(), classes);
+        }
+        return classesMap;
     }
 
     private Map<String, Integer> getSexMap() {

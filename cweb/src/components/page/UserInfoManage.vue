@@ -15,7 +15,7 @@
 						{{scope.row.sex == 1?"男":"女"}}
 					</template>
 				</el-table-column>
-				<el-table-column prop="class_id" label="班级标识">
+				<el-table-column prop="class_name" label="班级标识">
 				</el-table-column>
 				<el-table-column prop="status" label="状态">
 					<template scope="scope">
@@ -36,8 +36,8 @@
 				</el-table-column>
 				<el-table-column label="操作" min-width="140px">
 					<template scope="scope">
-						<el-button size="small" icon="el-icon-edit" type="primary" @click="handleUpdate(scope.$index, scope.row)">修改</el-button>
-						<el-button size="small" icon="el-icon-delete" type="danger" @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+						<el-button size="small" icon="el-icon-edit" type="primary" @click="handleUpdate(scope.row)">修改</el-button>
+						<el-button size="small" icon="el-icon-delete" type="danger" @click="handleDelete(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -86,8 +86,16 @@
 					this.$message.error('获取用户失败');
 				});
 			},
-			handleUpdate() {
-
+			handleUpdate(row) {
+				this.rjDialog.
+				title("修改用户").
+				width("600px").
+				top("3%").
+				currentView(addUser, {data:row}).
+				showClose(true).
+				then((opt) => {
+					this.findUsers();
+				}).show();
 			},
 			go2Add() {
 				this.rjDialog.

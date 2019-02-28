@@ -5,8 +5,11 @@ import com.yhr.course.course.entity.Classes;
 import com.yhr.course.course.service.ClassesService;
 import com.yhr.course.course.service.ClassesService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -44,6 +47,11 @@ public class ClassesController {
     @RequestMapping(value = "/classes/{id}", method = RequestMethod.GET)
     public Classes get(@PathVariable("id") Integer id) throws Exception {
         return classesService.get(id);
+    }
+
+    @RequestMapping(value = "/classes/{id}/students", method = RequestMethod.GET)
+    public List<StudentVo> getStudents(@PathVariable("id") Integer id) throws Exception {
+        return classesService.findClassesStudent(id);
     }
 
 }

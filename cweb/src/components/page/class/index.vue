@@ -24,7 +24,7 @@
 					<template scope="scope">
 						<el-button icon="el-icon-setting" type="text" @click="go2SetMonitor(scope.row)">设置班长</el-button>
 						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="handleImport(scope.row)">导入学生</el-button>
-            <el-button icon="el-icon-view" style="color: #67c23a;" type="text" @click="go2ViewStudent(scope.row)">查看学生</el-button>
+						<el-button icon="el-icon-view" style="color: #67c23a;" type="text" @click="go2ViewStudent(scope.row)">查看学生</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="handleUpdate(scope.row)">修改</el-button>
 						<el-button icon="el-icon-delete" style="color: #f56c6c;" type="text" @click="handleDelete(scope.row)">删除</el-button>
 					</template>
@@ -44,7 +44,7 @@
 	import rjDialog from '@components/common/dialog.vue'
 	import classesAdd from '@components/page/class/classesAdd.vue'
 	import setMonitor from '@components/page/class/setMonitor.vue'
-  import studentList from '@components/page/class/studentList.vue'
+	import studentList from '@components/page/class/studentList.vue'
 	import UploadImportData from '@components/common/UploadImportData.vue'
 
 	export default {
@@ -52,7 +52,7 @@
 			rjDialog,
 			classesAdd,
 			setMonitor,
-      studentList,
+			studentList,
 			UploadImportData
 		},
 		data() {
@@ -128,7 +128,7 @@
 				width("600px").
 				top("8%").
 				currentView(UploadImportData, {
-					uploadUrl: "http://localhost:8085/v1/users/import?class_id="+row.id,
+					uploadUrl: "http://localhost:8085/v1/users/import?class_id=" + row.id,
 					downloadUrl: "http://localhost:8085/v1/users/download"
 				}).
 				showClose(true).
@@ -162,18 +162,20 @@
 					this.findClasses();
 				}).show();
 			},
-      go2ViewStudent(row) {
-      	this.rjDialog.
-      	title("查看学生").
-      	width("850px").
-      	top("").
-      	currentView(studentList, {data:row}).
-      	closeOnClickModal(false).
-      	showClose(true).
-      	then((opt) => {
-      		this.findClasses();
-      	}).show();
-      }
+			go2ViewStudent(row) {
+				this.rjDialog.
+				title("查看学生").
+				width("850px").
+				top("").
+				currentView(studentList, {
+					data: row
+				}).
+				closeOnClickModal(false).
+				showClose(true).
+				then((opt) => {
+					this.findClasses();
+				}).show();
+			}
 		},
 
 	}

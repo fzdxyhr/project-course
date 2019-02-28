@@ -5,7 +5,7 @@
 			<v-courses-list @setSearchText="setSearchText" @setCurrentNum="setCurrentNum" @setCurrentPage="setCurrentPage" :page="page"
 			 :child-courses-list='coursesList' @sonDelCourse="fatherDelCourse" @childGetCourses="getCourses" @childAmendCourse="fatherAmendCourse"></v-courses-list>
 		</div>
-		<el-dialog :title="dialog.title" v-model="dialog.control" size="small">
+		<el-dialog :title="dialog.title" :visible.sync="dialog.control" size="small">
 			<el-form ref="dialog.form" :model="dialog.form" label-width="100px">
 				<el-form-item label="课程名">
 					<el-input v-model="dialog.form.course_name"></el-input>
@@ -35,7 +35,7 @@
 					<el-input type="textarea" :rows="3" v-model="dialog.form.course_tip"></el-input>
 				</el-form-item>
 				<el-form-item label="课程图片">
-					<el-upload name="editormd-image-file" class="avatar-uploader" :action="`/v1/courses/images/upload`"
+					<el-upload name="editormd-image-file" class="avatar-uploader" :action="`http://localhost:8085/v1/courses/images/upload`"
 					 :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 						<img v-if="showImage" :src="imageUrl" class="avatar">
 						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -98,7 +98,7 @@
 		},
 		computed: {
 			imageUrl() {
-				return "/v1/courses/images/download?relative_path=" + this.dialog.form.course_image_url;
+				return "http://localhost:8085/v1/courses/images/download?relative_path=" + this.dialog.form.course_image_url;
 			}
 		},
 		methods: {
@@ -227,7 +227,8 @@
 					this.$axios.put("/v1/courses/" + this.dialog.form.id,
 						this.dialog.form
 					).then((response) => {
-						if (response.data.status == 200) {
+						console.log("response=",response)
+						if (response.status == 200) {
 							this.dialog.control = false;
 							this.$message.success('修改成功');
 							this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);

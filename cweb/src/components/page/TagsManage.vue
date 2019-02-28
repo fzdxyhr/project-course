@@ -5,7 +5,7 @@
 			<tags-list @sonGetTags="getTags" @sonDelTag="delTag" @sonAmendTag="amendTag" :sonTagsList="tagsList"></tags-list>
 
 		</div>
-		<el-dialog :title="dialog.title" v-model="dialog.control" size="small">
+		<el-dialog :title="dialog.title" :visible.sync="dialog.control" size="small">
 			<el-form ref="dialog.form" :model="dialog.form" label-width="80px">
 				<el-form-item label="标签名">
 					<el-input v-model="dialog.form.tag_name"></el-input>
