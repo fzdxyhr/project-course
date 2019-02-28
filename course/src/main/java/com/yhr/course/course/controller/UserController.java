@@ -59,13 +59,14 @@ public class UserController {
 
     @ApiOperation(value = "导入学生表数据", notes = "")
     @PostMapping(value = "/users/import")
-    public void parseExcel(@ApiParam(value = "附件流", required = true) MultipartHttpServletRequest multiReq) throws Exception {
+    public void parseExcel(@ApiParam(value = "附件流", required = true) MultipartHttpServletRequest multiReq
+            , @RequestParam(value = "class_id", required = false) Integer classId) throws Exception {
         MultipartFile multipartFile = null;
         for (String key : multiReq.getMultiFileMap().keySet()) {
             multipartFile = multiReq.getFile(key);
             break;
         }
-        userService.parseExcel(multipartFile);
+        userService.parseExcel(multipartFile, classId);
     }
 
 }

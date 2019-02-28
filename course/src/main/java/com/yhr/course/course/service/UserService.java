@@ -6,6 +6,8 @@ import com.yhr.course.course.utils.PagerHelper;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -24,6 +26,8 @@ public interface UserService {
 
     void downloadTemplate(HttpServletResponse response) throws Exception;
 
-    void parseExcel(MultipartFile multipartFile) throws Exception;
+    void parseExcel(MultipartFile multipartFile,Integer classId) throws Exception;
+
+    Map<Integer,User> getAllUserMap();
 
 }

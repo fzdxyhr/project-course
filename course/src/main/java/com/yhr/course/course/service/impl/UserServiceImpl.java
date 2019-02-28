@@ -11,6 +11,7 @@ import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.ExcelUtils;
 import com.yhr.course.course.utils.MD5Utils;
 import com.yhr.course.course.utils.PagerHelper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void parseExcel(MultipartFile multipartFile) throws Exception {
+    public void parseExcel(MultipartFile multipartFile, Integer classId) throws Exception {
         //检查文件格式
         checkFile(multipartFile);
         ExcelUtils<User> excelUtils = new ExcelUtils<>();
@@ -120,10 +121,24 @@ public class UserServiceImpl implements UserService {
             user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim() : null);
             user.setTelephone(datas.get(i).length > 4 ? datas.get(i)[4].trim() : null);
             user.setRole(RoleEnum.STUDENT.getValue());
+            user.setClassId(classId);
             user.setIsAdmin(0);
             user.setCreateTime(new Date());
             userRepository.save(user);
         }
+    }
+
+    @Override
+    public Map<Integer, User> getAllUserMap() {
+        List<User> users = userRepository.findAll();
+        if (CollectionUtils.isEmpty(users)) {
+            return new HashMap<>();
+        }
+        Map<Integer, User> userMap = new HashMap<>();
+        for (User user : users) {
+            userMap.put(user.getId(), user);
+        }
+        return userMap;
     }
 
     private Map<String, Integer> getSexMap() {

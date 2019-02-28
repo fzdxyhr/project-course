@@ -2,11 +2,16 @@ package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.dao.ClassesRepository;
 import com.yhr.course.course.dao.TagRepository;
+import com.yhr.course.course.dao.UserRepository;
 import com.yhr.course.course.entity.Classes;
 import com.yhr.course.course.entity.Tag;
+import com.yhr.course.course.entity.User;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.ClassesService;
+import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.StudentVo;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +19,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author yhr
@@ -30,6 +33,10 @@ public class ClassesServiceImpl implements ClassesService {
 
     @Autowired
     private ClassesRepository classesRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private UserService userService;
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
@@ -51,6 +58,13 @@ public class ClassesServiceImpl implements ClassesService {
         params.add(startIndex);
         params.add(pageSize);
         List<Classes> classesList = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<Classes>(Classes.class));
+        if (CollectionUtils.isNotEmpty(classesList)) {
+            Map<Integer, User> userMap = userService.getAllUserMap();
+            for (Classes classes : classesList) {
+                classes.setTeacherName(classes.getTeacherId() == null || userMap.get(classes.getTeacherId()) == null ? "" : userMap.get(classes.getTeacherId()).getUserName());
+                classes.setMonitorName(classes.getMonitor() == null || userMap.get(classes.getMonitor()) == null ? "" : userMap.get(classes.getMonitor()).getUserName());
+            }
+        }
         result.setTotal(total);
         result.setItems(classesList);
         return result;
@@ -88,5 +102,19 @@ public class ClassesServiceImpl implements ClassesService {
             throw new ServiceException("不存在【" + id + "】对应的班级");
         }
         return tempClasses;
+    }
+
+    @Override
+    public List<StudentVo> findClassesStudent(Integer classId) {
+        List<User> users = userRepository.findByClassId(classId);
+        if (CollectionUtils.isEmpty(users)) {
+            return Collections.emptyList();
+        }
+        List<StudentVo> studentVos = new ArrayList<>();
+        for (User user : users) {
+            StudentVo studentVo = new StudentVo();
+
+        }
+        return null;
     }
 }

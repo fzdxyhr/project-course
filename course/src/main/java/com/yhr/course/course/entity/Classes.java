@@ -45,4 +45,10 @@ public class Classes {
     @Column(name = "create_time")
     private Date createTime;
 
+    //不做系列化的字段
+    @Transient
+    private String teacherName;
+    @Transient
+    private String monitorName;
+
 }
