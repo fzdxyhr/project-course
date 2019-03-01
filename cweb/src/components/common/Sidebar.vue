@@ -17,6 +17,9 @@
 		<el-menu-item index="TagsManage">
 			<i class="el-icon-star-on"></i>标签管理
 		</el-menu-item>
+    <el-menu-item index="HomeWorkManage">
+    	<i class="el-icon-star-on"></i>作业管理
+    </el-menu-item>
 	</el-menu>
 </template>
 
@@ -38,6 +41,7 @@
 					ClassManage:"班级管理",
 					ArticlesManage: "文章管理",
 					TagsManage: "标签管理",
+          HomeWorkManage:"作业管理"
 				};
 				var text_arr=[];
 				for(var i=0,l=keyPath.length;i<l;i++){
