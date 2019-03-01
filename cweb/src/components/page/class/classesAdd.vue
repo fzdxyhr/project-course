@@ -7,6 +7,9 @@
 			<el-form-item label="班级描述" prop="class_desc">
 				<el-input v-model="form.class_desc"></el-input>
 			</el-form-item>
+      <el-form-item label="教学进度" prop="progress">
+      	<el-input v-model="form.progress"></el-input>
+      </el-form-item>
 			<el-form-item label="授课老师" prop="teacher_id">
 				<el-select v-model="form.teacher_id" placeholder="请选择">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
@@ -18,7 +21,8 @@
 			</el-form-item>
 		</el-form>
 		<div style="text-align: right;">
-			<el-button type="primary" @click="go2Add">创建</el-button>
+			<el-button v-if="!form.id" type="primary" @click="go2Add">创建</el-button>
+      <el-button v-if="form.id" type="primary" @click="go2Add">修改</el-button>
 			<el-button @click="doCancel">取消</el-button>
 		</div>
 	</div>
@@ -32,7 +36,8 @@
 					class_name: "",
 					class_desc: "",
 					teacher_id: "",
-					max_student: ""
+					max_student: "",
+          progress:0
 				},
 				options: [],
 				rules: {
@@ -56,6 +61,11 @@
 						message: '请输入班级人数',
 						trigger: 'change'
 					}],
+          progress: [{
+          	required: true,
+          	message: '请输入教学进度',
+          	trigger: 'change'
+          }],
 				}
 			};
 		},

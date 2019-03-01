@@ -12,13 +12,16 @@
 				</el-table-column>
 				<el-table-column prop="teacher_name" label="授课老师">
 				</el-table-column>
+        <el-table-column prop="progress" label="教学进度" min-width="50px">
+          <template scope="scope">{{scope.row.progress == null? 0 : scope.row.progress}}%</template>
+        </el-table-column>
 				<el-table-column prop="monitor_name" label="班长">
 				</el-table-column>
-				<el-table-column prop="max_student" label="班级人数">
+				<el-table-column prop="max_student" label="班级人数" min-width="50px">
 				</el-table-column>
 				<el-table-column prop="class_desc" label="班级描述">
 				</el-table-column>
-				<el-table-column prop="create_time" label="创建时间">
+				<el-table-column prop="create_time" label="创建时间"  min-width="90px">
 				</el-table-column>
 				<el-table-column label="操作" min-width="160px">
 					<template scope="scope">

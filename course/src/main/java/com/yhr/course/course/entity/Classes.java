@@ -41,6 +41,10 @@ public class Classes {
     @Column(name = "max_student")
     private Integer maxStudent;
 
+    @ApiModelProperty("班级教学进度")
+    @Column(name = "progress")
+    private Integer progress;
+
     @ApiModelProperty("创建时间")
     @Column(name = "create_time")
     private Date createTime;

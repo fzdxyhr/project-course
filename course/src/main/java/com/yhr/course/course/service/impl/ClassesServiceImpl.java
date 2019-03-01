@@ -67,6 +67,7 @@ public class ClassesServiceImpl implements ClassesService {
         if (CollectionUtils.isNotEmpty(classesList)) {
             Map<Integer, User> userMap = userService.getAllUserMap();
             for (Classes classes : classesList) {
+                classes.setProgress(classes.getProgress() == null ? 0 : classes.getProgress());
                 classes.setTeacherName(classes.getTeacherId() == null || userMap.get(classes.getTeacherId()) == null ? "" : userMap.get(classes.getTeacherId()).getUserName());
                 classes.setMonitorName(classes.getMonitor() == null || userMap.get(classes.getMonitor()) == null ? "" : userMap.get(classes.getMonitor()).getUserName());
             }
