@@ -1,6 +1,7 @@
 package com.yhr.course.course.controller;
 
 import com.yhr.course.course.entity.Course;
+import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.service.CourseService;
 import com.yhr.course.course.service.TagService;
@@ -52,6 +53,16 @@ public class CourseController {
         return courseService.get(id);
     }
 
+    @RequestMapping(value = "/courses/{id}/study", method = RequestMethod.PUT)
+    public void study(@PathVariable("id") Integer id) throws Exception {
+        courseService.study(id);
+    }
+
+    @RequestMapping(value = "/courses/{id}/study", method = RequestMethod.GET)
+    public CourseStudent getStudy(@PathVariable("id") Integer id) throws Exception {
+        return courseService.getStudy(id);
+    }
+
     @ApiOperation(value = "上传图片", notes = "")
     @RequestMapping(value = "/courses/images/upload", method = RequestMethod.POST)
     public String upload(@ApiParam(value = "附件流", required = true) MultipartHttpServletRequest multiReq) throws Exception {
@@ -68,6 +79,24 @@ public class CourseController {
     @GetMapping(value = "/courses/images/download")
     public void downloadImage(@ApiParam(value = "文件名", required = true) @RequestParam("relative_path") String relativePath, HttpServletResponse response) throws Exception {
         courseService.downloadImage(relativePath, response);
+    }
+
+    @ApiOperation(value = "上传文件", notes = "")
+    @RequestMapping(value = "/files/upload", method = RequestMethod.POST)
+    public String uploadFile(@ApiParam(value = "附件流", required = true) MultipartHttpServletRequest multiReq) throws Exception {
+        MultipartFile multipartFile = null;
+        for (String key : multiReq.getMultiFileMap().keySet()) {
+            multipartFile = multiReq.getFile(key);
+            break;
+        }
+        String result = courseService.uploadFile(multipartFile);
+        return result;
+    }
+
+    @ApiOperation(value = "下载文件", notes = "")
+    @RequestMapping(value = "/files/download/{file_name}", method = RequestMethod.GET)
+    public void downloadFile(@ApiParam(value = "文件名", required = true) @PathVariable("file_name") String fileName, HttpServletResponse response) throws Exception {
+        courseService.downloadFile(fileName, response);
     }
 
 }

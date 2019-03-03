@@ -5,6 +5,7 @@ import articleManage from '@components/articlesList/index'
 import courseDetail from '@components/course/Content'
 import myStudy from '@components/study/index'
 import login from '@components/login/index'
+import filePlay from '@components/course/filePlay'
 
 Vue.use(Router)
 
@@ -40,6 +41,10 @@ export default new Router({
 				path: 'myStudy',
 				name: "myStudy",
 				component: myStudy,
+			}, {
+				path: 'filePlay',
+				name: "filePlay",
+				component: filePlay,
 			}]
 		}
 	]

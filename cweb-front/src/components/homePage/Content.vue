@@ -3,7 +3,7 @@
 		<div class="title-coursesList">
 			<h2>精品课程</h2>
 			<div class="courseSearch">
-				<el-input placeholder="查找课程" icon="search" v-model="searchText" :on-icon-click="handleIconClick">
+				<el-input type="text" placeholder="输入课程名查找" suffix-icon="el-icon-search" v-model="searchText">
 				</el-input>
 			</div>
 		</div>
@@ -20,20 +20,20 @@
 							全部
 						</span>
 						<span class="label" v-for="(tag,index) in tags" v-if="index<4">
-							{{tag.name}}
+							{{tag.tag_name}}
 						</span>
 						<el-button @click="btnShowMordLabel">{{labelMore.btnText}}<i :style="{transform: 'rotate('+labelMore.iconRotate+'deg)'}"
 							 class="el-icon-caret-bottom"></i></el-button>
 						<div class="cll-more" :class="{showMore:this.labelMore.state}">
 							<span class="label" v-for="(tag,index) in tags" v-if="index>=4">
-								{{tag.name}}
+								{{tag.tag_name}}
 							</span>
 						</div>
 					</div>
 				</el-col>
 			</el-row>
 		</div>
-		<courses-list :searchText="searchText"></courses-list>
+		<courses-list ref="course"></courses-list>
 	</div>
 </template>
 <script scoped>
@@ -43,6 +43,13 @@
 		name: "home-content",
 		components: {
 			coursesList,
+		},
+		watch: {
+			searchText(newValue, oldValue) {
+				if (newValue != oldValue) {
+					this.$refs.course.getCourses(this.searchText, 'search');
+				}
+			}
 		},
 		data: () => {
 			return {
@@ -75,11 +82,10 @@
 				}
 			},
 			getAllTags() {
-				this.$http.get('../../../static/testData/tags.json').then((response) => {
-					//console.log(response.data);
-					this.tags = response.data;
+				this.$axios.get('/v1/tags?page_no=1&page_size=10000000').then((response) => {
+					this.tags = response.data.items;
 				}, (response) => {
-					console.log("获取所有标签失败");
+					this.$message.error('获取标签失败');
 				});
 			}
 		},
@@ -88,86 +94,87 @@
 		}
 	}
 </script>
-<style>
+<style lang="scss">
 	.content {
-	}
+		height: 100%;
+		
+		.title-coursesList {
+			background-color: #edeff0;
+			/*background: linear-gradient(#edeff0, #ffffff);*/
+			overflow: hidden;
+			padding: 5px 10px;
+			height: 46px;
+		}
 
-	.title-coursesList {
-		background-color: #edeff0;
-		/*background: linear-gradient(#edeff0, #ffffff);*/
-		overflow: hidden;
-		padding: 5px 10px;
-		height: 46px;
-	}
+		.title-coursesList h2 {
+			float: left;
+			font-size: 20px;
+			font-weight: 200;
+			line-height: 46px;
+		}
 
-	.title-coursesList h2 {
-		float: left;
-		font-size: 20px;
-		font-weight: 200;
-		line-height: 46px;
-	}
+		.courseSearch {
+			float: left;
+			/*line-height: 60px;*/
+			/*ie9下不行*/
+			padding: 3px 40px;
+		}
 
-	.courseSearch {
-		float: left;
-		/*line-height: 60px;*/
-		/*ie9下不行*/
-		padding: 3px 40px;
-	}
+		.courseSearch .el-input__inner {
+			border-radius: 40px;
+			outline: none;
+			height: 40px;
+		}
 
-	.courseSearch .el-input__inner {
-		border-radius: 40px;
-		outline: none;
-		height: 40px;
-	}
+		.course-labels {
+			padding-top: 10px;
+		}
 
-	.course-labels {
-		padding-top: 10px;
-	}
+		.cl-title {
+			font-size: 16px;
+			font-weight: 200;
+			line-height: 27px;
+			padding: 5px 5px 5px 15px;
+		}
 
-	.cl-title {
-		font-size: 16px;
-		font-weight: 200;
-		line-height: 27px;
-		padding: 5px 5px 5px 15px;
-	}
+		.cl-labels {
+			padding: 5px;
+		}
 
-	.cl-labels {
-		padding: 5px;
-	}
+		.cl-labels .label {
+			display: inline-block;
+			font-size: 13px;
+			color: #324057;
+			border: 1px solid #D3DCE6;
+			padding: 4px 8px;
+			border-radius: 40px;
+			cursor: pointer;
+			margin: 0 20px 20px 0;
+		}
 
-	.cl-labels .label {
-		display: inline-block;
-		font-size: 13px;
-		color: #324057;
-		border: 1px solid #D3DCE6;
-		padding: 4px 8px;
-		border-radius: 40px;
-		cursor: pointer;
-		margin: 0 20px 20px 0;
-	}
+		.cl-labels .label:hover,
+		.cl-labels .label.active {
+			border-color: #20A0FF;
+			color: #1D8CE0;
+		}
 
-	.cl-labels .label:hover,
-	.cl-labels .label.active {
-		border-color: #20A0FF;
-		color: #1D8CE0;
-	}
+		.cl-labels .el-button {
+			border: none;
+		}
 
-	.cl-labels .el-button {
-		border: none;
-	}
+		.cll-more {
+			height: 0;
+			overflow: hidden;
+			transition: all ease .5s;
+		}
 
-	.cll-more {
-		height: 0;
-		overflow: hidden;
-		transition: all ease .5s;
-	}
+		.cll-more.showMore {
+			height: auto;
+			overflow: hidden;
+		}
 
-	.cll-more.showMore {
-		height: auto;
-		overflow: hidden;
-	}
-
-	.cl-labels .el-icon-caret-bottom {
-		transition: all ease .5s;
+		.cl-labels .el-icon-caret-bottom {
+			transition: all ease .5s;
+		}
 	}
 </style>

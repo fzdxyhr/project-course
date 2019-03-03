@@ -1,17 +1,16 @@
 <template>
 	<div class="course-detail">
-		<div class="title-background" :style="{'background-image':'url(../'+(course.imgUrl&&course.imgUrl)+')'}">
+		<div class="title-background" :style="{'background-image':'url(http://localhost:8085/v1/courses/images/download?relative_path='+(course.course_image_url&&course.course_image_url)+')'}">
 			<div class="c-title">
-				{{course.name}}
+				{{course.course_name}}
 			</div>
 		</div>
-
 		<el-row>
 			<el-col :span="16">
 				<el-tabs v-model="activeName" style="margin-top: 10px;">
 					<el-tab-pane label="基本信息" name="first">
 						<div class="c-describe">
-							简介：{{course.description}}
+							简介：{{course.course_desc}}
 						</div>
 						<el-collapse>
 							<el-collapse-item v-for="(s,i) in course.sections" :title="(i+1+'.')+s.name" :name="i">
@@ -41,7 +40,7 @@
 				</el-tabs>
 			</el-col>
 			<el-col :span="8">
-				<course-aside :prompt-content="course.prompt"></course-aside>
+				<course-aside :prompt-content="course.course_tip" :courseId="this.$route.query.courseId"></course-aside>
 			</el-col>
 		</el-row>
 	</div>
@@ -58,23 +57,23 @@
 			commentContent,
 			questionList
 		},
-		created() {
-			var urlStr = location.search;
-			var id = urlStr.substring(urlStr.indexOf("?") + 1, urlStr.length);
-			this.getCourse(id);
-		},
 		data() {
 			return {
 				course: {},
+				courseId: "",
 				activeName: "first"
 			};
 		},
+		mounted() {
+			this.courseId = this.$route.query.courseId;
+			this.getCourse();
+		},
 		methods: {
-			getCourse(id) {
-				this.$http.get('../../../static/testData/course.json').then((response) => {
+			getCourse() {
+				this.$axios.get('/v1/courses/' + this.courseId).then((response) => {
 					this.course = response.data;
 				}, (response) => {
-					console.log('获取课程失败');
+					this.$message.error('获取课程详情失败');
 				});
 			},
 		}
@@ -150,12 +149,12 @@
 			text-overflow: ellipsis;
 			margin: 3px 0;
 		}
-    
-    .el-tabs__item {
-    	font-size: 16px !important;
-    	color: #000 !important;
-    	font-weight: 600 !important;
-    }
+
+		.el-tabs__item {
+			font-size: 16px !important;
+			color: #000 !important;
+			font-weight: 600 !important;
+		}
 
 		.articles-title a:hover {
 			color: #888;

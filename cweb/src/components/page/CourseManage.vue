@@ -162,6 +162,7 @@
 				};
 				this.dialog.control = true;
 				this.dialog.title = "添加课程";
+				this.showImage = false;
 			},
 			fatherAmendCourse(course) { //显示修改的dialog
 				this.dialog.form = JSON.parse(JSON.stringify(course));
@@ -211,7 +212,7 @@
 				this.dialog.form.tag_id = this.dialog.form.tag_id.join(",");
 				if (!this.dialog.form.id) { //添加课程
 					this.$axios.post("/v1/courses", this.dialog.form).then((response) => {
-						if (response.data.status == 200) {
+						if (response.status == 200) {
 							this.dialog.control = false;
 							this.$message.success('添加成功');
 							this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);

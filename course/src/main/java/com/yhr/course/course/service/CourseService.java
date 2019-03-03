@@ -1,8 +1,10 @@
 package com.yhr.course.course.service;
 
 import com.yhr.course.course.entity.Course;
+import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.utils.PagerHelper;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -22,7 +24,15 @@ public interface CourseService {
 
     Course get(Integer id) throws Exception;
 
+    void study(Integer id) throws Exception;
+
+    CourseStudent getStudy(Integer id) throws Exception;
+
     String upload(MultipartFile multipartFile) throws Exception;
 
+    String uploadFile(MultipartFile multipartFile) throws Exception;
+
     public void downloadImage(String relativePath, HttpServletResponse response) throws Exception;
+
+    public void downloadFile(String relativePath, HttpServletResponse response) throws Exception;
 }

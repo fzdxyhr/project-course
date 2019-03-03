@@ -24,7 +24,11 @@
 </script>
 
 <style lang="scss">
-.content {
-  position: relative;
-}
+	.home {
+		height: 100%;
+
+		.content {
+			position: relative;
+		}
+	}
 </style>

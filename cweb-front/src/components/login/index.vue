@@ -3,11 +3,11 @@
 		<div class="login-form">
 			<p class="title">登陆</p>
 			<el-form label-position="right" :model="loginForm" :rules="rules" ref="loginForm">
-				<el-form-item prop="loginName">
-					<el-input prefix-icon="el-icon-fa-envelope" placeholder="请输入邮箱" type="text" v-model="loginForm.loginName"></el-input>
+				<el-form-item prop="account">
+					<el-input prefix-icon="el-icon-fa-envelope" placeholder="请输入账号" type="text" v-model="loginForm.account"></el-input>
 				</el-form-item>
 				<el-form-item prop="password">
-					<el-input prefix-icon="el-icon-fa-lock" placeholder="请输入密码" type="password" v-model="loginForm.password"></el-input>
+					<el-input prefix-icon="el-icon-fa-lock" placeholder="请输入密码" type="password" v-model="loginForm.password" @keyup.enter.native="handleLoginBtnClick"></el-input>
 				</el-form-item>
 			</el-form>
 			<div class="fogot-pwd-btn">
@@ -27,11 +27,11 @@
 		data() {
 			return {
 				loginForm: {
-					loginName: 'nianqin',
+					account: 'nianqin',
 					password: '123456',
 				},
 				rules: {
-					loginName: [{
+					account: [{
 							required: true,
 							message: '请输入账号',
 							trigger: 'blur'
@@ -57,18 +57,15 @@
 				this.$refs['loginForm'].validate(valid => {
 					if (valid) {
 						this.loginForm.password = this.$md5(this.loginForm.password);
-						// 						this.$http.post("/v1/login", this.loginData).then((response) => {
-						// 							let message = response.data;
-						// 							localStorage.setItem("WEBFRONT_USER", JSON.stringify(message));
-						// 							if (message) {
-						// 								this.$router.push('/Content');
-						// 							}
-						// 						}, (response) => {
-						// 							this.$message.error('账号或密码错误');
-						// 							this.isBtnLogin = false;
-						// 						});
-						localStorage.setItem("WEBFRONT_USER", JSON.stringify(this.loginForm));
-						this.$router.push({name:"courseManage"});
+						this.$axios.post("/v1/login", this.loginForm).then((response) => {
+							let message = response.data;
+							localStorage.setItem("WEBFRONT_USER", JSON.stringify(message));
+							this.$router.push({
+								name: "courseManage"
+							});
+						}, (response) => {
+							this.$message.error('账号或密码错误');
+						});
 					} else {
 						return false;
 					}

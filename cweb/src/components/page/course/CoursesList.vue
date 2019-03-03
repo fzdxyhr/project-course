@@ -5,7 +5,7 @@
 		</div>
 		<div class="course diyscrollbar" v-for="(c,courseIndex) in childCoursesList" :style="{top:readTop + 'px'}" :class="{ read: c.id==readCourseId }">
 			<div class="close" @click="closeRead" @keyup.esc="closeRead"> <i class="el-icon-close"></i></div>
-			<div class="c-title" :style="{'background-image':'url(/v1/courses/images/download?relative_path='+c.course_image_url+')'}">
+			<div class="c-title" :style="{'background-image':'url(http://localhost:8085/v1/courses/images/download?relative_path='+c.course_image_url+')'}">
 				<h2>{{c.course_name&&c.course_name}}</h2>
 			</div>
 			<div class="c-describe">
@@ -49,8 +49,10 @@
 							<el-button @click.stop="amendChapter(ch)" title="修改章" icon="el-icon-edit" :plain="true" type="warning"></el-button>
 							<el-button @click.stop="delChapter(ch)" title="删除章" icon="el-icon-delete" :plain="true" type="danger"></el-button>
 							<div class="sort-butGroup">
-								<el-button @click.stop="moveUpChapter(c.sections,chapterIndex,courseIndex)" :disabled="chapterIndex==0" title="上移" icon="caret-top" :plain="true" type="info"></el-button>
-								<el-button @click.stop="moveDowmChapter(c.sections,chapterIndex,courseIndex)" :disabled="chapterIndex==c.sections.length-1" title="下移" icon="caret-bottom" :plain="true" type="info"></el-button>
+								<el-button @click.stop="moveUpChapter(c.sections,chapterIndex,courseIndex)" :disabled="chapterIndex==0" title="上移"
+								 icon="caret-top" :plain="true" type="info"></el-button>
+								<el-button @click.stop="moveDowmChapter(c.sections,chapterIndex,courseIndex)" :disabled="chapterIndex==c.sections.length-1"
+								 title="下移" icon="caret-bottom" :plain="true" type="info"></el-button>
 							</div>
 						</template>
 						<div class="ch-tags">
@@ -69,39 +71,24 @@
 		</div>
 		<div class="fixclear"></div>
 		<div class="paging">
-			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.currentPage" :page-sizes="[20, 50, 80, 100,500,1000]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="page.totalCourses">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.currentPage"
+			 :page-sizes="[20, 50, 80, 100,500,1000]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="page.totalCourses">
 			</el-pagination>
 		</div>
-		<el-dialog :title="dialog.title" :visible.sync="dialog.control">
-			<el-form label-width="70px" :model="dialog.form">
-				<el-form-item label="章名称">
-					<el-input v-model="dialog.form.name"></el-input>
-				</el-form-item>
-				<el-form-item label="描述">
-					<el-input type="textarea" :rows="3" v-model="dialog.form.description"></el-input>
-				</el-form-item>
-				<el-form-item label="文章标签">
-					<el-tag :key="tag.name" v-for="tag in dialog.form.tags" :closable="true" :close-transition="false" @close="handleClose(tag)">
-						{{tag.name}}
-					</el-tag>
-					<el-autocomplete v-model="dialog.form.inputTag" :fetch-suggestions="querySearchTag" placeholder="请输入标签" :trigger-on-focus="false" @select="handleSelect" ref="saveTagInput" @keyup.enter.native="handleInputConfirm" @blur="handleInputConfirm"></el-autocomplete>
-					<el-button @click="handleInputConfirm">添加</el-button>
-				</el-form-item>
-			</el-form>
-			<span slot="footer" class="dialog-footer">
-   				 <el-button @click="dialog.control = false">取 消</el-button>
-   				 <el-button @click="onSubmit" type="primary">确 定</el-button>
-  			</span>
-		</el-dialog>
+		<rjDialog></rjDialog>
 	</div>
 </template>
 
 <script>
 	import Vue from 'vue'
+	import rjDialog from '@components/common/dialog.vue'
+	import addChapter from '@components/page/course/addChapter.vue'
+
 	export default {
 		name: 'courseList',
 		components: {
-
+			rjDialog,
+			addChapter
 		},
 		props: ['childCoursesList', 'page'],
 		data() {
@@ -170,14 +157,16 @@
 				this.isSwitchSort = !this.isSwitchSort;
 			},
 			addChapter(course) { //添加章
-				this.dialog.form = {
-					id: '',
-					name: '',
-					description: '',
-					tags: [],
-					inputTag: ''
-				};
-				this.showDialog();
+				this.rjDialog.
+				title("添加章节").
+				width("800px").
+				top("3%").
+				currentView(addChapter, {
+					data: course
+				}).
+				showClose(true).
+				then((opt) => {
+				}).show();
 			},
 			amendChapter(ch) { //修改章
 				this.dialog.form = JSON.parse(JSON.stringify(ch));
@@ -222,7 +211,7 @@
 			},
 			onSubmit() { //处理添加或修改章
 				var se = JSON.parse(JSON.stringify(this.dialog.form));
-				if(!this.dialog.form.id) { //添加章
+				if (!this.dialog.form.id) { //添加章
 					this.$axios.post("/admin/section", {
 						"courseId": this.readCourseId,
 						"description": se.description,
@@ -258,8 +247,8 @@
 
 			handleClose(tag) { //删除显示的标签
 				var index = 0;
-				for(let i = 0; i < this.dialog.form.tags.length; i++) {
-					if(this.dialog.form.tags[i].name == tag.name) {
+				for (let i = 0; i < this.dialog.form.tags.length; i++) {
+					if (this.dialog.form.tags[i].name == tag.name) {
 						index = i;
 					}
 				}
@@ -267,7 +256,7 @@
 			},
 			handleInputConfirm() { //添加标签
 				let inputTag = this.dialog.form.inputTag;
-				if(inputTag) {
+				if (inputTag) {
 					this.dialog.form.tags.push({
 						"name": inputTag
 					});
@@ -281,8 +270,8 @@
 				callback(results);
 			},
 			createFilterTag(queryString) { //根据输入的标签过滤相关地1标签
-				return(restaurant) => {
-					return(restaurant.value.indexOf(queryString) === 0);
+				return (restaurant) => {
+					return (restaurant.value.indexOf(queryString) === 0);
 				};
 			},
 			handleSelect(item) { //点击筛选后的标签列表
@@ -471,6 +460,7 @@
 		margin: 3px 15px;
 		/*float: left;*/
 	}
+
 	/*章节列表*/
 
 	.c-sections {
@@ -622,6 +612,7 @@
 		background-color: #fff;
 		padding: 10px 0;
 	}
+
 	/**
 	 * 查看单个课程时
 	 * */
@@ -652,7 +643,7 @@
 	}
 
 	.read .c-title {
-		background-image: none!important;
+		background-image: none !important;
 	}
 
 	.read .c-title h2 {

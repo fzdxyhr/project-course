@@ -4,16 +4,17 @@
 			后台管理
 		</div>
 		<div class="login-panel" :class="{isLogin:isLogin}">
-			<div class="top">
-				<ul class="fixclear">
+			<div class="login-title">
+				<!-- <ul class="fixclear">
 					<li>
 						<a @click="switchSignin" href="javascript:;">注册</a>
 					</li>
 					<li class="active">
 						<a @click="switchSignin" href="javascript:;">账号登陆</a>
 					</li>
-				</ul>
-				<div class="switchBorder"></div>
+				</ul> -->
+				登&nbsp;&nbsp;录
+				<!-- <div class="switchBorder"></div> -->
 			</div>
 			<div class="login-form">
 				<ul class="fixclear">
@@ -201,6 +202,18 @@
 		.top {
 			background-color: #fff;
 			height: 50px;
+			border-top-left-radius: 3px;
+			border-top-right-radius: 3px;
+			border-bottom: 3px solid #f3f8ff;
+		}
+		
+		.login-title {
+			background-color: #fff;
+			height: 50px;
+			line-height: 50px;
+			text-align: center;
+			color: #333;
+			font-size: 20px;
 			border-top-left-radius: 3px;
 			border-top-right-radius: 3px;
 			border-bottom: 3px solid #f3f8ff;

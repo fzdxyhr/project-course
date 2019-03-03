@@ -15,6 +15,11 @@ import java.util.List;
 public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Bean
+    public GlobalInterceptor globalInterceptor() {
+        return new GlobalInterceptor();
+    }
+
+    @Bean
     public CorsFilter corsFilter() {
         //1.添加CORS配置信息
         CorsConfiguration config = new CorsConfiguration();
@@ -39,8 +44,8 @@ public class MvcConfig extends WebMvcConfigurerAdapter {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-//        registry.addInterceptor(globalInterceptor())
-//                .addPathPatterns("/**");
+        registry.addInterceptor(globalInterceptor())
+                .addPathPatterns("/**");
 //        registry.addInterceptor(loginedInterceptor())
 //                .addPathPatterns("/api/v*/c/**")
 //                .addPathPatterns("/api/v*/m/**");

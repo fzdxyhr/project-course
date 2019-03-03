@@ -19,12 +19,10 @@
 </template>
 
 <script>
-	import { Card } from 'element-ui'
 	export default {
 		name: 'tagsList',
 		props: ['sonTagsList'],
 		components: {
-			'el-card': Card,
 		},
 		data() {
 			return {}

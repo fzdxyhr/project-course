@@ -1,18 +1,19 @@
 <template>
 	<div class="courseslist">
-		<div @click="go2CourseDetail" target="view_window" class="c-item" v-for="c in courseslist">
-			<img class="c-img" :src="c.imgUrl" />
+		<div @click="go2CourseDetail(c.id)" class="c-item" v-for="c in courseslist">
+			<img class="c-img" :src="`http://localhost:8085/v1/courses/images/download?relative_path=`+c.course_image_url" />
 			<div class="course">
-				<div class="title">{{c.name}}</div>
+				<div class="title">{{c.course_name}}</div>
 				<div class="c-describe">
-					{{c.description}}
+					{{c.course_desc}}
 				</div>
 			</div>
 			<div class="c-label">
 			</div>
 		</div>
 		<div class="getMode">
-			<el-button type="primary" @click="getModeCourse" :loading="loadMoreCourse">加载更多</el-button>
+			<el-button type="primary" v-if="!noMoreData" @click="getModeCourse" icon="el-icon-arrow-down" :loading="loadMoreCourse">加载更多</el-button>
+			<div v-if="noMoreData" style="font-size: 14px;color: #93999f;">暂无更多数据了...</div>
 		</div>
 	</div>
 </template>
@@ -25,23 +26,34 @@
 			return {
 				loadMoreCourse: false,
 				courseslist: [],
-				page: 0,
+				page: 1,
 				rows: 10,
-
+				noMoreData: false,
+				key: ""
 			}
 		},
 		created() {
-			this.getCourses();
+			this.getCourses('', 'search');
 		},
 		methods: {
-			getCourses() { //获取数据(页数，每页多少条，关键词)
-				this.$http.get("../../../static/testData/courses.json?searchStr=" + this.searchText + "&page=" + this.page +
-					"&size=" + this.rows).then((response) => {
-					//this.courseslist = response.data.data.content;
-					console.log(response.data);
-					response.data.forEach((c) => {
+			getCourses(key, type) { //获取数据(页数，每页多少条，关键词)
+				if (type === 'search') {
+					this.page = 1;
+					this.noMoreData = false;
+				}
+				this.key = key;
+				this.$axios.get("/v1/courses?key=" + this.key + "&page_no=" + this.page + "&page_size=" + this.rows).then((
+					response) => {
+					let message = response.data;
+					if (type === 'search') {
+						this.courseslist = [];
+					}
+					message.items.forEach((c) => {
 						this.courseslist.push(c)
 					})
+					if (message.items.length === 0) {
+						this.noMoreData = true;
+					}
 					this.loadMoreCourse = false;
 				}, (response) => {
 					this.$message.error('获取课程失败');
@@ -49,13 +61,15 @@
 			},
 			getModeCourse() {
 				this.page++;
-				this.row += 10;
 				this.loadMoreCourse = true;
-				this.getCourses()
+				this.getCourses(this.key, 'more')
 			},
-			go2CourseDetail() {
+			go2CourseDetail(courseId) {
 				this.$router.push({
-					name: "courseDetail"
+					name: "courseDetail",
+					query: {
+						courseId: courseId
+					}
 				})
 			}
 		}

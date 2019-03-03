@@ -2,6 +2,7 @@ package com.yhr.course.course.entity;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+import org.hibernate.annotations.Proxy;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -12,6 +13,7 @@ import java.util.Date;
 
 @Data
 @Entity
+@Proxy(lazy = false)
 @Table(name = "s_user")
 public class User {
 

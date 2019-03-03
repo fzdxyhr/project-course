@@ -1,9 +1,12 @@
 package com.yhr.course.course.service.impl;
 
+import com.yhr.course.course.config.GaeaContext;
 import com.yhr.course.course.contants.Contants;
 import com.yhr.course.course.dao.CourseRepository;
+import com.yhr.course.course.dao.CourseStudentRepository;
 import com.yhr.course.course.dao.TagRepository;
 import com.yhr.course.course.entity.Course;
+import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.CourseService;
@@ -18,6 +21,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.math.BigInteger;
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -32,6 +37,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseRepository courseRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private CourseStudentRepository courseStudentRepository;
 
     @Override
     public PagerHelper<Course> list(String key, Integer pageNo, Integer pageSize) {
@@ -98,6 +105,20 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public void study(Integer id) throws Exception {
+        CourseStudent courseStudent = new CourseStudent();
+        courseStudent.setCourseId(id);
+        courseStudent.setStudentId(GaeaContext.getUserId());
+        courseStudent.setCreateTime(new Date());
+        courseStudentRepository.save(courseStudent);
+    }
+
+    @Override
+    public CourseStudent getStudy(Integer id) throws Exception {
+        return courseStudentRepository.findByStudentIdAndCourseId(GaeaContext.getUserId(), id);
+    }
+
+    @Override
     public String upload(MultipartFile multipartFile) throws Exception {
         if (multipartFile == null) {
             return "";
@@ -120,6 +141,28 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
+    public String uploadFile(MultipartFile multipartFile) throws Exception {
+        if (multipartFile == null) {
+            return "";
+        }
+        String fileName = getFileName(multipartFile);
+        String relativePath = "file";
+        InputStream inputStream = multipartFile.getInputStream();
+        File destDir = new File(Contants.UPLOAD_FILE_PATH + relativePath);
+        if (!destDir.exists()) {
+            FileUtils.forceMkdir(destDir);
+        }
+        File destFile = new File(Contants.UPLOAD_FILE_PATH + relativePath + File.separator + fileName);
+        OutputStream outputStream = new FileOutputStream(destFile);
+        int len = 0;
+        byte[] buffer = new byte[1024];
+        while ((len = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, len);
+        }
+        return "http://localhost:8085/v1/files/download/" + fileName;
+    }
+
+    @Override
     public void downloadImage(String relativePath, HttpServletResponse response) throws Exception {
         String rootPath = Contants.UPLOAD_FILE_PATH;
         String path = rootPath + "image" + File.separator + relativePath;
@@ -130,5 +173,31 @@ public class CourseServiceImpl implements CourseService {
         while ((len = iStream.read(buffer)) != -1) {
             outputStream.write(buffer, 0, len);
         }
+    }
+
+    public void downloadFile(String fileName, HttpServletResponse response) throws Exception {
+        String rootPath = Contants.UPLOAD_FILE_PATH;
+        String path = rootPath + "file" + File.separator + fileName;
+        OutputStream outputStream = response.getOutputStream();
+        InputStream iStream = new FileInputStream(new File(path));
+        int len = 0;
+        byte[] buffer = new byte[1024];
+        while ((len = iStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, len);
+        }
+    }
+
+    private String getFileName(MultipartFile multipartFile) {
+        try {
+            String suffix = multipartFile.getOriginalFilename().split(".")[1];
+            byte[] uploadBytes = multipartFile.getBytes();
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            byte[] digest = md5.digest(uploadBytes);
+            String hashString = new BigInteger(1, digest).toString(16);
+            return hashString + "." + suffix;
+        } catch (Exception e) {
+            System.out.println(e.getCause());
+        }
+        return multipartFile.getOriginalFilename();
     }
 }

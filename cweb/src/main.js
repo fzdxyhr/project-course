@@ -7,7 +7,7 @@ import 'element-ui/lib/theme-chalk/index.css'
 import './assets/css/reset1.2.css'
 import './assets/css/pagePublic.css'
 import md5 from 'js-md5'
-import axios from './axios';//通过import引入
+import axios from './axios'; //通过import引入
 
 Vue.config.productionTip = false
 
@@ -17,6 +17,6 @@ Vue.use(ElementUI);
 // Vue.use(vueResource);
 new Vue({
 	router,
-  axios,
+	axios,
 	render: h => h(App)
 }).$mount('#app');

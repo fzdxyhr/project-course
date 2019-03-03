@@ -65,11 +65,8 @@
 			};
 		},
 		mounted() {
-			if (localStorage.getItem("WEBFRONT_USER")) {
-
-			}
 			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
-			this.userName = user.loginName;
+			this.userName = user.user_name;
 		},
 		methods: {
 			handleSelect(key, keyPath) {
