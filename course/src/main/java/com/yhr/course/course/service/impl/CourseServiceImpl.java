@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
 import java.math.BigInteger;
+import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Date;
@@ -145,7 +146,7 @@ public class CourseServiceImpl implements CourseService {
         if (multipartFile == null) {
             return "";
         }
-        String fileName = getFileName(multipartFile);
+        String fileName = new String(multipartFile.getOriginalFilename().getBytes("UTF-8"), Charset.forName("utf-8"));
         String relativePath = "file";
         InputStream inputStream = multipartFile.getInputStream();
         File destDir = new File(Contants.UPLOAD_FILE_PATH + relativePath);
@@ -189,7 +190,7 @@ public class CourseServiceImpl implements CourseService {
 
     private String getFileName(MultipartFile multipartFile) {
         try {
-            String suffix = multipartFile.getOriginalFilename().split(".")[1];
+            String suffix = multipartFile.getOriginalFilename().split("\\.")[1];
             byte[] uploadBytes = multipartFile.getBytes();
             MessageDigest md5 = MessageDigest.getInstance("MD5");
             byte[] digest = md5.digest(uploadBytes);

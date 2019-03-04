@@ -109,7 +109,8 @@
 				if (this.limit === 2) {
 					this.fileList.splice(0, 1, tempImg)
 				}
-				this.$emit('change', res.result)
+        console.log("success=",res)
+				this.$emit('change', res)
 			},
 			handleRemove(file, fileList) {
 				this.fileList.forEach((item, index) => {

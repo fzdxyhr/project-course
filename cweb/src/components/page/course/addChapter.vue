@@ -8,14 +8,18 @@
 				<el-input type="textarea" :rows="4" v-model="form.chapter_desc"></el-input>
 			</el-form-item>
 		</el-form>
-		<div>对象信息</div>
-		<el-form label-width="90px" :inline="true" :model="form" ref="childForm">
-			<div class="child-chapter-content" v-for="item in form.childChapters">
+		<div class="obj-content">对象信息</div>
+		<el-form label-width="100px" :inline="true" :model="form" ref="childForm">
+			<div class="child-chapter-content" v-for="(item,index) in form.childChapters">
 				<el-form-item label="子章节标题">
-					<el-input v-model="item.chapter_name"></el-input>
+					<el-input size="small" v-model="item.chapter_name"></el-input>
 				</el-form-item>
-				<el-form-item label="子章节内容">
-					<fileUpload isImg="file" @change="fileChange(item)" buttonText="上传文件" :showFileList="true" :limit="2" :fileList="fileList"></fileUpload>
+				<el-form-item label="子章节内容" >
+					<fileUpload isImg="file" style="width: 110px;margin-top: -2px;" @change="fileChange(item)" buttonText="上传文件" :showFileList="true" :limit="2" :fileList="fileList"></fileUpload>
+				</el-form-item>
+				<el-form-item>
+					<i class="el-icon-minus" style="font-size: 18px;cursor: pointer;" @click="deleteChapter(index)" v-if="index > 0"></i>
+					<i class="el-icon-plus" style="font-size: 18px;cursor: pointer;margin-left: 8px;" @click="addChapter" v-if="index == (form.childChapters.length -1)"></i>
 				</el-form-item>
 			</div>
 		</el-form>
@@ -53,11 +57,23 @@
 
 			},
 			doCancel() {
-
+				this.closeRjDialog();
 			},
-			fileChange(data, res) {
-				console.log("data=", data, "res=", res)
-			}
+			fileChange(item,res) {
+				console.log("item=",item,"res=", res)
+			},
+			addChapter() {
+				this.form.childChapters.push({
+					chapter_name: "",
+					chapter_parent_id: "",
+					chapter_type: "",
+					chapter_file_path: "",
+          file_list:[]
+				});
+			},
+      deleteChapter(index){
+        this.form.childChapters.splice(index,1);
+      }
 		},
 	}
 </script>
@@ -67,6 +83,11 @@
 		.dialog-footer {
 			text-align: right;
 		}
+    .obj-content {
+      padding: 10px;
+      border-bottom:solid 1px rgba(57,67,87,0.2);
+      margin-bottom: 10px;
+    }
 
 		.child-chapter {
 			.el-input__inner {
