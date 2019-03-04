@@ -164,6 +164,7 @@
 				currentView(addChapter, {
 					data: course
 				}).
+				closeOnClickModal(false).
 				showClose(true).
 				then((opt) => {
 				}).show();
