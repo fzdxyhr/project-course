@@ -2,17 +2,23 @@ package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.config.GaeaContext;
 import com.yhr.course.course.contants.Contants;
+import com.yhr.course.course.dao.CourseChapterRepository;
 import com.yhr.course.course.dao.CourseRepository;
 import com.yhr.course.course.dao.CourseStudentRepository;
 import com.yhr.course.course.dao.TagRepository;
 import com.yhr.course.course.entity.Course;
+import com.yhr.course.course.entity.CourseChapter;
 import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.CourseService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.CourseChapterVo;
+import com.yhr.course.course.vo.CourseVo;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tomcat.util.http.fileupload.FileUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -25,6 +31,7 @@ import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -40,10 +47,12 @@ public class CourseServiceImpl implements CourseService {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private CourseStudentRepository courseStudentRepository;
+    @Autowired
+    private CourseChapterRepository courseChapterRepository;
 
     @Override
-    public PagerHelper<Course> list(String key, Integer pageNo, Integer pageSize) {
-        PagerHelper<Course> result = new PagerHelper<>();
+    public PagerHelper<CourseVo> list(String key, Integer pageNo, Integer pageSize) {
+        PagerHelper<CourseVo> result = new PagerHelper<>();
         StringBuffer sql = new StringBuffer("select * from s_course where 1=1");
         List<Object> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(key)) {
@@ -58,9 +67,15 @@ public class CourseServiceImpl implements CourseService {
         sql.append(" limit ?,?");
         params.add(startIndex);
         params.add(pageSize);
-        List<Course> tags = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<Course>(Course.class));
+        List<CourseVo> courseVos = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseVo.class));
+        if (CollectionUtils.isNotEmpty(courseVos)) {
+            for (CourseVo courseVo : courseVos) {
+                List<CourseChapter> courseChapters = courseChapterRepository.findByCourseId(courseVo.getId());
+                courseVo.setCourseChapterVos(resolveChapter(courseChapters));
+            }
+        }
         result.setTotal(total);
-        result.setItems(tags);
+        result.setItems(courseVos);
         return result;
     }
 
@@ -176,6 +191,7 @@ public class CourseServiceImpl implements CourseService {
         }
     }
 
+    @Override
     public void downloadFile(String fileName, HttpServletResponse response) throws Exception {
         String rootPath = Contants.UPLOAD_FILE_PATH;
         String path = rootPath + "file" + File.separator + fileName;
@@ -186,6 +202,32 @@ public class CourseServiceImpl implements CourseService {
         while ((len = iStream.read(buffer)) != -1) {
             outputStream.write(buffer, 0, len);
         }
+    }
+
+    private List<CourseChapterVo> resolveChapter(List<CourseChapter> courseChapters) {
+        if (CollectionUtils.isEmpty(courseChapters)) {
+            return Collections.EMPTY_LIST;
+        }
+        List<CourseChapterVo> chapters = new ArrayList<>();
+        for (CourseChapter courseChapter : courseChapters) {
+            if (courseChapter.getChapterParentId() == null) {
+                CourseChapterVo chapterVo = new CourseChapterVo();
+                BeanUtils.copyProperties(courseChapter, chapterVo);
+                chapters.add(chapterVo);
+            }
+        }
+        for (CourseChapterVo chapter : chapters) {
+            List<CourseChapterVo> courseChapterVos = new ArrayList<>();
+            for (CourseChapter courseChapter : courseChapters) {
+                if (courseChapter.getChapterParentId() == chapter.getId()) {
+                    CourseChapterVo chapterVo = new CourseChapterVo();
+                    BeanUtils.copyProperties(courseChapter, chapterVo);
+                    courseChapterVos.add(chapterVo);
+                }
+            }
+            chapter.setCourseChapterVos(courseChapterVos);
+        }
+        return chapters;
     }
 
     private String getFileName(MultipartFile multipartFile) {

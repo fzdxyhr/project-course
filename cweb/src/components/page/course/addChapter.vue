@@ -18,9 +18,9 @@
 					<fileUpload isImg="file" style="width: 110px;margin-top: -2px;" @change="fileChange(item)" buttonText="上传文件"
 					 :showFileList="false" :limit="2" :fileList="item.file_list"></fileUpload>
 				</el-form-item>
-        <el-form-item v-if="item.file_list.length > 0" style="width: 160px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
-        	<span :title="obj.name" v-for="obj in item.file_list">{{obj.name.substring(0,10)}}...</span>
-        </el-form-item>
+				<el-form-item v-if="item.file_list.length > 0" style="width: 160px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+					<span :title="obj.name" v-for="obj in item.file_list">{{obj.name.substring(0,10)}}...</span>
+				</el-form-item>
 				<el-form-item>
 					<i class="el-icon-minus" style="font-size: 18px;cursor: pointer;" @click="deleteChapter(index)" v-if="index > 0"></i>
 					<i class="el-icon-plus" style="font-size: 18px;cursor: pointer;margin-left: 8px;" @click="addChapter" v-if="index == (form.childChapters.length -1)"></i>
@@ -43,8 +43,8 @@
 		},
 		data() {
 			return {
-				fileList: [],
 				form: {
+					course_id:"",
 					chapter_name: "",
 					chapter_desc: "",
 					childChapters: [{
@@ -57,15 +57,36 @@
 				}
 			}
 		},
+		mounted() {
+			if (this.rjDialogParams().data) {
+				this.form.course_id = this.rjDialogParams().data.id;
+			}
+		},
 		methods: {
 			onSubmit() {
-
+				this.$axios.post("/v1/course_chapters", this.form).then((response) => {
+					this.$message.success('添加章节成功');
+				}, (response) => {
+					this.$message.error('添加章节失败');
+				});
 			},
 			doCancel() {
 				this.closeRjDialog();
 			},
-			fileChange(item, res) {
-				console.log("item=", item, "res=", res)
+			fileChange(item) {
+				if (item.file_list && item.file_list.length > 0) {
+					let file = item.file_list[0];
+					if (file.name.toLowcase().indexof("doc") >= 0 || file.name.toLowcase().indexof("docx") >= 0) {
+						item.chapter_type = 1;
+					}
+					if (file.name.toLowcase().indexof("ppt") >= 0 || file.name.toLowcase().indexof("pptx") >= 0) {
+						item.chapter_type = 2;
+					}
+					if (file.name.toLowcase().indexof("mp4") >= 0) {
+						item.chapter_type = 3;
+					}
+					item.chapter_file_path = file.url;
+				}
 			},
 			addChapter() {
 				this.form.childChapters.push({

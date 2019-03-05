@@ -64,6 +64,8 @@ public class CourseChapterServiceImpl implements CourseChapterService {
             for (CourseChapterVo chapterVo : courseChapterVo.getCourseChapterVos()) {
                 CourseChapter chapter = new CourseChapter();
                 BeanUtils.copyProperties(chapterVo, chapter);
+                chapter.setChapterParentId(courseChapter.getId());
+                chapter.setCourseId(courseChapterVo.getCourseId());
             }
         }
         return courseChapterVo;

@@ -6,6 +6,7 @@ import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.service.CourseService;
 import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.CourseVo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class CourseController {
     private CourseService courseService;
 
     @RequestMapping(value = "/courses", method = RequestMethod.GET)
-    public PagerHelper<Course> list(@RequestParam(value = "key", required = false) String key
+    public PagerHelper<CourseVo> list(@RequestParam(value = "key", required = false) String key
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
             , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) {
         return courseService.list(key, pageNo, pageSize);

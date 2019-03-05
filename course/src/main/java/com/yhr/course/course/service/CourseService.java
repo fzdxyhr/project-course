@@ -4,6 +4,7 @@ import com.yhr.course.course.entity.Course;
 import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.CourseVo;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -14,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 public interface CourseService {
 
-    PagerHelper<Course> list(String key, Integer pageNo, Integer pageSize);
+    PagerHelper<CourseVo> list(String key, Integer pageNo, Integer pageSize);
 
     Course create(Course course);
 

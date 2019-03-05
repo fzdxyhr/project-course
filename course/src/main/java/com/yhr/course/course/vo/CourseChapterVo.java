@@ -16,8 +16,10 @@ import java.util.List;
 @Data
 public class CourseChapterVo {
 
+    private Integer id;
+
     @ApiModelProperty("课程标识")
-    private String courseId;
+    private Integer courseId;
 
     @ApiModelProperty("章节名称")
     private String chapterName;

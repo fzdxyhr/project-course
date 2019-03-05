@@ -72,7 +72,7 @@
 		<div class="fixclear"></div>
 		<div class="paging">
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.currentPage"
-			 :page-sizes="[20, 50, 80, 100,500,1000]" :page-size="20" layout="total, sizes, prev, pager, next, jumper" :total="page.totalCourses">
+			 :page-sizes="[10, 20, 50, 100]" :page-size="10" layout="total, sizes, prev, pager, next, jumper" :total="page.totalCourses">
 			</el-pagination>
 		</div>
 		<rjDialog></rjDialog>
@@ -167,6 +167,7 @@
 				closeOnClickModal(false).
 				showClose(true).
 				then((opt) => {
+					this.$emit('childGetCourses', this.page.currentPage, this.page.currentNum, this.page.searchText);
 				}).show();
 			},
 			amendChapter(ch) { //修改章
