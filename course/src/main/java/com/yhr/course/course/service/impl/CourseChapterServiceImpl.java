@@ -6,6 +6,8 @@ import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.CourseChapterService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.CourseChapterVo;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,9 +53,20 @@ public class CourseChapterServiceImpl implements CourseChapterService {
     }
 
     @Override
-    public CourseChapter create(CourseChapter courseChapter) {
+    public CourseChapterVo create(CourseChapterVo courseChapterVo) {
+        List<CourseChapter> courseChapters = new ArrayList<>();
+        CourseChapter courseChapter = new CourseChapter();
+        BeanUtils.copyProperties(courseChapterVo, courseChapter);
         courseChapter.setCreateTime(new Date());
-        return courseChapterRepository.save(courseChapter);
+        courseChapter = courseChapterRepository.save(courseChapter);
+        //保存子章节信息
+        if (CollectionUtils.isNotEmpty(courseChapterVo.getCourseChapterVos())) {
+            for (CourseChapterVo chapterVo : courseChapterVo.getCourseChapterVos()) {
+                CourseChapter chapter = new CourseChapter();
+                BeanUtils.copyProperties(chapterVo, chapter);
+            }
+        }
+        return courseChapterVo;
     }
 
     @Override

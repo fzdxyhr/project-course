@@ -105,7 +105,7 @@
 			handleSuccess(res, file) {
 				let tempImg = {};
 				tempImg.name = file.name;
-				tempImg.url = res.result;
+				tempImg.url = res;
 				if (this.limit === 2) {
 					this.fileList.splice(0, 1, tempImg)
 				}

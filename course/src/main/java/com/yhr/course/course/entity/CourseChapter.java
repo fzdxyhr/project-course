@@ -21,6 +21,10 @@ public class CourseChapter {
     @ApiModelProperty("课程章节标识")
     private Integer id;
 
+    @ApiModelProperty("课程标识")
+    @Column(name = "course_id")
+    private Integer courseId;
+
     @ApiModelProperty("章节名称")
     @Column(name = "chapter_name")
     private String chapterName;

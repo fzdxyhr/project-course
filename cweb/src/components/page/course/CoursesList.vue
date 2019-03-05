@@ -159,7 +159,7 @@
 			addChapter(course) { //添加章
 				this.rjDialog.
 				title("添加章节").
-				width("800px").
+				width("820px").
 				top("3%").
 				currentView(addChapter, {
 					data: course
