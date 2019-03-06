@@ -15,6 +15,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,28 +67,48 @@ public class CourseChapterServiceImpl implements CourseChapterService {
                 BeanUtils.copyProperties(chapterVo, chapter);
                 chapter.setChapterParentId(courseChapter.getId());
                 chapter.setCourseId(courseChapterVo.getCourseId());
+                courseChapters.add(chapter);
             }
         }
+        courseChapterRepository.saveAll(courseChapters);
         return courseChapterVo;
     }
 
     @Override
-    public CourseChapter update(Integer id, CourseChapter courseChapter) throws Exception {
-        CourseChapter tempTag = courseChapterRepository.getOne(id);
-        if (tempTag == null) {
+    @Transactional
+    public CourseChapterVo update(Integer id, CourseChapterVo courseChapterVo) throws Exception {
+        List<CourseChapter> courseChapters = new ArrayList<>();
+        CourseChapter courseChapter = courseChapterRepository.getOne(id);
+        if (courseChapter == null) {
             throw new ServiceException("不存在【" + id + "】对应的章节");
         }
-        BeanUtils.copyProperties(courseChapter, tempTag);
-        return courseChapterRepository.save(tempTag);
+        BeanUtils.copyProperties(courseChapterVo, courseChapter);
+        courseChapter.setId(id);
+        courseChapterRepository.save(courseChapter);
+        //保存子章节信息
+        if (CollectionUtils.isNotEmpty(courseChapterVo.getCourseChapterVos())) {
+            courseChapterRepository.deleteByChapterParentId(id);
+            for (CourseChapterVo chapterVo : courseChapterVo.getCourseChapterVos()) {
+                CourseChapter chapter = new CourseChapter();
+                BeanUtils.copyProperties(chapterVo, chapter);
+                chapter.setChapterParentId(courseChapter.getId());
+                chapter.setCourseId(courseChapterVo.getCourseId());
+                courseChapters.add(chapter);
+            }
+        }
+        courseChapterRepository.saveAll(courseChapters);
+        return courseChapterVo;
     }
 
     @Override
+    @Transactional
     public void delete(Integer id) throws Exception {
-        CourseChapter tempTag = courseChapterRepository.getOne(id);
-        if (tempTag == null) {
+        CourseChapter courseChapter = courseChapterRepository.getOne(id);
+        if (courseChapter == null) {
             throw new ServiceException("不存在【" + id + "】对应的章节");
         }
-        courseChapterRepository.delete(tempTag);
+        courseChapterRepository.delete(courseChapter);
+        courseChapterRepository.deleteByChapterParentId(id);
     }
 
     @Override

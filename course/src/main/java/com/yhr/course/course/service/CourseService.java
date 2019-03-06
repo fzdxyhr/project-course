@@ -23,7 +23,7 @@ public interface CourseService {
 
     void delete(Integer id) throws Exception;
 
-    Course get(Integer id) throws Exception;
+    CourseVo get(Integer id) throws Exception;
 
     void study(Integer id) throws Exception;
 

@@ -36,6 +36,7 @@ public class CourseChapterVo {
     @ApiModelProperty("章节对象路径")
     private String chapterFilePath;
 
+    @ApiModelProperty("子章节对象信息")
     private List<CourseChapterVo> courseChapterVos;
 
 }

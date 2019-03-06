@@ -13,20 +13,16 @@
 							简介：{{course.course_desc}}
 						</div>
 						<el-collapse>
-							<el-collapse-item v-for="(s,i) in course.sections" :title="(i+1+'.')+s.name" :name="i">
-								{{s.description}}
-								<div class="labels">
-									<span v-for="tag in s.tags">
-										{{tag.name}}
-									</span>
-								</div>
+							<el-collapse-item v-for="(chapter,i) in course.course_chapter_vos" :title="(i+1+'.')+chapter.chapter_name" :name="i">
+								<div style="margin-left: 20px;">{{chapter.chapter_desc}}</div>
 								<div class="articles-title">
-									<div v-for="tag in s.tags">
-										<a href="article.html" target="view_window" v-for="(a,j) in tag.articles">{{(i+1)+'.'+(j+1)+a.title}}</a>
+									<div class="child-item" v-for="item in chapter.course_chapter_vos">
+										<div class="chapter-title">{{item.chapter_name}}</div>
+										<div class="chapter-content"></div>
 									</div>
-									<span class="getMore-articles-title" title="获取更多">
+									<!-- <span class="getMore-articles-title" title="获取更多">
 										获取更多<i class="el-icon-caret-bottom"></i>
-									</span>
+									</span> -->
 								</div>
 							</el-collapse-item>
 						</el-collapse>
@@ -83,6 +79,14 @@
 	.course-detail {
 		margin: 0 auto;
 		min-height: 800px;
+    
+    .chapter-content {
+      text-align: right;
+    }
+    
+    .child-item {
+      padding-left: 15px;
+    }
 
 		.title-background {
 			height: 200px;

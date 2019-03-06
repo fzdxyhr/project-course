@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 
 import './assets/css/reset1.2.css';
+import './assets/css/vve-components-icon-font.scss'
 import md5 from 'js-md5';
 import axios from './axios'; //通过import引入
 

@@ -1,0 +1,30 @@
+@font-face {
+  font-family: 'fastfont';  /* project id 1027702 */
+  src: url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.eot');
+  src: url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.svg#iconfont') format('svg');
+}
+
+i[class^="course-icon"], i[class*=" course-icon"] {
+  font-family:"fastfont" !important;
+  display: inline-block;
+  text-rendering: auto;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-style: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+	vertical-align: middle;
+	margin-right: 5px;
+	width: 24px;
+	text-align: center;
+	font-size: 17px;
+}
+
+$icf-css-prefix: "course-icon";
+
+.#{$icf-css-prefix}-vedio:before { content: "\e607"; } // 已添加

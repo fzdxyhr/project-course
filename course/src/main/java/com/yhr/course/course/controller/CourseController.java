@@ -50,7 +50,7 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/courses/{id}", method = RequestMethod.GET)
-    public Course get(@PathVariable("id") Integer id) throws Exception {
+    public CourseVo get(@PathVariable("id") Integer id) throws Exception {
         return courseService.get(id);
     }
 

@@ -1,5 +1,7 @@
 package com.yhr.course.course.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.annotations.Proxy;
@@ -43,6 +45,7 @@ public class CourseVo {
     private String courseImageUrl;
 
     @ApiModelProperty("课程章节信息")
+    @JsonProperty("course_chapter_vos")
     private List<CourseChapterVo> courseChapterVos;
 
     @ApiModelProperty("创建时间")

@@ -112,12 +112,16 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course get(Integer id) throws Exception {
+    public CourseVo get(Integer id) throws Exception {
         Course course = courseRepository.getOne(id);
         if (course == null) {
             throw new ServiceException("不存在【" + id + "】对应的课程");
         }
-        return course;
+        CourseVo courseVo = new CourseVo();
+        BeanUtils.copyProperties(course, courseVo);
+        List<CourseChapter> courseChapters = courseChapterRepository.findByCourseId(courseVo.getId());
+        courseVo.setCourseChapterVos(resolveChapter(courseChapters));
+        return courseVo;
     }
 
     @Override

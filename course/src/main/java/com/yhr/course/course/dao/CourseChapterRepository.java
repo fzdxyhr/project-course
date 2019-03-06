@@ -12,4 +12,6 @@ public interface CourseChapterRepository extends JpaRepository<CourseChapter, In
 
     List<CourseChapter> findByCourseId(Integer courseId);
 
+    void deleteByChapterParentId(Integer chapterParentId);
+
 }

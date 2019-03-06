@@ -14,7 +14,7 @@ public interface CourseChapterService {
 
     CourseChapterVo create(CourseChapterVo courseChapterVo);
 
-    CourseChapter update(Integer id, CourseChapter courseChapter) throws Exception;
+    CourseChapterVo update(Integer id, CourseChapterVo courseChapterVo) throws Exception;
 
     void delete(Integer id) throws Exception;
 

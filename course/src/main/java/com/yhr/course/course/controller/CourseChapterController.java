@@ -24,4 +24,14 @@ public class CourseChapterController {
         return courseChapterService.create(courseChapterVo);
     }
 
+    @RequestMapping(value = "/course_chapters/{id}", method = RequestMethod.PUT)
+    public CourseChapterVo update(@PathVariable("id") Integer id, @RequestBody CourseChapterVo courseChapterVo) throws Exception {
+        return courseChapterService.update(id, courseChapterVo);
+    }
+
+    @RequestMapping(value = "/course_chapters/{id}", method = RequestMethod.DELETE)
+    public void delete(@PathVariable("id") Integer id) throws Exception {
+        courseChapterService.delete(id);
+    }
+
 }
