@@ -13,12 +13,21 @@
 							简介：{{course.course_desc}}
 						</div>
 						<el-collapse>
-							<el-collapse-item v-for="(chapter,i) in course.course_chapter_vos" :title="(i+1+'.')+chapter.chapter_name" :name="i">
-								<div style="margin-left: 20px;">{{chapter.chapter_desc}}</div>
+							<el-collapse-item v-for="(chapter,i) in course.course_chapter_vos" :title="('第'+(i+1)+'章 ')+chapter.chapter_name"
+							 :name="i">
+								<div style="margin-left: 10px;font-size: 12px;color: #545c63;padding-top: -10px;">{{chapter.chapter_desc}}</div>
 								<div class="articles-title">
-									<div class="child-item" v-for="item in chapter.course_chapter_vos">
-										<div class="chapter-title">{{item.chapter_name}}</div>
-										<div class="chapter-content"></div>
+									<div class="child-item" v-for="item in chapter.course_chapter_vos" @click="go2Start(item)">
+										<div class="chapter-title">
+											<i v-if="item.chapter_type === 1 " class="course-icon-doc"></i>
+											<i v-if="item.chapter_type === 2 " class="course-icon-ppt"></i>
+											<i v-if="item.chapter_type === 3 " class="course-icon-vedio"></i>
+											{{item.chapter_name}}
+										</div>
+										<div class="chapter-content">
+											<el-button style="border-radius: 0%;" v-if="!isStudy" type="danger" @click="go2Start(item)" size="small">开始学习</el-button>
+											<el-button v-if="isStudy" type="danger" size="small" @click="go2Start(item)">继续学习</el-button>
+										</div>
 									</div>
 									<!-- <span class="getMore-articles-title" title="获取更多">
 										获取更多<i class="el-icon-caret-bottom"></i>
@@ -56,6 +65,7 @@
 		data() {
 			return {
 				course: {},
+				isStudy: false,
 				courseId: "",
 				activeName: "first"
 			};
@@ -63,8 +73,20 @@
 		mounted() {
 			this.courseId = this.$route.query.courseId;
 			this.getCourse();
+			this.getStudy();
 		},
 		methods: {
+			getStudy() {
+				this.$axios.get('/v1/courses/' + this.courseId + '/study').then((response) => {
+					if (response.data) {
+						this.isStudy = true;
+					} else {
+						this.isStudy = false;
+					}
+				}, (response) => {
+					this.$message.error('获取课程学习情况失败');
+				});
+			},
 			getCourse() {
 				this.$axios.get('/v1/courses/' + this.courseId).then((response) => {
 					this.course = response.data;
@@ -72,6 +94,44 @@
 					this.$message.error('获取课程详情失败');
 				});
 			},
+			go2Start(item) {
+				let type = "";
+				if (item.chapter_type === 1 || item.chapter_type === 2) {
+					type = 'file';
+				}
+				if (item.chapter_type === 3) {
+					type = 'vedio';
+				}
+				if (!this.isStudy) {
+					this.$axios.put('/v1/courses/' + this.courseId + '/study').then((response) => {
+						if (response.status === 200) {
+							this.$router.push({
+								name: "filePlay",
+								query: {
+									type: type,
+									path: encodeURIComponent(item.chapter_file_path)
+								}
+							})
+						}
+					}, (response) => {
+						this.$message.error('开始学习失败');
+					});
+				} else {
+					this.$router.push({
+						name: "filePlay",
+						query: {
+							type: type,
+							path: encodeURIComponent(item.chapter_file_path)
+						}
+					})
+				}
+
+			},
+			go2Continue() {
+				this.$router.push({
+					name: "filePlay"
+				})
+			}
 		}
 	}
 </script>
@@ -79,14 +139,41 @@
 	.course-detail {
 		margin: 0 auto;
 		min-height: 800px;
-    
-    .chapter-content {
-      text-align: right;
-    }
-    
-    .child-item {
-      padding-left: 15px;
-    }
+
+		.chapter-content {
+			float: right;
+			margin-right: 30px;
+			display: none;
+		}
+
+		.child-item {
+			margin-left: 20px;
+			// padding-top: 10px;
+			margin-top: 10px;
+			padding-left: 15px;
+			font-size: 14px;
+			height: 48px;
+			line-height: 48px;
+			width: 92%;
+		}
+
+		.child-item:hover {
+			background-color: rgba(233, 150, 122, 0.1);
+			color: red;
+			cursor: pointer;
+
+			.chapter-content {
+				display: inline-block;
+			}
+		}
+
+		.chapter-title {
+			display: inline-block;
+		}
+
+		.el-button--small {
+			padding: 4px 15px;
+		}
 
 		.title-background {
 			height: 200px;
@@ -124,9 +211,9 @@
 		}
 
 		div.el-collapse-item__header {
-			padding: 7px 10px 7px 10px;
+			padding: 5px 10px 0px 10px;
 			font-weight: 700;
-			font-size: 14px;
+			font-size: 16px;
 		}
 
 		.course .labels {

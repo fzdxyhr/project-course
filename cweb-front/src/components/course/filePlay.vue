@@ -1,14 +1,14 @@
 <template>
 	<div class="file-play-index">
-		<div  v-if="resourseType == 'file'" class="left-content">
-			<iframe :src='filePath' width='100%' height='100%' frameborder='1'>
+		<div v-if="resourseType == 'file'" class="left-content">
+			<iframe :src="`https://view.officeapps.live.com/op/view.aspx?src=`+filePath" width='100%' height='100%' frameborder='1'>
 			</iframe>
 		</div>
 		<div v-if="resourseType == 'vedio'" class="left-content">
-			<video height="100%" width="100%" :src="vedioPath" controls="controls" autoplay>
-				your browser does not support the video tag
+			<video height="100%" width="100%" :src="filePath" controls="controls" autoplay preload="auto">
 			</video>
 		</div>
+		<!-- <a :href="`http://www.xdocin.com/xdoc?_func=to&amp;_format=html&amp;_cache=1&amp;_xdoc=`+filePath" target="_blank" rel="nofollow">XDOC</a> -->
 		<!-- <div class="right-content">
 			1111111111111111
 		</div> -->
@@ -17,18 +17,23 @@
 
 <script>
 	export default {
-		props: {
-			resourseType: {
-				type: String,
-				default: "vedio"
-			},
-		},
+		// 		props: {
+		// 			resourseType: {
+		// 				type: String,
+		// 				default: "vedio"
+		// 			},
+		// 		},
 		data() {
 			return {
+				resourseType: '',
 				vedioPath: "http://www.w3school.com.cn/i/movie.ogg",
-				filePath: "https://view.officeapps.live.com/op/view.aspx?src=http://storage.xuetangx.com/public_assets/xuetangx/PDF/1.xls"
+				filePath: "http://storage.xuetangx.com/public_assets/xuetangx/PDF/1.xls"
 			}
 		},
+		mounted() {
+			this.resourseType = this.$route.query.type;
+			this.filePath = decodeURIComponent(this.$route.query.path);
+		}
 	}
 </script>
 

@@ -199,6 +199,7 @@ public class CourseServiceImpl implements CourseService {
     public void downloadFile(String fileName, HttpServletResponse response) throws Exception {
         String rootPath = Contants.UPLOAD_FILE_PATH;
         String path = rootPath + "file" + File.separator + fileName;
+//        response.setContentType("video/mp4");
         OutputStream outputStream = response.getOutputStream();
         InputStream iStream = new FileInputStream(new File(path));
         int len = 0;
