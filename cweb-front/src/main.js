@@ -9,6 +9,7 @@ import './assets/css/reset1.2.css';
 import './assets/css/vve-components-icon-font.scss'
 import md5 from 'js-md5';
 import axios from './axios'; //通过import引入
+import store from './store'; //通过import引入
 
 Vue.prototype.$md5 = md5;
 
@@ -23,6 +24,7 @@ new Vue({
 	el: '#app',
 	router,
 	axios,
+  store,
 	template: '<App/>',
 	components: {
 		App

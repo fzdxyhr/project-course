@@ -9,6 +9,7 @@ import './assets/css/pagePublic.css'
 import './assets/css/vve-components-icon-font.scss'
 import md5 from 'js-md5'
 import axios from './axios'; //通过import引入
+import store from './store'; //通过import引入
 
 Vue.config.productionTip = false
 
@@ -19,5 +20,6 @@ Vue.use(ElementUI);
 new Vue({
 	router,
 	axios,
+  store,
 	render: h => h(App)
 }).$mount('#app');

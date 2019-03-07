@@ -65,7 +65,7 @@ public class CourseController {
     }
 
     @ApiOperation(value = "上传图片", notes = "")
-    @RequestMapping(value = "/courses/images/upload", method = RequestMethod.POST)
+    @RequestMapping(value = "/courses/images/upload", method = RequestMethod.POST, produces = {"application/json;charset=UTF-8"})
     public String upload(@ApiParam(value = "附件流", required = true) MultipartHttpServletRequest multiReq) throws Exception {
         MultipartFile multipartFile = null;
         for (String key : multiReq.getMultiFileMap().keySet()) {

@@ -23,8 +23,8 @@
 				<el-input v-model="form.telephone"></el-input>
 			</el-form-item>
 			<el-form-item label="用户图片">
-				<el-upload name="editormd-image-file" class="avatar-uploader" :action="`/v1/courses/images/upload`" :show-file-list="false"
-				 :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+				<el-upload name="editormd-image-file" class="avatar-uploader" :action="host+`/v1/courses/images/upload`"
+				 :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 					<img v-if="showImage" :src="imageUrl" class="avatar">
 					<i v-else class="el-icon-plus avatar-uploader-icon"></i>
 				</el-upload>
@@ -61,7 +61,10 @@
 		},
 		computed: {
 			imageUrl() {
-				return "/v1/courses/images/download?relative_path=" + this.form.photo_path;
+				return this.$store.state.host + "/v1/courses/images/download?relative_path=" + this.form.photo_path;
+			},
+			host() {
+				return this.$store.state.host
 			}
 		},
 		methods: {
@@ -77,8 +80,8 @@
 				return isLt2M;
 			},
 			go2Add() {
-				if(this.form.id) {
-					this.$axios.put("/v1/users/"+this.form.id,this.form).then((response) => {
+				if (this.form.id) {
+					this.$axios.put("/v1/users/" + this.form.id, this.form).then((response) => {
 						let message = response.data;
 						this.$message.success('修改用户成功');
 						this.closeRjDialog();
@@ -86,7 +89,7 @@
 						this.$message.error('修改用户失败');
 					});
 				} else {
-					this.$axios.post("/v1/users",this.form).then((response) => {
+					this.$axios.post("/v1/users", this.form).then((response) => {
 						let message = response.data;
 						this.$message.success('新增用户成功');
 						this.closeRjDialog();

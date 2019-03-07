@@ -5,7 +5,7 @@
 		</div>
 		<div class="course diyscrollbar" v-for="(c,courseIndex) in childCoursesList" :style="{top:readTop + 'px'}" :class="{ read: c.id==readCourseId }">
 			<div class="close" @click="closeRead" @keyup.esc="closeRead"> <i class="el-icon-close"></i></div>
-			<div class="c-title" :style="{'background-image':'url(http://localhost:8085/v1/courses/images/download?relative_path='+c.course_image_url+')'}">
+			<div class="c-title" :style="{'background-image':'url('+c.course_image_url+')'}">
 				<h2>{{c.course_name&&c.course_name}}</h2>
 			</div>
 			<div class="c-describe">
@@ -28,7 +28,7 @@
 				<div class="left">
 					课程背景图&nbsp;:&nbsp;
 				</div>
-				<div class="right"><img :src="`http://localhost:8085/v1/courses/images/download?relative_path=`+c.course_image_url" /></div>
+				<div class="right"><img :src="c.course_image_url" /></div>
 			</div>
 			<div class="c-operation">
 				<el-button @click="readCourse(c)" title="查看课程" class="btn-c-read" icon="el-icon-zoom-in" type="success"></el-button>
@@ -66,7 +66,7 @@
 						<div class="child-chapter-content" v-for="(item,childIndex) in ch.course_chapter_vos">
 							<div class="child-chapter-item">
 								<div class="child-title"><span v-text="chapterIndex+1+'-'+(childIndex+1)" style="margin-right: 15px;"></span>{{item.chapter_name}}</div>
-								<div class="child-file">{{item.chapter_file_path.split("/")[6]}}</div>
+								<div class="child-file">{{item.chapter_file_path.split("/")[item.chapter_file_path.split("/").length - 1]}}</div>
 							</div>
 						</div>
 					</el-collapse-item>
@@ -120,6 +120,11 @@
 
 			};
 		},
+    computed: {
+    	host() {
+    		return this.$store.state.host 
+    	}
+    },
 		created() {
 			this.getAllTags();
 		},

@@ -35,7 +35,7 @@
 					<el-input type="textarea" :rows="3" v-model="dialog.form.course_tip"></el-input>
 				</el-form-item>
 				<el-form-item label="课程图片">
-					<el-upload name="editormd-image-file" class="avatar-uploader" :action="`http://localhost:8085/v1/courses/images/upload`"
+					<el-upload name="editormd-image-file" class="avatar-uploader" :action="host + `/v1/courses/images/upload`"
 					 :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 						<img v-if="showImage" :src="imageUrl" class="avatar">
 						<i v-else class="el-icon-plus avatar-uploader-icon"></i>
@@ -98,8 +98,11 @@
 		},
 		computed: {
 			imageUrl() {
-				return "http://localhost:8085/v1/courses/images/download?relative_path=" + this.dialog.form.course_image_url;
-			}
+				return this.dialog.form.course_image_url;
+			},
+      host(){
+        return this.$store.state.host 
+      }
 		},
 		methods: {
 			setCurrentPage(num) {

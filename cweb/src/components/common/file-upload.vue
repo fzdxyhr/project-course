@@ -52,7 +52,7 @@
 				ads_id
 			} = this.$route.params
 			return {
-				action: `http://localhost:8085/v1/files/upload`,
+				action: this.$store.state.host +`/v1/files/upload`,
 				accept: '.mp4,.doc,.docx,.ppt,.pptx,.pdf'
 			}
 		},

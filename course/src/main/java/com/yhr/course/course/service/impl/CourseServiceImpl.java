@@ -1,15 +1,13 @@
 package com.yhr.course.course.service.impl;
 
+import com.yhr.course.course.config.AliyunFileHandle;
 import com.yhr.course.course.config.GaeaContext;
-import com.yhr.course.course.contants.Contants;
 import com.yhr.course.course.dao.CourseChapterRepository;
 import com.yhr.course.course.dao.CourseRepository;
 import com.yhr.course.course.dao.CourseStudentRepository;
-import com.yhr.course.course.dao.TagRepository;
 import com.yhr.course.course.entity.Course;
 import com.yhr.course.course.entity.CourseChapter;
 import com.yhr.course.course.entity.CourseStudent;
-import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.CourseService;
 import com.yhr.course.course.utils.PagerHelper;
@@ -17,7 +15,6 @@ import com.yhr.course.course.vo.CourseChapterVo;
 import com.yhr.course.course.vo.CourseVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -26,7 +23,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
@@ -49,6 +45,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseStudentRepository courseStudentRepository;
     @Autowired
     private CourseChapterRepository courseChapterRepository;
+    @Autowired
+    private AliyunFileHandle aliyunFileHandle;
 
     @Override
     public PagerHelper<CourseVo> list(String key, Integer pageNo, Integer pageSize) {
@@ -143,21 +141,22 @@ public class CourseServiceImpl implements CourseService {
         if (multipartFile == null) {
             return "";
         }
-        String fileName = multipartFile.getOriginalFilename();
-        String relativePath = "image";
-        InputStream inputStream = multipartFile.getInputStream();
-        File destDir = new File(Contants.UPLOAD_FILE_PATH + relativePath);
-        if (!destDir.exists()) {
-            FileUtils.forceMkdir(destDir);
-        }
-        File destFile = new File(Contants.UPLOAD_FILE_PATH + relativePath + File.separator + fileName);
-        OutputStream outputStream = new FileOutputStream(destFile);
-        int len = 0;
-        byte[] buffer = new byte[1024];
-        while ((len = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, len);
-        }
-        return fileName;
+        String fileName = new String(multipartFile.getOriginalFilename().getBytes("UTF-8"), Charset.forName("utf-8"));
+//        String relativePath = "image";
+//        InputStream inputStream = multipartFile.getInputStream();
+//        File destDir = new File(Contants.UPLOAD_FILE_PATH + relativePath);
+//        if (!destDir.exists()) {
+//            FileUtils.forceMkdir(destDir);
+//        }
+//        File destFile = new File(Contants.UPLOAD_FILE_PATH + relativePath + File.separator + fileName);
+//        OutputStream outputStream = new FileOutputStream(destFile);
+//        int len = 0;
+//        byte[] buffer = new byte[1024];
+//        while ((len = inputStream.read(buffer)) != -1) {
+//            outputStream.write(buffer, 0, len);
+//        }
+        aliyunFileHandle.uploadFile(fileName, multipartFile.getInputStream());
+        return "http://filecourse.oss-cn-shanghai.aliyuncs.com/" + fileName;
     }
 
     @Override
@@ -166,47 +165,50 @@ public class CourseServiceImpl implements CourseService {
             return "";
         }
         String fileName = new String(multipartFile.getOriginalFilename().getBytes("UTF-8"), Charset.forName("utf-8"));
-        String relativePath = "file";
-        InputStream inputStream = multipartFile.getInputStream();
-        File destDir = new File(Contants.UPLOAD_FILE_PATH + relativePath);
-        if (!destDir.exists()) {
-            FileUtils.forceMkdir(destDir);
-        }
-        File destFile = new File(Contants.UPLOAD_FILE_PATH + relativePath + File.separator + fileName);
-        OutputStream outputStream = new FileOutputStream(destFile);
-        int len = 0;
-        byte[] buffer = new byte[1024];
-        while ((len = inputStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, len);
-        }
-        return "http://localhost:8085/v1/files/download/" + fileName;
+//        String relativePath = "file";
+//        InputStream inputStream = multipartFile.getInputStream();
+//        File destDir = new File(Contants.UPLOAD_FILE_PATH + relativePath);
+//        if (!destDir.exists()) {
+//            FileUtils.forceMkdir(destDir);
+//        }
+//        File destFile = new File(Contants.UPLOAD_FILE_PATH + relativePath + File.separator + fileName);
+//        OutputStream outputStream = new FileOutputStream(destFile);
+//        int len = 0;
+//        byte[] buffer = new byte[1024];
+//        while ((len = inputStream.read(buffer)) != -1) {
+//            outputStream.write(buffer, 0, len);
+//        }
+        aliyunFileHandle.uploadFile(fileName, multipartFile.getInputStream());
+        return "http://filecourse.oss-cn-shanghai.aliyuncs.com/" + fileName;
     }
 
     @Override
-    public void downloadImage(String relativePath, HttpServletResponse response) throws Exception {
-        String rootPath = Contants.UPLOAD_FILE_PATH;
-        String path = rootPath + "image" + File.separator + relativePath;
-        OutputStream outputStream = response.getOutputStream();
-        InputStream iStream = new FileInputStream(new File(path));
-        int len = 0;
-        byte[] buffer = new byte[1024];
-        while ((len = iStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, len);
-        }
+    public void downloadImage(String fileName, HttpServletResponse response) throws Exception {
+//        String rootPath = Contants.UPLOAD_FILE_PATH;
+//        String path = rootPath + "image" + File.separator + relativePath;
+//        OutputStream outputStream = response.getOutputStream();
+//        InputStream iStream = new FileInputStream(new File(path));
+//        int len = 0;
+//        byte[] buffer = new byte[1024];
+//        while ((len = iStream.read(buffer)) != -1) {
+//            outputStream.write(buffer, 0, len);
+//        }
+        aliyunFileHandle.downloadFile(fileName, response.getOutputStream());
     }
 
     @Override
     public void downloadFile(String fileName, HttpServletResponse response) throws Exception {
-        String rootPath = Contants.UPLOAD_FILE_PATH;
-        String path = rootPath + "file" + File.separator + fileName;
-//        response.setContentType("video/mp4");
-        OutputStream outputStream = response.getOutputStream();
-        InputStream iStream = new FileInputStream(new File(path));
-        int len = 0;
-        byte[] buffer = new byte[1024];
-        while ((len = iStream.read(buffer)) != -1) {
-            outputStream.write(buffer, 0, len);
-        }
+//        String rootPath = Contants.UPLOAD_FILE_PATH;
+//        String path = rootPath + "file" + File.separator + fileName;
+////        response.setContentType("video/mp4");
+//        OutputStream outputStream = response.getOutputStream();
+//        InputStream iStream = new FileInputStream(new File(path));
+//        int len = 0;
+//        byte[] buffer = new byte[1024];
+//        while ((len = iStream.read(buffer)) != -1) {
+//            outputStream.write(buffer, 0, len);
+//        }
+        aliyunFileHandle.downloadFile(fileName, response.getOutputStream());
     }
 
     private List<CourseChapterVo> resolveChapter(List<CourseChapter> courseChapters) {

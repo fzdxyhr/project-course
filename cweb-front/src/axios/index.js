@@ -5,7 +5,8 @@ import axios from 'axios';
 
 
 // 配置默认的host,假如你的API host是：http://api.htmlx.club
-axios.defaults.baseURL = 'http://localhost:8085';
+axios.defaults.baseURL = 'http://47.101.194.23:8085';
+// axios.defaults.baseURL = 'http://localhost:8085';
 axios.defaults.headers.post['Accept'] = 'application/json';
 axios.defaults.headers.post['Content-Type'] = 'application/json';  
 

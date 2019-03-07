@@ -71,7 +71,7 @@
 					item.file_list = [];
 					let temp = {};
 					if (item.chapter_file_path) {
-						temp.name = item.chapter_file_path.split("/")[6];
+						temp.name = item.chapter_file_path.split("/")[item.chapter_file_path.split("/").length - 1];
 						temp.url = item.chapter_file_path;
 					}
 					item.file_list.push(temp);

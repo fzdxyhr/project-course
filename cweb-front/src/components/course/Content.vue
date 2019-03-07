@@ -1,6 +1,6 @@
 <template>
 	<div class="course-detail">
-		<div class="title-background" :style="{'background-image':'url(http://localhost:8085/v1/courses/images/download?relative_path='+(course.course_image_url&&course.course_image_url)+')'}">
+		<div class="title-background" :style="{'background-image':'url('+(course.course_image_url&&course.course_image_url)+')'}">
 			<div class="c-title">
 				{{course.course_name}}
 			</div>
@@ -70,6 +70,11 @@
 				activeName: "first"
 			};
 		},
+    computed: {
+    	host() {
+    		return this.$store.state.host 
+    	}
+    },
 		mounted() {
 			this.courseId = this.$route.query.courseId;
 			this.getCourse();

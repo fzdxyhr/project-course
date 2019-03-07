@@ -8,7 +8,6 @@
 			<video height="100%" width="100%" :src="filePath" controls="controls" autoplay preload="auto">
 			</video>
 		</div>
-		<!-- <a :href="`http://www.xdocin.com/xdoc?_func=to&amp;_format=html&amp;_cache=1&amp;_xdoc=`+filePath" target="_blank" rel="nofollow">XDOC</a> -->
 		<!-- <div class="right-content">
 			1111111111111111
 		</div> -->

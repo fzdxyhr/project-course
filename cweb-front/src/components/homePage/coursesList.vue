@@ -1,7 +1,7 @@
 <template>
 	<div class="courseslist">
 		<div @click="go2CourseDetail(c.id)" class="c-item" v-for="c in courseslist">
-			<img class="c-img" :src="`http://localhost:8085/v1/courses/images/download?relative_path=`+c.course_image_url" />
+			<img class="c-img" :src="c.course_image_url" />
 			<div class="course">
 				<div class="title">{{c.course_name}}</div>
 				<div class="c-describe">
@@ -35,6 +35,11 @@
 		created() {
 			this.getCourses('', 'search');
 		},
+    computed: {
+    	host() {
+    		return this.$store.state.host 
+    	}
+    },
 		methods: {
 			getCourses(key, type) { //获取数据(页数，每页多少条，关键词)
 				if (type === 'search') {
