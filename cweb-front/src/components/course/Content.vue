@@ -12,7 +12,7 @@
 						<div class="c-describe">
 							简介：{{course.course_desc}}
 						</div>
-						<el-collapse>
+						<el-collapse v-model="activeNames">
 							<el-collapse-item v-for="(chapter,i) in course.course_chapter_vos" :title="('第'+(i+1)+'章 ')+chapter.chapter_name"
 							 :name="i">
 								<div style="margin-left: 10px;font-size: 12px;color: #545c63;padding-top: -10px;">{{chapter.chapter_desc}}</div>
@@ -67,14 +67,15 @@
 				course: {},
 				isStudy: false,
 				courseId: "",
-				activeName: "first"
+				activeName: "first",
+				activeNames:[0]
 			};
 		},
-    computed: {
-    	host() {
-    		return this.$store.state.host 
-    	}
-    },
+		computed: {
+			host() {
+				return this.$store.state.host
+			}
+		},
 		mounted() {
 			this.courseId = this.$route.query.courseId;
 			this.getCourse();
@@ -95,6 +96,9 @@
 			getCourse() {
 				this.$axios.get('/v1/courses/' + this.courseId).then((response) => {
 					this.course = response.data;
+// 					response.data.course_chapter_vos.forEach((item,index) => {
+// 						this.activeNames.push(index)
+// 					})
 				}, (response) => {
 					this.$message.error('获取课程详情失败');
 				});

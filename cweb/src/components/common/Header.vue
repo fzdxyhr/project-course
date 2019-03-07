@@ -5,7 +5,7 @@
 				课程管理后台
 			</div>
 			<div class="user_info">
-				<img :src="user.icon" />
+				<img :src="user.img_url" />
 				<el-dropdown trigger="click">
 					<span class="el-dropdown-link">
       				  {{user.name}}
@@ -38,7 +38,8 @@
 			return {
 				user: {
 					name: "Admin",
-					icon: iconImg
+					icon: iconImg,
+					img_url:""
 				}
 			}
 		},
@@ -46,6 +47,7 @@
 			const user = JSON.parse(localStorage.getItem("USER"));
 			if(user) {
 				this.user.name = user.user_name;
+				this.user.img_url = user.photo_path;
 			}
 		},
 		methods: {

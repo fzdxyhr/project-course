@@ -57,11 +57,14 @@
 		mounted() {
 			if (this.rjDialogParams().data) {
 				this.form = JSON.parse(JSON.stringify(this.rjDialogParams().data));
+				if(this.form.photo_path) {
+					this.showImage = true;
+				}
 			}
 		},
 		computed: {
 			imageUrl() {
-				return this.$store.state.host + "/v1/courses/images/download?relative_path=" + this.form.photo_path;
+				return this.form.photo_path;
 			},
 			host() {
 				return this.$store.state.host
@@ -80,6 +83,7 @@
 				return isLt2M;
 			},
 			go2Add() {
+				this.form.password = this.$md5(this.form.password)
 				if (this.form.id) {
 					this.$axios.put("/v1/users/" + this.form.id, this.form).then((response) => {
 						let message = response.data;

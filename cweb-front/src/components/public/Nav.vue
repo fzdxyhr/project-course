@@ -20,7 +20,9 @@
 					<el-dropdown>
 						<span class="el-dropdown-link">
 							<a href="#" class="user-icon">
-								<img src="../../../static/img/carousel.jpg" />
+								<img v-if="!photoPath" src="../../../static/img/carousel.jpg" />
+								<img v-if="photoPath" :src="photoPath" />
+								
 							</a>
 						</span>
 						<el-dropdown-menu slot="dropdown">
@@ -61,12 +63,14 @@
 			return {
 				search: '',
 				activeIndex: "1",
-				userName: ""
+				userName: "",
+				photoPath:""
 			};
 		},
 		mounted() {
 			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
 			this.userName = user.user_name;
+			this.photoPath = user.photo_path;
 		},
 		methods: {
 			handleSelect(key, keyPath) {
