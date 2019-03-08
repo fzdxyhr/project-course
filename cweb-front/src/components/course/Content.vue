@@ -37,9 +37,9 @@
 						</el-collapse>
 					</el-tab-pane>
 					<el-tab-pane label="评价" name="second">
-						<comment-content></comment-content>
+						<comment-content :courseName="course.course_name" :courseId="this.$route.query.courseId"></comment-content>
 					</el-tab-pane>
-					<el-tab-pane label="提问" name="third">
+					<el-tab-pane label="提问" name="third" :courseId="this.$route.query.courseId">
 						<questionList></questionList>
 					</el-tab-pane>
 				</el-tabs>

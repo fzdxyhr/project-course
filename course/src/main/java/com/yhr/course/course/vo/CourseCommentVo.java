@@ -23,15 +23,19 @@ public class CourseCommentVo {
     @ApiModelProperty("用户标识")
     private Integer userId;
 
+    @ApiModelProperty("用户名称")
+    private String userName;
+
     @ApiModelProperty("评分(10分为最高分)")
     private Integer score;
 
     @ApiModelProperty("评论内容")
     private String commentContent;
 
+    @ApiModelProperty("用户头像路径")
+    private String photoPath;
+
     @ApiModelProperty("创建时间")
     private Date createTime;
-
-    private User user;
 
 }

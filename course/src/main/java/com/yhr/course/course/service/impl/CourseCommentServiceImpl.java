@@ -58,7 +58,8 @@ public class CourseCommentServiceImpl implements CourseCommentService {
         if (CollectionUtils.isNotEmpty(courseVos)) {
             Map<Integer, User> userMap = userService.getAllUserMap();
             for (CourseCommentVo courseVo : courseVos) {
-                courseVo.setUser(userMap.get(courseVo.getUserId()));
+                courseVo.setUserName(courseVo.getUserId() == null || userMap.get(courseVo.getUserId()) == null ? "" : userMap.get(courseVo.getUserId()).getUserName());
+                courseVo.setPhotoPath(courseVo.getUserId() == null || userMap.get(courseVo.getUserId()) == null ? "" : userMap.get(courseVo.getUserId()).getPhotoPath());
             }
         }
         result.setTotal(total);

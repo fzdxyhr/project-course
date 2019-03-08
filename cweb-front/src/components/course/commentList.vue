@@ -10,12 +10,12 @@
 					<img style="float: left;" :src="item.photo_path" :alt="item.user_name" width="80px" height="80px" />
 					<div style="float: left;margin-left: 50px;">
 						<div class="user">{{item.user_name}}</div>
-						<div class="comment-content">{{item.content}}</div>
+						<div class="comment-content">{{item.comment_content}}</div>
 					</div>
 				</div>
 				<div class="fixclear"></div>
 				<div class="page-content">
-					<span>{{item.time}}</span>
+					<span>{{item.create_time}}</span>
 				</div>
 			</el-card>
 		</div>
@@ -32,36 +32,43 @@
 			rjDialog,
 			commentAdd
 		},
+		props: {
+			courseName: {
+				type: String
+			},
+			courseId: {
+				type: Number
+			},
+		},
 		data() {
 			return {
 				comments: [{
 						user_name: "我是谁",
 						photo_path: "https://www.baidu.com/img/bd_logo1.png?where=super",
-						content: "sssssssssss",
-						time: "6秒前"
+						comment_content: "sssssssssss",
+						create_time: "6秒前"
 					},
 					{
 						user_name: "谁是我",
 						photo_path: "https://www.baidu.com/img/bd_logo1.png?where=super",
-						content: "bbbbbbbbbbbbbb",
-						time: "8秒前"
+						comment_content: "bbbbbbbbbbbbbb",
+						create_time: "8秒前"
 					}
 				]
 			};
 		},
 		methods: {
 			go2Query() {
-				this.$http.get("../../../static/testData/courses.json?searchStr=" + this.searchText + "&page=" + this.page +
-					"&size=" + this.rows).then((response) => {
+				this.$axios.get("/v1/course_comments").then((response) => {
 					let message = response.data;
-
+          this.comments = response.data.items;
 				}, (response) => {
 					this.$message.error('获取评论失败');
 				});
 			},
 			go2Comment() {
 				this.rjDialog.
-				title("撰写《课程》的评价").
+				title("撰写《" + this.courseName + "》的评价").
 				width("600px").
 				top("2%").
 				closeOnClickModal(false).
@@ -90,9 +97,10 @@
 			color: #1c1f21;
 			font-weight: 700;
 		}
-    .comment-content {
-      margin-top: 30px;
-      font-size: 14px;
-    }
+
+		.comment-content {
+			margin-top: 30px;
+			font-size: 14px;
+		}
 	}
 </style>

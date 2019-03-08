@@ -5,6 +5,7 @@ import com.yhr.course.course.service.CourseChapterService;
 import com.yhr.course.course.service.CourseCommentService;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.CourseChapterVo;
+import com.yhr.course.course.vo.CourseCommentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,12 +21,12 @@ public class CourseCommentController {
     private CourseCommentService courseCommentService;
 
     @RequestMapping(value = "/course_comments", method = RequestMethod.POST)
-    public CourseComment create(@RequestBody CourseComment courseComment) {
+    public CourseCommentVo create(@RequestBody CourseCommentVo courseComment) {
         return courseCommentService.create(courseComment);
     }
 
     @RequestMapping(value = "/course_comments", method = RequestMethod.GET)
-    public PagerHelper<CourseComment> list(@RequestParam(value = "key", required = false) String key
+    public PagerHelper<CourseCommentVo> list(@RequestParam(value = "key", required = false) String key
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
             , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) throws Exception {
         return courseCommentService.list(key, pageNo, pageSize);
