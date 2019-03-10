@@ -18,10 +18,14 @@ public class GlobalInterceptor implements HandlerInterceptor {
         String userId = request.getHeader("USER_ID");
         if (StringUtils.isNotEmpty(userId)) {
             GaeaContext.setUserId(Integer.parseInt(userId));
+        } else {
+            GaeaContext.setUserId(null);
         }
         String adminUserId = request.getHeader("ADMIN_USER_ID");
         if (StringUtils.isNotEmpty(adminUserId)) {
             GaeaContext.setAdminUserId(Integer.parseInt(adminUserId));
+        } else {
+            GaeaContext.setAdminUserId(null);
         }
         return true;
     }

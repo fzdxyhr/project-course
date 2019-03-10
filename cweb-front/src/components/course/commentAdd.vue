@@ -42,11 +42,14 @@
 				texts: ["非常失望", "比较失望,不推荐", "马马虎虎,不太推荐", "课程很不错,有待提高", "棒！强烈推荐"],
 				commentContent: "",
 				showContentError: false,
-				showStarError: false
+				showStarError: false,
+				courseId:""
 			}
 		},
 		mounted() {
-
+			if(this.rjDialogParams().courseId) {
+				this.courseId = this.rjDialogParams().courseId;
+			}
 		},
 		methods: {
 			go2Submit() {
@@ -65,6 +68,16 @@
 				if (this.commentContent.length > 500) {
 					return
 				}
+				let req = {};
+				req.score = this.star;
+				req.comment_content = this.commentContent;
+				req.course_id = this.courseId;
+				this.$axios.post("/v1/course_comments",req).then((response) => {
+					let message = response.data;
+					this.closeRjDialog();
+				}, (response) => {
+					this.$message.error('发表评论失败');
+				});
 			},
 			doCancel(){
 				this.closeRjDialog();

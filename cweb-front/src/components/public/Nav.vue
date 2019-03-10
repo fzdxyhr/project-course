@@ -1,6 +1,6 @@
 <template>
 	<header>
-		<nav class="nav-index">
+		<div class="nav-index">
 			<el-menu class="menu-ul" theme="dark" background-color="#324157" text-color="#fff" active-text-color="#ffd04b"
 			 :default-active="activeIndex" menu-trigger="hover" mode="horizontal">
 				<li class="nav-logo">
@@ -44,7 +44,7 @@
 					<a v-if="!userName" href="javascript:" @click="go2Page('login')">未登录</a>
 				</li>
 			</el-menu>
-		</nav>
+		</div>
 		<rjDialog></rjDialog>
 	</header>
 </template>
@@ -69,8 +69,10 @@
 		},
 		mounted() {
 			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
-			this.userName = user.user_name;
-			this.photoPath = user.photo_path;
+			if(user) {
+				this.userName = user.user_name;
+				this.photoPath = user.photo_path;
+			}
 		},
 		methods: {
 			handleSelect(key, keyPath) {

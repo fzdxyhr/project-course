@@ -39,8 +39,8 @@
 					<el-tab-pane label="评价" name="second">
 						<comment-content :courseName="course.course_name" :courseId="this.$route.query.courseId"></comment-content>
 					</el-tab-pane>
-					<el-tab-pane label="提问" name="third" :courseId="this.$route.query.courseId">
-						<questionList></questionList>
+					<el-tab-pane label="提问" name="third">
+						<questionList :courseId="this.$route.query.courseId"></questionList>
 					</el-tab-pane>
 				</el-tabs>
 			</el-col>
@@ -104,6 +104,13 @@
 				});
 			},
 			go2Start(item) {
+				const user = localStorage.getItem("WEBFRONT_USER");
+				if(!user) {//未登录，跳转到登录页面
+					this.$router.push({
+						name:"login"
+					})
+					return;
+				}
 				let type = "";
 				if (item.chapter_type === 1 || item.chapter_type === 2) {
 					type = 'file';

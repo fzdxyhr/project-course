@@ -6,6 +6,7 @@ import courseDetail from '@components/course/Content'
 import myStudy from '@components/study/index'
 import login from '@components/login/index'
 import filePlay from '@components/course/filePlay'
+import signIndex from '@components/sign/index'
 
 Vue.use(Router)
 
@@ -45,6 +46,10 @@ export default new Router({
 				path: 'filePlay',
 				name: "filePlay",
 				component: filePlay,
+			}, {
+				path: 'sign',
+				name: "sign",
+				component: signIndex,
 			}]
 		}
 	]

@@ -13,7 +13,7 @@
 		</div>
 		<div class="getMode">
 			<el-button type="primary" v-if="!noMoreData" @click="getModeCourse" icon="el-icon-arrow-down" :loading="loadMoreCourse">加载更多</el-button>
-			<div v-if="noMoreData" style="font-size: 14px;color: #93999f;">暂无更多数据了...</div>
+			<div v-if="noMoreData" style="font-size: 14px;color: #93999f;">暂无更多数据了~~~</div>
 		</div>
 	</div>
 </template>
@@ -160,7 +160,7 @@
 			position: absolute;
 			bottom: 0;
 			left: 50%;
-			width: 120px;
+			width: 140px;
 			margin-left: -60px;
 		}
 

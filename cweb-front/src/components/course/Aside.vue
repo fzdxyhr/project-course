@@ -46,6 +46,12 @@
 				});
 			},
 			go2Start() {
+				const user = localStorage.getItem("WEBFRONT_USER");
+				if(!user) {//未登录，跳转到登录页面
+					this.$router.push({
+						name:"login"
+					})
+				}
 				this.$axios.put('/v1/courses/' + this.courseId + '/study').then((response) => {
 					if (response.status === 200) {
 						this.$router.push({
@@ -57,9 +63,17 @@
 				});
 			},
 			go2Continue() {
-				this.$router.push({
-					name:"filePlay"
-				})
+				const user = localStorage.getItem("WEBFRONT_USER");
+				if(!user) {//未登录，跳转到登录页面
+					this.$router.push({
+						name:"login"
+					})
+				} else {
+					this.$router.push({
+						name:"filePlay"
+					})
+				}
+				
 			}
 		},
 	}

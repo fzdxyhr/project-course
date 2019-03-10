@@ -1,5 +1,5 @@
 <template>
-	<footer>
+	<div class="footer-index">
 		<p>
 			<a href="#">关于本站</a>
 			&nbsp;-&nbsp;
@@ -14,16 +14,15 @@
 		<p>
 			版权所有&#169;yanhuorong-2019
 		</p>
-	</footer>
-
+	</div>
 </template>
 <script>
 	export default {
 		name: 'footer'
 	}
 </script>
-<style scoped>
-	footer {
+<style lang="scss">
+	.footer-index {
 		max-width: 1200px;
 		margin: 0 auto;
 		padding: 15px 0;
@@ -31,10 +30,10 @@
 		font-weight: 700;
 		color: #888;
 		line-height: 18px;
-	}
 
-	footer a:link,
-	footer a:visited {
-		color: #888;
+		a:link,
+		a:visited {
+			color: #888;
+		}
 	}
 </style>

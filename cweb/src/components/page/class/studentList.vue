@@ -2,9 +2,9 @@
 	<div class="class-student-index">
 		<div class="body-content" v-for="item in studentList" v-if="studentList.length > 0">
 			<el-card>
-				<div style="padding-top: 15px;padding-bottom: 5px;">
-					<span>{{item.user_name}}</span>
-					<span style="margin-left: 23px;">{{item.account}}</span>
+				<div style="padding-top: 15px;padding-bottom: 5px;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
+					<div style="display: inline-block;">{{item.user_name}}</div>
+					<div style="display: inline-block;margin-left: 23px;width: 80px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;" :title="item.account">{{item.account}}</div>
 				</div>
 			</el-card>
 			<div v-if="item.sign === 1" class="sign-content"><i class="el-icon-check" style="margin-right: 5px;"></i>已签到</div>

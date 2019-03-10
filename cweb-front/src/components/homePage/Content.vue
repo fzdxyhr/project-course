@@ -34,15 +34,21 @@
 			</el-row>
 		</div>
 		<courses-list ref="course"></courses-list>
+		<rjDialog></rjDialog>
 	</div>
 </template>
 <script scoped>
 	import coursesList from './coursesList.vue'
+	import rjDialog from '@components/common/dialog.vue'
+	import signTip from '@components/sign/signTip.vue'
+
 	//主页走马灯下的内容
 	export default {
 		name: "home-content",
 		components: {
 			coursesList,
+			signTip,
+			rjDialog
 		},
 		watch: {
 			searchText(newValue, oldValue) {
@@ -87,17 +93,37 @@
 				}, (response) => {
 					this.$message.error('获取标签失败');
 				});
+			},
+			getSignStatus() {
+				this.$axios.get('/v1/signs/status').then((response) => {
+					if (response.data === 0) {
+						this.rjDialog.
+						title("签到提示").
+						width("500px").
+						top("10%").
+						closeOnClickModal(false).
+						currentView(signTip, {}).
+						showClose(true).
+						then((opt) => {}).show();
+					}
+				}, (response) => {
+					this.$message.error('获取标签失败');
+				});
 			}
 		},
 		created() {
 			this.getAllTags();
+			const user = localStorage.getItem("WEBFRONT_USER");
+			if(user) {
+				this.getSignStatus();
+			}
 		}
 	}
 </script>
 <style lang="scss">
 	.content {
 		height: 100%;
-		
+
 		.title-coursesList {
 			background-color: #edeff0;
 			/*background: linear-gradient(#edeff0, #ffffff);*/

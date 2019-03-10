@@ -33,11 +33,14 @@
 				questionTitle: "",
 				questionContent: "",
 				showContentError: false,
-				showStarError: false
+				showStarError: false,
+				courseId:""
 			}
 		},
 		mounted() {
-
+			if(this.rjDialogParams().courseId) {
+				this.courseId = this.rjDialogParams().courseId;
+			}
 		},
 		methods: {
 			go2Submit() {
@@ -47,7 +50,16 @@
 				} else {
 					this.showStarError = false;
 				}
-				this.closeRjDialog();
+				let req = {};
+				req.question_title = this.questionTitle;
+				req.question_content = this.questionContent;
+				req.course_id = this.courseId;
+				this.$axios.post("/v1/course_questions",req).then((response) => {
+					let message = response.data;
+					this.closeRjDialog();
+				}, (response) => {
+					this.$message.error('提问失败');
+				});
 			},
 			doCancel(){
 				this.closeRjDialog();

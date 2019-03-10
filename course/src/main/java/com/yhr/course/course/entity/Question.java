@@ -23,6 +23,10 @@ public class Question {
     @ApiModelProperty("问题标识")
     private Integer id;
 
+    @ApiModelProperty("问题标题")
+    @Column(name = "question_title")
+    private String questionTitle;
+
     @ApiModelProperty("问题内容")
     @Column(name = "question_content")
     private String questionContent;
@@ -30,10 +34,6 @@ public class Question {
     @ApiModelProperty("课程标识")
     @Column(name = "course_id")
     private Integer courseId;
-
-    @ApiModelProperty("章节标识")
-    @Column(name = "chapter_id")
-    private Integer chapter_id;
 
     @ApiModelProperty("用户标识")
     @Column(name = "user_id")

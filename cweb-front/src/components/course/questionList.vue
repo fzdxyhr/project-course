@@ -7,18 +7,21 @@
 		<div style="margin-top: 20px;" v-for="item in comments">
 			<el-card class="box-card" style="height: 150px;">
 				<div class="content">
-					<img style="float: left;" :src="item.photo_path" :alt="item.user_name" width="80px" height="80px" />
+					<img style="float: left;border-radius: 50%;" :src="item.photo_path" :alt="item.user_name" width="80px" height="80px" />
 					<div style="float: left;margin-left: 50px;">
 						<div class="title">{{item.user_name}}</div>
-						<div class="comment-content">{{item.content}}</div>
+						<div class="comment-content">{{item.question_content}}</div>
 					</div>
 				</div>
 				<div class="fixclear"></div>
 				<div class="page-content">
 					<div style="float: left;margin-left: 17%;"><span style="margin-right: 5px;" v-text="answerTotal"></span>回答</div>
-					<div style="float: right;">{{item.time}}</div>
+					<div style="float: right;">{{item.create_time}}</div>
 				</div>
 			</el-card>
+		</div>
+		<div v-if="comments.length == 0" style="margin-top: 10%;text-align: center;color: #93999f;">
+			暂无提问~~~
 		</div>
 		<rjDialog></rjDialog>
 	</div>
@@ -33,32 +36,30 @@
 			rjDialog,
 			questionAdd
 		},
+		props: {
+			courseName: {
+				type: String
+			},
+			courseId: {
+				type: Number
+			},
+		},
 		data() {
 			return {
-				answerTotal:0,
-				comments: [{
-						user_name: "我是谁",
-						photo_path: "https://www.baidu.com/img/bd_logo1.png?where=super",
-						content: "sssssssssss",
-						time: "6秒前"
-					},
-					{
-						user_name: "谁是我",
-						photo_path: "https://www.baidu.com/img/bd_logo1.png?where=super",
-						content: "bbbbbbbbbbbbbb",
-						time: "8秒前"
-					}
-				]
+				answerTotal: 0,
+				comments: []
 			};
+		},
+		mounted() {
+			this.go2Query();
 		},
 		methods: {
 			go2Query() {
-				this.$http.get("../../../static/testData/courses.json?searchStr=" + this.searchText + "&page=" + this.page +
-					"&size=" + this.rows).then((response) => {
+				this.$axios.get("/v1/course_questions?course_id=" + this.courseId).then((response) => {
 					let message = response.data;
-
+					this.comments = message.items;
 				}, (response) => {
-					this.$message.error('获取评论失败');
+					this.$message.error('获取问题失败');
 				});
 			},
 			go2Question() {
@@ -67,10 +68,12 @@
 				width("600px").
 				top("2%").
 				closeOnClickModal(false).
-				currentView(questionAdd, {}).
+				currentView(questionAdd, {courseId: this.courseId}).
 				sizeSelf("question-add-index").
 				showClose(true).
-				then((opt) => {}).show();
+				then((opt) => {
+					this.go2Query();
+				}).show();
 			}
 		}
 	}

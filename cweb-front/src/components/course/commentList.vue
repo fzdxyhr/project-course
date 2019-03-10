@@ -4,10 +4,14 @@
 			<el-button type="primary" @click="go2Comment">我要评价</el-button>
 		</div>
 		<div class="fixclear"></div>
-		<div style="margin-top: 20px;" v-for="item in comments">
+		<div v-if="comments.length > 0" style="margin-top: 20px;" v-for="item in comments">
 			<el-card class="box-card" style="height: 150px;">
 				<div class="content">
-					<img style="float: left;" :src="item.photo_path" :alt="item.user_name" width="80px" height="80px" />
+					<img style="float: left;border-radius: 50%;" :src="item.photo_path" :alt="item.user_name" width="80px" height="80px" />
+					<div style="float: right;">
+						<el-rate v-model="item.score" disabled>
+						</el-rate>
+					</div>
 					<div style="float: left;margin-left: 50px;">
 						<div class="user">{{item.user_name}}</div>
 						<div class="comment-content">{{item.comment_content}}</div>
@@ -18,6 +22,9 @@
 					<span>{{item.create_time}}</span>
 				</div>
 			</el-card>
+		</div>
+		<div v-if="comments.length == 0" style="margin-top: 10%;text-align: center;color: #93999f;">
+			暂无评价~~~
 		</div>
 		<rjDialog></rjDialog>
 	</div>
@@ -57,11 +64,14 @@
 				]
 			};
 		},
+		mounted() {
+			this.go2Query();
+		},
 		methods: {
 			go2Query() {
-				this.$axios.get("/v1/course_comments").then((response) => {
+				this.$axios.get("/v1/course_comments?course_id=" + this.courseId).then((response) => {
 					let message = response.data;
-          this.comments = response.data.items;
+					this.comments = response.data.items;
 				}, (response) => {
 					this.$message.error('获取评论失败');
 				});
@@ -72,9 +82,13 @@
 				width("600px").
 				top("2%").
 				closeOnClickModal(false).
-				currentView(commentAdd, {}).
+				currentView(commentAdd, {
+					courseId: this.courseId
+				}).
 				showClose(true).
-				then((opt) => {}).show();
+				then((opt) => {
+					this.go2Query();
+				}).show();
 			}
 		}
 	}

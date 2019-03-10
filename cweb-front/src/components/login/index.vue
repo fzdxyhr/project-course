@@ -27,8 +27,8 @@
 		data() {
 			return {
 				loginForm: {
-					account: 'nianqin',
-					password: '123456',
+					account: 'admin',
+					password: 'admin',
 				},
 				rules: {
 					account: [{

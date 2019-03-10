@@ -1,17 +1,17 @@
 package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.config.GaeaContext;
-import com.yhr.course.course.dao.CourseCommentRepository;
 import com.yhr.course.course.dao.CourseRepository;
+import com.yhr.course.course.dao.QuestionRepository;
 import com.yhr.course.course.entity.Course;
-import com.yhr.course.course.entity.CourseChapter;
 import com.yhr.course.course.entity.CourseComment;
+import com.yhr.course.course.entity.Question;
 import com.yhr.course.course.entity.User;
-import com.yhr.course.course.service.CourseCommentService;
+import com.yhr.course.course.service.QuestionService;
 import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.CourseCommentVo;
-import com.yhr.course.course.vo.CourseVo;
+import com.yhr.course.course.vo.QuestionVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,28 +23,28 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 /**
- * Created by Administrator on 2019/3/7.
+ * Created by Administrator on 2019/3/8.
  */
 
 @Service
-public class CourseCommentServiceImpl implements CourseCommentService {
+public class QuestionServiceImpl implements QuestionService {
 
-    @Autowired
-    private CourseCommentRepository courseCommentRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private UserService userService;
     @Autowired
+    private QuestionRepository questionRepository;
+    @Autowired
     private CourseRepository courseRepository;
 
     @Override
-    public PagerHelper<CourseCommentVo> list(String key, Integer userId, Integer courseId, Integer pageNo, Integer pageSize) {
-        PagerHelper<CourseCommentVo> result = new PagerHelper<>();
-        StringBuffer sql = new StringBuffer("select * from s_course_comment where 1=1");
+    public PagerHelper<QuestionVo> list(String key, Integer userId, Integer courseId, Integer pageNo, Integer pageSize) {
+        PagerHelper<QuestionVo> result = new PagerHelper<>();
+        StringBuffer sql = new StringBuffer("select * from s_question where 1=1");
         List<Object> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(key)) {
-            sql.append(" and course_name like ?");
+            sql.append(" and question_content like ?");
             params.add("%" + key + "%");
         }
         if (courseId != null) {
@@ -55,6 +55,7 @@ public class CourseCommentServiceImpl implements CourseCommentService {
             sql.append(" and user_id = ?");
             params.add(userId);
         }
+
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
         Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);
 
@@ -62,32 +63,31 @@ public class CourseCommentServiceImpl implements CourseCommentService {
         sql.append(" limit ?,?");
         params.add(startIndex);
         params.add(pageSize);
-        List<CourseCommentVo> courseVos = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseCommentVo.class));
-        if (CollectionUtils.isNotEmpty(courseVos)) {
+        List<QuestionVo> questionVos = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(QuestionVo.class));
+        if (CollectionUtils.isNotEmpty(questionVos)) {
             Map<Integer, User> userMap = userService.getAllUserMap();
             Map<Integer, Course> courseMap = getCourseMap();
-            for (CourseCommentVo courseVo : courseVos) {
-                courseVo.setUserName(courseVo.getUserId() == null || userMap.get(courseVo.getUserId()) == null ? "" : userMap.get(courseVo.getUserId()).getUserName());
-                courseVo.setPhotoPath(courseVo.getUserId() == null || userMap.get(courseVo.getUserId()) == null ? "" : userMap.get(courseVo.getUserId()).getPhotoPath());
-                courseVo.setCourseName(courseVo.getCourseId() == null || courseMap.get(courseVo.getCourseId()) == null ? "" : courseMap.get(courseVo.getCourseId()).getCourseName());
-                courseVo.setCoursePath(courseVo.getCourseId() == null || courseMap.get(courseVo.getCourseId()) == null ? "" : courseMap.get(courseVo.getCourseId()).getCourseImageUrl());
+            for (QuestionVo questionVo : questionVos) {
+                questionVo.setUserName(questionVo.getUserId() == null || userMap.get(questionVo.getUserId()) == null ? "" : userMap.get(questionVo.getUserId()).getUserName());
+                questionVo.setPhotoPath(questionVo.getUserId() == null || userMap.get(questionVo.getUserId()) == null ? "" : userMap.get(questionVo.getUserId()).getPhotoPath());
+                questionVo.setCourseName(questionVo.getCourseId() == null || courseMap.get(questionVo.getCourseId()) == null ? "" : courseMap.get(questionVo.getCourseId()).getCourseName());
+                questionVo.setCoursePath(questionVo.getCourseId() == null || courseMap.get(questionVo.getCourseId()) == null ? "" : courseMap.get(questionVo.getCourseId()).getCourseImageUrl());
             }
         }
         result.setTotal(total);
-        result.setItems(courseVos);
+        result.setItems(questionVos);
         return result;
     }
 
     @Override
-    public CourseCommentVo create(CourseCommentVo courseCommentVo) {
-        CourseComment courseComment = new CourseComment();
-        BeanUtils.copyProperties(courseCommentVo, courseComment);
-        courseComment.setUserId(GaeaContext.getUserId());
-        courseComment.setCreateTime(new Date());
-        courseCommentRepository.save(courseComment);
-        return courseCommentVo;
+    public QuestionVo create(QuestionVo questionVo) {
+        Question question = new Question();
+        BeanUtils.copyProperties(questionVo, question);
+        question.setUserId(GaeaContext.getUserId());
+        question.setCreateTime(new Date());
+        questionRepository.save(question);
+        return questionVo;
     }
-
 
     private Map<Integer, Course> getCourseMap() {
         Map<Integer, Course> courseMap = new HashMap<>();

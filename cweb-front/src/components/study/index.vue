@@ -2,7 +2,7 @@
 	<div class="study-index">
 		<div class="side-bar">
 			<div class="user-pic-bg">
-				<img class="img" src="https://img1.mukewang.com/5333a0600001f9ed02000200-140-140.jpg" alt="">
+				<img class="img" :src="photoPath" alt="">
 			</div>
 			<div style="text-align: center;margin-top: 30px;">
 				<span style="font-size: 15px;font-weight: 600;">{{userName}}</span>
@@ -56,11 +56,17 @@
 		data() {
 			return {
 				userName: "测试",
+				photoPath:"https://img1.mukewang.com/5333a0600001f9ed02000200-140-140.jpg",
 				courseTotal: 10,
 				studyTime: 20,
 				tabPosition: "left",
 				selectCurrent: "myCourse"
 			}
+		},
+		mounted(){
+			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
+			this.userName = user.user_name;
+			this.photoPath = user.photo_path;
 		},
 		methods: {
 			changeTab(key) {

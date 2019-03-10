@@ -1,18 +1,22 @@
 <template>
 	<div class="my_courses_list">
-		<div @click="go2CourseDetail" target="view_window" class="c-item" v-for="c in courseslist">
-			<img class="c-img" :src="c.imgUrl" />
+		<div v-if="courseslist.length > 0" @click="go2CourseDetail(c.id)" target="view_window" class="c-item" v-for="c in courseslist">
+			<img class="c-img" :src="c.course_image_url" />
 			<div class="course">
-				<div class="title">{{c.name}}</div>
+				<div class="title">{{c.course_name}}</div>
 				<div class="c-describe">
-					{{c.description}}
+					{{c.course_desc}}
 				</div>
 			</div>
 			<div class="c-label">
 			</div>
 		</div>
-		<div class="getMode">
-			<el-button type="primary" @click="getModeCourse" :loading="loadMoreCourse">加载更多</el-button>
+		<div v-if="courseslist.length == 0" class="no-data-content">
+			您还没学习,没有课程数据 <el-button style="margin-left: 10px;" size="small" type="primary" @click="go2Study">去学习</el-button>
+		</div>
+		<div v-if="courseslist.length > 0" class="getMode">
+			<el-button type="primary" v-if="!noMoreData" @click="getModeCourse" icon="el-icon-arrow-down" :loading="loadMoreCourse">加载更多</el-button>
+			<div v-if="noMoreData" style="font-size: 14px;color: #93999f;">暂无更多数据了~~~</div>
 		</div>
 	</div>
 </template>
@@ -23,8 +27,9 @@
 			return {
 				loadMoreCourse: false,
 				courseslist: [],
-				page: 0,
+				page: 1,
 				rows: 10,
+				noMoreData: false
 			}
 		},
 		created() {
@@ -32,27 +37,36 @@
 		},
 		methods: {
 			getCourses() { //获取数据(页数，每页多少条，关键词)
-				this.$http.get("../../../static/testData/courses.json?searchStr=" + this.searchText + "&page=" + this.page +
-					"&size=" + this.rows).then((response) => {
-					//this.courseslist = response.data.data.content;
-					console.log(response.data);
-					response.data.forEach((c) => {
+				this.$axios.get("/v1/mine/courses?page_no=" + this.page + "&page_size=" + this.rows).then((
+					response) => {
+					let message = response.data;
+					message.items.forEach((c) => {
 						this.courseslist.push(c)
 					})
+					if (message.items.length === 0) {
+						this.noMoreData = true;
+					}
 					this.loadMoreCourse = false;
 				}, (response) => {
 					this.$message.error('获取课程失败');
 				});
 			},
+			go2Study(){
+				this.$router.push({
+					name: "courseManage"
+				});
+			},
 			getModeCourse() {
 				this.page++;
-				this.row += 10;
 				this.loadMoreCourse = true;
 				this.getCourses()
 			},
-			go2CourseDetail() {
+			go2CourseDetail(courseId) {
 				this.$router.push({
-					name: "courseDetail"
+					name: "courseDetail",
+					query: {
+						courseId: courseId
+					}
 				})
 			}
 		}
@@ -64,6 +78,13 @@
 		margin-bottom: 20px;
 		position: relative;
 		padding-bottom: 60px;
+		
+		.no-data-content {
+			text-align: center;
+			padding-top: 26%;
+			color: #787d82;
+			font-size: 14px;
+		}
 
 		.c-item {
 			width: 240px;

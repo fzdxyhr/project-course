@@ -11,7 +11,7 @@ import com.yhr.course.course.vo.CourseVo;
  */
 public interface CourseCommentService {
 
-    PagerHelper<CourseCommentVo> list(String key, Integer pageNo, Integer pageSize);
+    PagerHelper<CourseCommentVo> list(String key, Integer userId, Integer courseId, Integer pageNo, Integer pageSize);
 
     CourseCommentVo create(CourseCommentVo courseComment);
 }

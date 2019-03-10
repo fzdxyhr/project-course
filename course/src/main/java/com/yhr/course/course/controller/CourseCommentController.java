@@ -27,9 +27,10 @@ public class CourseCommentController {
 
     @RequestMapping(value = "/course_comments", method = RequestMethod.GET)
     public PagerHelper<CourseCommentVo> list(@RequestParam(value = "key", required = false) String key
+            , @RequestParam(value = "course_id", required = false) Integer courseId
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
             , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) throws Exception {
-        return courseCommentService.list(key, pageNo, pageSize);
+        return courseCommentService.list(key, null, courseId, pageNo, pageSize);
     }
 
 }

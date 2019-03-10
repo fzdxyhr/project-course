@@ -9,7 +9,7 @@ export default new Router({
 		redirect: '/login'
 	}, {
 		path: '/login',
-		name:"login",
+		name: "login",
 		component: resolve => require(['../components/page/Login.vue'], resolve)
 	}, {
 		path: '/Content',
@@ -23,7 +23,7 @@ export default new Router({
 		}, {
 			path: '/UserInfoManage',
 			component: resolve => require(['../components/page/UserInfoManage.vue'], resolve)
-		},{
+		}, {
 			path: '/ClassManage',
 			component: resolve => require(['../components/page/class/index.vue'], resolve)
 		}, {
@@ -35,7 +35,10 @@ export default new Router({
 		}, {
 			path: '/TagsManage',
 			component: resolve => require(['../components/page/TagsManage.vue'], resolve)
-		}, ]
+		}, {
+			path: '/HomeWorkManage',
+			component: resolve => require(['../components/page/homework/index.vue'], resolve)
+		}]
 
 	}, ]
 })
