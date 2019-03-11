@@ -55,12 +55,12 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/courses/{id}/study", method = RequestMethod.PUT)
-    public void study(@PathVariable("id") Integer id) throws Exception {
-        courseService.study(id);
+    public void study(@PathVariable("id") Integer id, @RequestParam("chapter_id") Integer chapterId) throws Exception {
+        courseService.study(id, chapterId);
     }
 
     @RequestMapping(value = "/courses/{id}/study", method = RequestMethod.GET)
-    public CourseStudent getStudy(@PathVariable("id") Integer id) throws Exception {
+    public boolean getStudy(@PathVariable("id") Integer id) throws Exception {
         return courseService.getStudy(id);
     }
 

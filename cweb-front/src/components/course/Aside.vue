@@ -22,6 +22,9 @@
 			},
 			courseId: {
 				type: Number
+			},
+			course: {
+				type: Object
 			}
 		},
 		components: {},
@@ -47,15 +50,33 @@
 			},
 			go2Start() {
 				const user = localStorage.getItem("WEBFRONT_USER");
-				if(!user) {//未登录，跳转到登录页面
+				if (!user) { //未登录，跳转到登录页面
 					this.$router.push({
-						name:"login"
+						name: "login"
 					})
 				}
-				this.$axios.put('/v1/courses/' + this.courseId + '/study').then((response) => {
+				if (this.course.course_chapter_vos && this.course.course_chapter_vos.length === 0) {
+					this.$message.error('暂无章节信息,请先添加章节');
+					return;
+				}
+				//没学习过的，点击开始学习，学习的是第一章
+				let firstChapter = this.course.course_chapter_vos[0].course_chapter_vos[0];
+        console.log("firstChapter",firstChapter)
+				let type = "";
+				if (firstChapter.chapter_type === 1 || firstChapter.chapter_type === 2) {
+					type = 'file';
+				}
+				if (firstChapter.chapter_type === 3) {
+					type = 'vedio';
+				}
+				this.$axios.put('/v1/courses/' + this.courseId + '/study?chapter_id=' + firstChapter.id).then((response) => {
 					if (response.status === 200) {
 						this.$router.push({
-							name:"filePlay"
+							name: "filePlay",
+							query: {
+								type: type,
+								path: encodeURIComponent(firstChapter.chapter_file_path)
+							}
 						})
 					}
 				}, (response) => {
@@ -64,16 +85,35 @@
 			},
 			go2Continue() {
 				const user = localStorage.getItem("WEBFRONT_USER");
-				if(!user) {//未登录，跳转到登录页面
+				if (!user) { //未登录，跳转到登录页面
 					this.$router.push({
-						name:"login"
+						name: "login"
 					})
 				} else {
+					let firstChapter = {};
+					this.course.course_chapter_vos.forEach((item) => {
+            item.course_chapter_vos.forEach((it) => {
+              if (it.recent_study) {
+              	firstChapter = it;
+              }
+            })
+					})
+					let type = "";
+					if (firstChapter.chapter_type === 1 || firstChapter.chapter_type === 2) {
+						type = 'file';
+					}
+					if (firstChapter.chapter_type === 3) {
+						type = 'vedio';
+					}
 					this.$router.push({
-						name:"filePlay"
+						name: "filePlay",
+						query: {
+							type: type,
+							path: encodeURIComponent(firstChapter.chapter_file_path)
+						}
 					})
 				}
-				
+
 			}
 		},
 	}

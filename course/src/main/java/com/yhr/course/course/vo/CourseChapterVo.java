@@ -36,6 +36,9 @@ public class CourseChapterVo {
     @ApiModelProperty("章节对象路径")
     private String chapterFilePath;
 
+    @ApiModelProperty("是否为最近学习章节")
+    private boolean recentStudy;
+
     @ApiModelProperty("子章节对象信息")
     private List<CourseChapterVo> courseChapterVos;
 

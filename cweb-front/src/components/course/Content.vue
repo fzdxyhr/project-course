@@ -25,8 +25,8 @@
 											{{item.chapter_name}}
 										</div>
 										<div class="chapter-content">
-											<el-button style="border-radius: 0%;" v-if="!isStudy" type="danger" @click="go2Start(item)" size="small">开始学习</el-button>
-											<el-button v-if="isStudy" type="danger" size="small" @click="go2Start(item)">继续学习</el-button>
+											<span v-if="item.recent_study" style="color: #93999f;font-size: 12px;">最近学习</span><el-button style="border-radius: 0%;" v-if="!item.recent_study" type="danger" @click="go2Start(item)" size="small">开始学习</el-button>
+											<el-button v-if="item.recent_study" type="danger" size="small" @click="go2Start(item)">继续学习</el-button>
 										</div>
 									</div>
 									<!-- <span class="getMore-articles-title" title="获取更多">
@@ -45,7 +45,7 @@
 				</el-tabs>
 			</el-col>
 			<el-col :span="8">
-				<course-aside :prompt-content="course.course_tip" :courseId="this.$route.query.courseId"></course-aside>
+				<course-aside :prompt-content="course.course_tip" :courseId="this.$route.query.courseId" :course="course"></course-aside>
 			</el-col>
 		</el-row>
 	</div>
@@ -118,8 +118,8 @@
 				if (item.chapter_type === 3) {
 					type = 'vedio';
 				}
-				if (!this.isStudy) {
-					this.$axios.put('/v1/courses/' + this.courseId + '/study').then((response) => {
+				if (!item.recent_study) {
+					this.$axios.put('/v1/courses/' + this.courseId + '/study?chapter_id='+item.id).then((response) => {
 						if (response.status === 200) {
 							this.$router.push({
 								name: "filePlay",

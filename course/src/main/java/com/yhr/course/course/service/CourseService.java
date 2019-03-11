@@ -25,9 +25,9 @@ public interface CourseService {
 
     CourseVo get(Integer id) throws Exception;
 
-    void study(Integer id) throws Exception;
+    void study(Integer id,Integer chapterId) throws Exception;
 
-    CourseStudent getStudy(Integer id) throws Exception;
+    boolean getStudy(Integer id) throws Exception;
 
     String upload(MultipartFile multipartFile) throws Exception;
 

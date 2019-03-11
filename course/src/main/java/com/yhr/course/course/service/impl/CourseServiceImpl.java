@@ -5,9 +5,11 @@ import com.yhr.course.course.config.GaeaContext;
 import com.yhr.course.course.dao.CourseChapterRepository;
 import com.yhr.course.course.dao.CourseRepository;
 import com.yhr.course.course.dao.CourseStudentRepository;
+import com.yhr.course.course.dao.UserStudyProgressRepository;
 import com.yhr.course.course.entity.Course;
 import com.yhr.course.course.entity.CourseChapter;
 import com.yhr.course.course.entity.CourseStudent;
+import com.yhr.course.course.entity.UserStudyProgress;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.CourseService;
 import com.yhr.course.course.utils.PagerHelper;
@@ -47,6 +49,8 @@ public class CourseServiceImpl implements CourseService {
     private CourseChapterRepository courseChapterRepository;
     @Autowired
     private AliyunFileHandle aliyunFileHandle;
+    @Autowired
+    private UserStudyProgressRepository userStudyProgressRepository;
 
     @Override
     public PagerHelper<CourseVo> list(String key, Integer pageNo, Integer pageSize) {
@@ -69,7 +73,7 @@ public class CourseServiceImpl implements CourseService {
         if (CollectionUtils.isNotEmpty(courseVos)) {
             for (CourseVo courseVo : courseVos) {
                 List<CourseChapter> courseChapters = courseChapterRepository.findByCourseId(courseVo.getId());
-                courseVo.setCourseChapterVos(resolveChapter(courseChapters));
+                courseVo.setCourseChapterVos(resolveChapter(courseChapters, courseVo.getId(), false));
             }
         }
         result.setTotal(total);
@@ -118,22 +122,28 @@ public class CourseServiceImpl implements CourseService {
         CourseVo courseVo = new CourseVo();
         BeanUtils.copyProperties(course, courseVo);
         List<CourseChapter> courseChapters = courseChapterRepository.findByCourseId(courseVo.getId());
-        courseVo.setCourseChapterVos(resolveChapter(courseChapters));
+        courseVo.setCourseChapterVos(resolveChapter(courseChapters, id, true));
         return courseVo;
     }
 
     @Override
-    public void study(Integer id) throws Exception {
-        CourseStudent courseStudent = new CourseStudent();
-        courseStudent.setCourseId(id);
-        courseStudent.setStudentId(GaeaContext.getUserId());
-        courseStudent.setCreateTime(new Date());
-        courseStudentRepository.save(courseStudent);
+    public void study(Integer id, Integer chapterId) throws Exception {
+        UserStudyProgress studyProgress = new UserStudyProgress();
+        studyProgress.setCourseId(id);
+        studyProgress.setChapterId(chapterId);
+        studyProgress.setProgress(0);
+        studyProgress.setUserId(GaeaContext.getUserId());
+        studyProgress.setCreateTime(new Date());
+        userStudyProgressRepository.save(studyProgress);
     }
 
     @Override
-    public CourseStudent getStudy(Integer id) throws Exception {
-        return courseStudentRepository.findByStudentIdAndCourseId(GaeaContext.getUserId(), id);
+    public boolean getStudy(Integer id) throws Exception {
+        List<UserStudyProgress> studyProgressList = userStudyProgressRepository.findByCourseIdAndUserIdOrderByCreateTimeDesc(id, GaeaContext.getUserId());
+        if (CollectionUtils.isEmpty(studyProgressList)) {
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -211,7 +221,7 @@ public class CourseServiceImpl implements CourseService {
         aliyunFileHandle.downloadFile(fileName, response.getOutputStream());
     }
 
-    private List<CourseChapterVo> resolveChapter(List<CourseChapter> courseChapters) {
+    private List<CourseChapterVo> resolveChapter(List<CourseChapter> courseChapters, Integer courseId, boolean isNeedStudy) {
         if (CollectionUtils.isEmpty(courseChapters)) {
             return Collections.EMPTY_LIST;
         }
@@ -233,6 +243,21 @@ public class CourseServiceImpl implements CourseService {
                 }
             }
             chapter.setCourseChapterVos(courseChapterVos);
+        }
+        if (isNeedStudy) {//为true 说明需要设置章节是否为最近学习章节
+            List<UserStudyProgress> progresses = userStudyProgressRepository.findByCourseIdAndUserIdOrderByCreateTimeDesc(courseId, GaeaContext.getUserId());
+            //取得第一条数据即为最近学习的章节
+            if (CollectionUtils.isEmpty(progresses)) {
+                return chapters;
+            }
+            UserStudyProgress studyProgress = progresses.get(0);
+            for (CourseChapterVo chapter : chapters) {
+                for (CourseChapterVo childChapter : chapter.getCourseChapterVos()) {
+                    if (studyProgress.getChapterId().equals(childChapter.getId())) {
+                        childChapter.setRecentStudy(true);
+                    }
+                }
+            }
         }
         return chapters;
     }
