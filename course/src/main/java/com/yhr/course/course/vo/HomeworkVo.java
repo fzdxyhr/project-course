@@ -1,4 +1,4 @@
-package com.yhr.course.course.entity;
+package com.yhr.course.course.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -12,35 +12,27 @@ import java.util.Date;
  */
 
 @Data
-@Entity
-@Proxy(lazy = false)
-@Table(name = "s_homework")
-public class Homework {
+public class HomeworkVo {
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @ApiModelProperty("作业标识")
     private Integer id;
 
     @ApiModelProperty("作业标题")
-    @Column(name = "homework_title")
     private String homeworkTitle;
 
     @ApiModelProperty("发布老师")
-    @Column(name = "publish_teacher")
     private Integer publishTeacher;
 
+    @ApiModelProperty("发布老师名称")
+    private String publishTeacherName;
+
     @ApiModelProperty("作业描述")
-    @Column(name = "homework_desc")
     private String homeworkDesc;
 
     @ApiModelProperty("作业文件路径")
-    @Column(name = "homework_file_path")
     private String homeworkFilePath;
 
     @ApiModelProperty("创建时间")
-    @Column(name = "create_time")
     private Date createTime;
 
 }

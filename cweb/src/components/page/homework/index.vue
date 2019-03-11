@@ -10,7 +10,7 @@
 			<el-table :data="tableData" style="width: 100%">
 				<el-table-column prop="homework_title" label="作业标题">
 				</el-table-column>
-				<el-table-column prop="publish_teacher" label="发布老师">
+				<el-table-column prop="publish_teacher_name" label="发布老师">
 				</el-table-column>
 				<el-table-column prop="homework_desc" label="作业描述">
 				</el-table-column>
@@ -35,10 +35,12 @@
 
 <script>
 	import rjDialog from '@components/common/dialog.vue'
+	import homeworkAdd from '@components/page/homework/homeworkAdd.vue'
 
 	export default {
 		components: {
 			rjDialog,
+			homeworkAdd
 		},
 		data() {
 			return {
@@ -48,6 +50,9 @@
 				page_size: 10,
 				total: 0
 			};
+		},
+		mounted(){
+			this.go2Query();
 		},
 		methods: {
 			handleSizeChange(val) {
@@ -59,7 +64,7 @@
 				this.go2Query();
 			},
 			go2Query(){
-				this.$axios.get('/v1/classes?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then((
+				this.$axios.get('/v1/homeworks?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then((
 					response) => {
 					this.tableData = response.data.items;
 					this.total = response.data.total;
@@ -68,13 +73,54 @@
 				});
 			},
 			go2Update(row){
-				
+				this.rjDialog.
+				title("修改作业").
+				width("600px").
+				top("").
+				currentView(homeworkAdd, {
+					data: row
+				}).
+				closeOnClickModal(false).
+				showClose(true).
+				then((opt) => {
+					this.go2Query();
+				}).show();
 			},
 			go2Delete(row){
-				
+				this.$confirm('此操作将永久删除该作业, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$axios.delete('/v1/classes/' + row.id).then((
+						response) => {
+						this.$message({
+							type: 'success',
+							message: '删除作业成功!'
+						});
+						this.go2Query();
+					}, (response) => {
+						this.$message.error('删除作业失败');
+					});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
 			},
 			go2Publish(){
-				
+				this.rjDialog.
+				title("发布作业").
+				width("600px").
+				top("").
+				currentView(homeworkAdd, {
+				}).
+				closeOnClickModal(false).
+				showClose(true).
+				then((opt) => {
+					this.go2Query();
+				}).show();
 			}
 		},
 	}

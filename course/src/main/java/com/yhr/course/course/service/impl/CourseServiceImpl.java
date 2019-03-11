@@ -128,13 +128,18 @@ public class CourseServiceImpl implements CourseService {
 
     @Override
     public void study(Integer id, Integer chapterId) throws Exception {
-        UserStudyProgress studyProgress = new UserStudyProgress();
-        studyProgress.setCourseId(id);
-        studyProgress.setChapterId(chapterId);
-        studyProgress.setProgress(0);
-        studyProgress.setUserId(GaeaContext.getUserId());
-        studyProgress.setCreateTime(new Date());
-        userStudyProgressRepository.save(studyProgress);
+        UserStudyProgress userStudyProgress = userStudyProgressRepository.findByCourseIdAndUserIdAndChapterId(id, GaeaContext.getUserId(), chapterId);
+        if (userStudyProgress == null) {
+            userStudyProgress = new UserStudyProgress();
+            userStudyProgress.setCourseId(id);
+            userStudyProgress.setChapterId(chapterId);
+            userStudyProgress.setProgress(0);
+            userStudyProgress.setUserId(GaeaContext.getUserId());
+            userStudyProgress.setCreateTime(new Date());
+        } else {
+            userStudyProgress.setCreateTime(new Date());
+        }
+        userStudyProgressRepository.save(userStudyProgress);
     }
 
     @Override
@@ -255,6 +260,10 @@ public class CourseServiceImpl implements CourseService {
                 for (CourseChapterVo childChapter : chapter.getCourseChapterVos()) {
                     if (studyProgress.getChapterId().equals(childChapter.getId())) {
                         childChapter.setRecentStudy(true);
+                    }
+                    UserStudyProgress userStudyProgress = userStudyProgressRepository.findByCourseIdAndUserIdAndChapterId(courseId, GaeaContext.getUserId(), childChapter.getId());
+                    if (userStudyProgress != null) {
+                        childChapter.setStudy(true);
                     }
                 }
             }

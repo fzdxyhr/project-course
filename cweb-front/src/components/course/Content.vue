@@ -17,16 +17,17 @@
 							 :name="i">
 								<div style="margin-left: 10px;font-size: 12px;color: #545c63;padding-top: -10px;">{{chapter.chapter_desc}}</div>
 								<div class="articles-title">
-									<div class="child-item" v-for="item in chapter.course_chapter_vos" @click="go2Start(item)">
+									<div class="child-item" v-for="(item,index) in chapter.course_chapter_vos" @click="go2Start(item)">
 										<div class="chapter-title">
 											<i v-if="item.chapter_type === 1 " class="course-icon-doc"></i>
 											<i v-if="item.chapter_type === 2 " class="course-icon-ppt"></i>
 											<i v-if="item.chapter_type === 3 " class="course-icon-vedio"></i>
-											{{item.chapter_name}}
+											{{i+1}}-{{index+1}}&nbsp;&nbsp;{{item.chapter_name}}
 										</div>
 										<div class="chapter-content">
-											<span v-if="item.recent_study" style="color: #93999f;font-size: 12px;">最近学习</span><el-button style="border-radius: 0%;" v-if="!item.recent_study" type="danger" @click="go2Start(item)" size="small">开始学习</el-button>
-											<el-button v-if="item.recent_study" type="danger" size="small" @click="go2Start(item)">继续学习</el-button>
+											<span v-if="item.recent_study" style="color: #93999f;font-size: 12px;">最近学习</span>
+											<el-button style="border-radius: 0%;" v-if="!item.study" type="danger" @click="go2Start(item)" size="small">开始学习</el-button>
+											<el-button v-if="item.study" type="danger" size="small" @click="go2Start(item)">继续学习</el-button>
 										</div>
 									</div>
 									<!-- <span class="getMore-articles-title" title="获取更多">
@@ -68,7 +69,7 @@
 				isStudy: false,
 				courseId: "",
 				activeName: "first",
-				activeNames:[0]
+				activeNames: [0]
 			};
 		},
 		computed: {
@@ -96,18 +97,18 @@
 			getCourse() {
 				this.$axios.get('/v1/courses/' + this.courseId).then((response) => {
 					this.course = response.data;
-// 					response.data.course_chapter_vos.forEach((item,index) => {
-// 						this.activeNames.push(index)
-// 					})
+					// 					response.data.course_chapter_vos.forEach((item,index) => {
+					// 						this.activeNames.push(index)
+					// 					})
 				}, (response) => {
 					this.$message.error('获取课程详情失败');
 				});
 			},
 			go2Start(item) {
 				const user = localStorage.getItem("WEBFRONT_USER");
-				if(!user) {//未登录，跳转到登录页面
+				if (!user) { //未登录，跳转到登录页面
 					this.$router.push({
-						name:"login"
+						name: "login"
 					})
 					return;
 				}
@@ -118,30 +119,21 @@
 				if (item.chapter_type === 3) {
 					type = 'vedio';
 				}
-				if (!item.recent_study) {
-					this.$axios.put('/v1/courses/' + this.courseId + '/study?chapter_id='+item.id).then((response) => {
-						if (response.status === 200) {
-							this.$router.push({
-								name: "filePlay",
-								query: {
-									type: type,
-									path: encodeURIComponent(item.chapter_file_path)
-								}
-							})
-						}
-					}, (response) => {
-						this.$message.error('开始学习失败');
-					});
-				} else {
-					this.$router.push({
-						name: "filePlay",
-						query: {
-							type: type,
-							path: encodeURIComponent(item.chapter_file_path)
-						}
-					})
-				}
-
+				this.$axios.put('/v1/courses/' + this.courseId + '/study?chapter_id=' + item.id).then((response) => {
+					if (response.status === 200) {
+						this.$router.push({
+							name: "filePlay",
+							query: {
+								type: type,
+								path: encodeURIComponent(item.chapter_file_path),
+								chapterName: encodeURIComponent(item.chapter_name),
+								courseId: this.courseId
+							}
+						})
+					}
+				}, (response) => {
+					this.$message.error('开始学习失败');
+				});
 			},
 			go2Continue() {
 				this.$router.push({

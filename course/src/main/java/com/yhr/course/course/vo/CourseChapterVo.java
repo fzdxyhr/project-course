@@ -39,6 +39,9 @@ public class CourseChapterVo {
     @ApiModelProperty("是否为最近学习章节")
     private boolean recentStudy;
 
+    @ApiModelProperty("是否学习过章节")
+    private boolean study;
+
     @ApiModelProperty("子章节对象信息")
     private List<CourseChapterVo> courseChapterVos;
 

@@ -13,4 +13,6 @@ import java.util.List;
 public interface UserStudyProgressRepository extends JpaRepository<UserStudyProgress, Integer> {
 
     List<UserStudyProgress> findByCourseIdAndUserIdOrderByCreateTimeDesc(Integer courseId, Integer userId);
+
+    UserStudyProgress findByCourseIdAndUserIdAndChapterId(Integer courseId, Integer userId, Integer chapterId);
 }

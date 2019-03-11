@@ -1,7 +1,7 @@
 <template>
 	<div class="file-upload">
 		<el-upload ref="upload" class="m-upload-wrapper" :action="action" :before-upload="beforeUpload" :on-success="handleSuccess"
-		 :on-error="handleError" :on-remove="handleRemove" :accept="accept" :show-file-list="showFileList" list-type="picture"
+		 :on-error="handleError" :on-remove="handleRemove" :accept="accept" :show-file-list="showFileList" :list-type="listType"
 		 :file-list="fileList" multiple :limit="limit" :on-exceed="handleOnExceed">
 			<el-button size="small" type="primary" icon="el-icon-upload2" class="upload-btn">{{buttonText}}</el-button>
 		</el-upload>
@@ -43,6 +43,12 @@
 				type: String,
 				default () {
 					return "img";
+				}
+			},
+			listType: {
+				type: String,
+				default () {
+					return "picture";
 				}
 			}
 

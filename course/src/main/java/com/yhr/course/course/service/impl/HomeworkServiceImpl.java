@@ -1,12 +1,17 @@
 package com.yhr.course.course.service.impl;
 
+import com.yhr.course.course.config.GaeaContext;
 import com.yhr.course.course.dao.HomeworkRepository;
 import com.yhr.course.course.entity.Homework;
 import com.yhr.course.course.entity.Tag;
+import com.yhr.course.course.entity.User;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.HomeworkService;
 import com.yhr.course.course.service.TagService;
+import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.HomeworkVo;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +22,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -29,10 +35,12 @@ public class HomeworkServiceImpl implements HomeworkService {
     private HomeworkRepository homeworkRepository;
     @Autowired
     private JdbcTemplate jdbcTemplate;
+    @Autowired
+    private UserService userService;
 
     @Override
-    public PagerHelper<Homework> list(String key, Integer pageNo, Integer pageSize) {
-        PagerHelper<Homework> result = new PagerHelper<>();
+    public PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize) {
+        PagerHelper<HomeworkVo> result = new PagerHelper<>();
         StringBuffer sql = new StringBuffer("select * from s_homework where 1=1");
         List<Object> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(key)) {
@@ -47,16 +55,26 @@ public class HomeworkServiceImpl implements HomeworkService {
         sql.append(" limit ?,?");
         params.add(startIndex);
         params.add(pageSize);
-        List<Homework> tags = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<Homework>(Homework.class));
+        List<HomeworkVo> tags = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<HomeworkVo>(HomeworkVo.class));
+        if (CollectionUtils.isNotEmpty(tags)) {
+            Map<Integer, User> userMap = userService.getAllUserMap();
+            for (HomeworkVo tag : tags) {
+                tag.setPublishTeacherName(tag.getPublishTeacher() == null || userMap.get(tag.getPublishTeacher()) == null ? "" : userMap.get(tag.getPublishTeacher()).getUserName());
+            }
+        }
         result.setTotal(total);
         result.setItems(tags);
         return result;
     }
 
     @Override
-    public Homework create(Homework homework) {
+    public HomeworkVo create(HomeworkVo homeworkVo) {
+        Homework homework = new Homework();
+        BeanUtils.copyProperties(homeworkVo, homework);
+        homework.setPublishTeacher(GaeaContext.getAdminUserId());
         homework.setCreateTime(new Date());
-        return homeworkRepository.save(homework);
+        homeworkRepository.save(homework);
+        return homeworkVo;
     }
 
     @Override
@@ -65,7 +83,7 @@ public class HomeworkServiceImpl implements HomeworkService {
         if (tempHomework == null) {
             throw new ServiceException("不存在【" + id + "】对应的标签");
         }
-        BeanUtils.copyProperties(homework,tempHomework);
+        BeanUtils.copyProperties(homework, tempHomework);
         return homeworkRepository.save(tempHomework);
     }
 
