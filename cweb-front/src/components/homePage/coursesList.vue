@@ -1,6 +1,9 @@
 <template>
 	<div class="courseslist">
 		<div @click="go2CourseDetail(c.id)" class="c-item" v-for="c in courseslist">
+			<div class="tag-content">
+				<label v-for="item in c.tags">{{item}}</label>
+			</div>
 			<img class="c-img" :src="c.course_image_url" />
 			<div class="course">
 				<div class="title">{{c.course_name}}</div>
@@ -29,25 +32,27 @@
 				page: 1,
 				rows: 10,
 				noMoreData: false,
-				key: ""
+				key: "",
+				tagId:""
 			}
 		},
 		created() {
-			this.getCourses('', 'search');
+			this.getCourses('', '', 'search');
 		},
-    computed: {
-    	host() {
-    		return this.$store.state.host 
-    	}
-    },
+		computed: {
+			host() {
+				return this.$store.state.host
+			}
+		},
 		methods: {
-			getCourses(key, type) { //获取数据(页数，每页多少条，关键词)
+			getCourses(key, tagId, type) { //获取数据(页数，每页多少条，关键词)
 				if (type === 'search') {
 					this.page = 1;
 					this.noMoreData = false;
 				}
 				this.key = key;
-				this.$axios.get("/v1/courses?key=" + this.key + "&page_no=" + this.page + "&page_size=" + this.rows).then((
+				this.tagId = tagId;
+				this.$axios.get("/v1/courses?key=" + this.key + "&page_no=" + this.page + "&page_size=" + this.rows+"&tag_id="+this.tagId).then((
 					response) => {
 					let message = response.data;
 					if (type === 'search') {
@@ -67,7 +72,7 @@
 			getModeCourse() {
 				this.page++;
 				this.loadMoreCourse = true;
-				this.getCourses(this.key, 'more')
+				this.getCourses(this.key,this.tagId, 'more')
 			},
 			go2CourseDetail(courseId) {
 				this.$router.push({
@@ -113,6 +118,27 @@
 			border-radius: 4px;
 			border-top-left-radius: 5px;
 			border-top-right-radius: 5px;
+		}
+
+		.tag-content {
+			position: absolute;
+			// bottom: 6px;
+			top: 78px;
+			left: 8px;
+			font-size: 12px;
+			color: #fff;
+			line-height: 16px;
+
+			label {
+				display: inline-block;
+				background: rgba(7, 17, 27, .4);
+				border-radius: 12px;
+				padding: 4px 8px;
+				margin-right: 4px;
+				margin-bottom: 2px;
+				margin-right: 0;
+				font-weight: 200;
+			}
 		}
 
 		.c-label {

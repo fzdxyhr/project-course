@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -29,9 +30,10 @@ public class CourseController {
 
     @RequestMapping(value = "/courses", method = RequestMethod.GET)
     public PagerHelper<CourseVo> list(@RequestParam(value = "key", required = false) String key
+            , @RequestParam(value = "tag_id", required = false) Integer tagId
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
             , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) {
-        return courseService.list(key, pageNo, pageSize);
+        return courseService.list(key, tagId, pageNo, pageSize);
     }
 
     @RequestMapping(value = "/courses", method = RequestMethod.POST)
@@ -40,7 +42,7 @@ public class CourseController {
     }
 
     @RequestMapping(value = "/courses/{id}", method = RequestMethod.PUT)
-    public Course update(@PathVariable("id") Integer id, @RequestBody Course course) throws Exception {
+    public Course update(@PathVariable("id") Integer id, @RequestBody CourseVo course) throws Exception {
         return courseService.update(id, course);
     }
 

@@ -7,6 +7,7 @@ import myStudy from '@components/study/index'
 import login from '@components/login/index'
 import filePlay from '@components/course/filePlay'
 import signIndex from '@components/sign/index'
+import homework from '@components/homework/index'
 
 Vue.use(Router)
 
@@ -50,6 +51,10 @@ export default new Router({
 				path: 'sign',
 				name: "sign",
 				component: signIndex,
+			}, {
+				path: 'homework',
+				name: "homework",
+				component: homework,
 			}]
 		}
 	]

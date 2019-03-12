@@ -48,6 +48,9 @@ public class CourseVo {
     @JsonProperty("course_chapter_vos")
     private List<CourseChapterVo> courseChapterVos;
 
+    @ApiModelProperty("标签列表")
+    private List<String> tags;
+
     @ApiModelProperty("创建时间")
     private Date createTime;
 

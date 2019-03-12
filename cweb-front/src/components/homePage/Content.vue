@@ -16,16 +16,16 @@
 				</el-col>
 				<el-col :span="22">
 					<div class="cl-labels">
-						<span class="label active">
+						<span :class="selectedId == ''?'label active':'label'" @click="go2Select('')">
 							全部
 						</span>
-						<span class="label" v-for="(tag,index) in tags" v-if="index<4">
+						<span :class="selectedId == tag.id?'label active':'label'" v-for="(tag,index) in tags" v-if="index<4" @click="go2Select(tag.id)">
 							{{tag.tag_name}}
 						</span>
 						<el-button @click="btnShowMordLabel">{{labelMore.btnText}}<i :style="{transform: 'rotate('+labelMore.iconRotate+'deg)'}"
 							 class="el-icon-caret-bottom"></i></el-button>
 						<div class="cll-more" :class="{showMore:this.labelMore.state}">
-							<span class="label" v-for="(tag,index) in tags" v-if="index>=4">
+							<span :class="selectedId == tag.id?'label active':'label'" v-for="(tag,index) in tags" v-if="index>=4" @click="go2Select(tag.id)">
 								{{tag.tag_name}}
 							</span>
 						</div>
@@ -53,7 +53,7 @@
 		watch: {
 			searchText(newValue, oldValue) {
 				if (newValue != oldValue) {
-					this.$refs.course.getCourses(this.searchText, 'search');
+					this.$refs.course.getCourses(this.searchText, this.selectedId, 'search');
 				}
 			}
 		},
@@ -65,10 +65,15 @@
 					btnText: '更多',
 					iconRotate: 0,
 				},
-				tags: []
+				tags: [],
+				selectedId: ""
 			}
 		},
 		methods: {
+			go2Select(id) {
+				this.selectedId = id;
+				this.$refs.course.getCourses(this.searchText, this.selectedId, 'search');
+			},
 			handleIconClick(ev) {
 				console.log(ev);
 			},
@@ -114,7 +119,7 @@
 		created() {
 			this.getAllTags();
 			const user = localStorage.getItem("WEBFRONT_USER");
-			if(user) {
+			if (user) {
 				this.getSignStatus();
 			}
 		}

@@ -12,6 +12,7 @@ import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.entity.UserStudyProgress;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.CourseService;
+import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.CourseChapterVo;
 import com.yhr.course.course.vo.CourseVo;
@@ -28,10 +29,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.math.BigInteger;
 import java.nio.charset.Charset;
 import java.security.MessageDigest;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Administrator on 2019-01-09.
@@ -51,15 +49,21 @@ public class CourseServiceImpl implements CourseService {
     private AliyunFileHandle aliyunFileHandle;
     @Autowired
     private UserStudyProgressRepository userStudyProgressRepository;
+    @Autowired
+    private TagService tagService;
 
     @Override
-    public PagerHelper<CourseVo> list(String key, Integer pageNo, Integer pageSize) {
+    public PagerHelper<CourseVo> list(String key, Integer tagId, Integer pageNo, Integer pageSize) {
         PagerHelper<CourseVo> result = new PagerHelper<>();
         StringBuffer sql = new StringBuffer("select * from s_course where 1=1");
         List<Object> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(key)) {
             sql.append(" and course_name like ?");
             params.add("%" + key + "%");
+        }
+        if (tagId != null) {
+            sql.append(" and tag_id like ?");
+            params.add("%" + tagId + "%");
         }
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
@@ -74,6 +78,7 @@ public class CourseServiceImpl implements CourseService {
             for (CourseVo courseVo : courseVos) {
                 List<CourseChapter> courseChapters = courseChapterRepository.findByCourseId(courseVo.getId());
                 courseVo.setCourseChapterVos(resolveChapter(courseChapters, courseVo.getId(), false));
+                courseVo.setTags(getTagNames(courseVo.getTagId()));
             }
         }
         result.setTotal(total);
@@ -88,7 +93,7 @@ public class CourseServiceImpl implements CourseService {
     }
 
     @Override
-    public Course update(Integer id, Course course) throws Exception {
+    public Course update(Integer id, CourseVo course) throws Exception {
         Course tempCourse = courseRepository.getOne(id);
         if (tempCourse == null) {
             throw new ServiceException("不存在【" + id + "】对应的课程");
@@ -283,5 +288,21 @@ public class CourseServiceImpl implements CourseService {
             System.out.println(e.getCause());
         }
         return multipartFile.getOriginalFilename();
+    }
+
+    //获取课程对应的标签名称
+    private List<String> getTagNames(String tagId) {
+        if (StringUtils.isEmpty(tagId)) {
+            return Collections.EMPTY_LIST;
+        }
+        List<String> tagNames = new ArrayList<>();
+        Map<Integer, String> stringMap = tagService.getAllTagMap();
+        String[] tagIds = tagId.split(",");
+        for (String id : tagIds) {
+            if (stringMap.get(Integer.parseInt(id)) == null || StringUtils.isNotEmpty(stringMap.get(Integer.parseInt(id)))) {
+                tagNames.add(stringMap.get(Integer.parseInt(id)));
+            }
+        }
+        return tagNames;
     }
 }

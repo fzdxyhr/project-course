@@ -5,15 +5,14 @@ import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.utils.PagerHelper;
+import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -83,5 +82,18 @@ public class TagServiceImpl implements TagService {
             throw new ServiceException("不存在【" + id + "】对应的标签");
         }
         return tempTag;
+    }
+
+    @Override
+    public Map<Integer, String> getAllTagMap() {
+        Map<Integer, String> stringMap = new HashMap<>();
+        List<Tag> tags = tagRepository.findAll();
+        if (CollectionUtils.isEmpty(tags)) {
+            return stringMap;
+        }
+        for (Tag tag : tags) {
+            stringMap.put(tag.getId(), tag.getTagName());
+        }
+        return stringMap;
     }
 }

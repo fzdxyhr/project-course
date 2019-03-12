@@ -9,23 +9,24 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019-01-09.
  */
 public interface CourseService {
 
-    PagerHelper<CourseVo> list(String key, Integer pageNo, Integer pageSize);
+    PagerHelper<CourseVo> list(String key, Integer tagId, Integer pageNo, Integer pageSize);
 
     Course create(Course course);
 
-    Course update(Integer id, Course course) throws Exception;
+    Course update(Integer id, CourseVo course) throws Exception;
 
     void delete(Integer id) throws Exception;
 
     CourseVo get(Integer id) throws Exception;
 
-    void study(Integer id,Integer chapterId) throws Exception;
+    void study(Integer id, Integer chapterId) throws Exception;
 
     boolean getStudy(Integer id) throws Exception;
 

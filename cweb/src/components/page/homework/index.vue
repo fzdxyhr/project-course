@@ -16,10 +16,10 @@
 				</el-table-column>
 				<el-table-column prop="create_time" label="创建时间" min-width="90px">
 				</el-table-column>
-				<el-table-column label="操作" min-width="160px">
+				<el-table-column label="操作" min-width="80px">
 					<template scope="scope">
-						<el-button icon="el-icon-setting" type="text" @click="go2Update(scope.row)">修改</el-button>
-						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="go2Delete(scope.row)">删除</el-button>
+						<el-button icon="el-icon-edit" type="text" @click="go2Update(scope.row)">修改</el-button>
+						<el-button icon="el-icon-delete" style="color: #f56c6c;" type="text" @click="go2Delete(scope.row)">删除</el-button>
 					</template>
 				</el-table-column>
 			</el-table>

@@ -12,6 +12,9 @@
 				<el-menu-item index="2" @click="go2Page('articleManage')">
 					文章列表
 				</el-menu-item>
+				<el-menu-item index="3" @click="go2Page('homework')">
+					作业列表
+				</el-menu-item>
 				<!-- <li class="nav-search">
 					<el-input placeholder="搜索文章" icon="search" v-model="search" :on-icon-click="handleIconClick">
 					</el-input>
