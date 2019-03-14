@@ -1,5 +1,5 @@
 <template>
-	<div class="content">
+	<div class="index-content">
 		<div class="title-coursesList">
 			<h2>精品课程</h2>
 			<div class="courseSearch">
@@ -126,13 +126,14 @@
 	}
 </script>
 <style lang="scss">
-	.content {
+	.index-content {
 		height: 100%;
+		overflow: auto;
 
 		.title-coursesList {
 			background-color: #edeff0;
 			/*background: linear-gradient(#edeff0, #ffffff);*/
-			overflow: hidden;
+			// overflow: hidden;
 			padding: 5px 10px;
 			height: 46px;
 		}

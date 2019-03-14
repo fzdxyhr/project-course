@@ -4,7 +4,7 @@
 		<div class="content">
 			<router-view></router-view>
 		</div>
-		<v-footer></v-footer>
+		<v-footer class="footer-content"></v-footer>
 	</div>
 </template>
 
@@ -26,12 +26,17 @@
 <style lang="scss">
 	.home {
 		height: 100%;
-    background-color: #eef1f6;
+		background-color: #eef1f6;
 
 		.content {
-      height: 100%;
-      background-color: white;
-      margin: 20px 0;
+			height: 100%;
+			background-color: white;
+			margin: 20px 0;
+		}
+		.footer-content {
+			bottom: 0;
+			// position: absolute;
+			clear: both;
 		}
 	}
 </style>

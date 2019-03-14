@@ -1,10 +1,10 @@
 package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.config.GaeaContext;
+import com.yhr.course.course.dao.ClassesRepository;
 import com.yhr.course.course.dao.HomeworkRepository;
-import com.yhr.course.course.entity.Homework;
-import com.yhr.course.course.entity.Tag;
-import com.yhr.course.course.entity.User;
+import com.yhr.course.course.dao.HomeworkSubmitRepository;
+import com.yhr.course.course.entity.*;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.HomeworkService;
 import com.yhr.course.course.service.TagService;
@@ -13,6 +13,7 @@ import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.HomeworkVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.omg.CORBA.PRIVATE_MEMBER;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
@@ -37,6 +38,10 @@ public class HomeworkServiceImpl implements HomeworkService {
     private JdbcTemplate jdbcTemplate;
     @Autowired
     private UserService userService;
+    @Autowired
+    private ClassesRepository classesRepository;
+    @Autowired
+    private HomeworkSubmitRepository homeworkSubmitRepository;
 
     @Override
     public PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize) {
@@ -47,6 +52,45 @@ public class HomeworkServiceImpl implements HomeworkService {
             sql.append(" and homework_title like ?");
             params.add("%" + key + "%");
         }
+
+        sql.append(" and publish_teacher = ?");
+        params.add(GaeaContext.getAdminUserId());
+
+        StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
+        Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);
+
+        int startIndex = (pageNo - 1) * pageSize;
+        sql.append(" limit ?,?");
+        params.add(startIndex);
+        params.add(pageSize);
+        List<HomeworkVo> tags = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<HomeworkVo>(HomeworkVo.class));
+        if (CollectionUtils.isNotEmpty(tags)) {
+            Map<Integer, User> userMap = userService.getAllUserMap();
+            for (HomeworkVo tag : tags) {
+                tag.setPublishTeacherName(tag.getPublishTeacher() == null || userMap.get(tag.getPublishTeacher()) == null ? "" : userMap.get(tag.getPublishTeacher()).getUserName());
+            }
+        }
+        result.setTotal(total);
+        result.setItems(tags);
+        return result;
+    }
+
+    @Override
+    public PagerHelper<HomeworkVo> listFront(String key, Integer pageNo, Integer pageSize) throws Exception {
+        PagerHelper<HomeworkVo> result = new PagerHelper<>();
+        StringBuffer sql = new StringBuffer("select * from s_homework where 1=1");
+        List<Object> params = new ArrayList<>();
+        if (StringUtils.isNotEmpty(key)) {
+            sql.append(" and homework_title like ?");
+            params.add("%" + key + "%");
+        }
+
+        //根据学生查询对应的班级，并获取班级对应的授课老师，然后查询对应布置的作业
+        User user = userService.get(GaeaContext.getUserId());
+        //获取对应的班级信息
+        Classes classes = classesRepository.getOne(user.getClassId());
+        sql.append(" and publish_teacher = ?");
+        params.add(classes.getTeacherId());
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
         Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);
@@ -103,5 +147,11 @@ public class HomeworkServiceImpl implements HomeworkService {
             throw new ServiceException("不存在【" + id + "】对应的标签");
         }
         return tempTag;
+    }
+
+    @Override
+    public HomeworkSubmit submit(HomeworkSubmit homeworkSubmit) {
+        homeworkSubmit.setCreateTime(new Date());
+        return homeworkSubmitRepository.save(homeworkSubmit);
     }
 }

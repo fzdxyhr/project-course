@@ -1,6 +1,7 @@
 package com.yhr.course.course.controller;
 
 import com.yhr.course.course.entity.Homework;
+import com.yhr.course.course.entity.HomeworkSubmit;
 import com.yhr.course.course.service.HomeworkService;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.HomeworkVo;
@@ -25,6 +26,13 @@ public class HomeworkController {
         return homeworkService.list(key, pageNo, pageSize);
     }
 
+    @RequestMapping(value = "/homeworks/front", method = RequestMethod.GET)
+    public PagerHelper<HomeworkVo> listFront(@RequestParam(value = "key", required = false) String key
+            , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
+            , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) throws Exception {
+        return homeworkService.listFront(key, pageNo, pageSize);
+    }
+
     @RequestMapping(value = "/homeworks", method = RequestMethod.POST)
     public HomeworkVo create(@RequestBody HomeworkVo homeworkVo) {
         return homeworkService.create(homeworkVo);
@@ -43,6 +51,11 @@ public class HomeworkController {
     @RequestMapping(value = "/homeworks/{id}", method = RequestMethod.GET)
     public Homework get(@PathVariable("id") Integer id) throws Exception {
         return homeworkService.get(id);
+    }
+
+    @RequestMapping(value = "/homeworks/submit", method = RequestMethod.POST)
+    public HomeworkSubmit submit(@RequestBody HomeworkSubmit homeworkSubmit) {
+        return homeworkService.submit(homeworkSubmit);
     }
 
 }

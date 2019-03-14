@@ -1,6 +1,7 @@
 package com.yhr.course.course.service;
 
 import com.yhr.course.course.entity.Homework;
+import com.yhr.course.course.entity.HomeworkSubmit;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.HomeworkVo;
@@ -12,6 +13,8 @@ public interface HomeworkService {
 
     PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize);
 
+    PagerHelper<HomeworkVo> listFront(String key, Integer pageNo, Integer pageSize) throws Exception;
+
     HomeworkVo create(HomeworkVo homeworkVo);
 
     Homework update(Integer id, Homework homework) throws Exception;
@@ -19,5 +22,7 @@ public interface HomeworkService {
     void delete(Integer id) throws Exception;
 
     Homework get(Integer id) throws Exception;
+
+    HomeworkSubmit submit(HomeworkSubmit homeworkSubmit);
 
 }
