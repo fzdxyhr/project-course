@@ -1,12 +1,17 @@
 <template>
-	<el-carousel :interval="4000" type="card" height="350px">
-		<el-carousel-item v-for="img in imgs">
-			<img :src="img" />
-		</el-carousel-item>
-	</el-carousel>
+	<div class="carousel-index">
+		<el-carousel :interval="4000" type="card" height="350px">
+			<el-carousel-item v-for="img in imgs">
+				<img :src="img" />
+			</el-carousel-item>
+		</el-carousel>
+	</div>
 </template>
 <script>
-	import { Carousel, CarouselItem } from 'element-ui'
+	import {
+		Carousel,
+		CarouselItem
+	} from 'element-ui'
 	//走马灯
 	export default {
 		name: 'carousel',
@@ -26,17 +31,19 @@
 		}
 	}
 </script>
-<style scoped>
-	.el-carousel__item:nth-child(2n) {
-		background-color: #99a9bf;
-	}
-
-	.el-carousel__item:nth-child(2n+1) {
-		background-color: #d3dce6;
-	}
-
-	.el-carousel__item img {
-		height: 100%;
-		width: 100%;
-	}
+<style lang="scss">
+  .carousel-index {
+    .el-carousel__item:nth-child(2n) {
+    		background-color: #99a9bf;
+    	}
+    
+    	.el-carousel__item:nth-child(2n+1) {
+    		background-color: #d3dce6;
+    	}
+    
+    	.el-carousel__item img {
+    		height: 100%;
+    		width: 100%;
+    	}
+  }
 </style>

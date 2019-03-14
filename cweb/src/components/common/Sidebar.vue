@@ -1,24 +1,27 @@
 <template>
 	<el-menu class="diyscrollbar" background-color="#324157" text-color="#fff" :default-active="onRoutes" @select="handleSelect"  unique-opened router>
-		<el-submenu index="user">
-			<template slot="title"><i class="el-icon-menu"></i>用户管理</template>
-			<el-menu-item index="UserInfoManage">信息管理</el-menu-item>
+		<!-- <el-submenu index="user"> -->
+			<!-- <template slot="title"><i class="course-icon-user-manage"></i>用户管理</template> -->
+			
 			<!-- <el-menu-item index="PermissionsManage">权限管理</el-menu-item> -->
-		</el-submenu>
+		<!-- </el-submenu> -->
+    <el-menu-item index="UserInfoManage">
+      <i class="course-icon-user-manage"></i>用户管理
+    </el-menu-item>
 		<el-menu-item index="CourseManage">
-			<i class="el-icon-setting"></i>课程管理
+			<i class="course-icon-course-manage"></i>课程管理
 		</el-menu-item>
 		<el-menu-item index="ClassManage">
-			<i class="el-icon-setting"></i>班级管理
+			<i class="course-icon-class-manage"></i>班级管理
 		</el-menu-item>
-		<el-menu-item index="ArticlesManage">
+		<!-- <el-menu-item index="ArticlesManage">
 			<i class="el-icon-document"></i>文章管理
-		</el-menu-item>
+		</el-menu-item> -->
 		<el-menu-item index="TagsManage">
-			<i class="el-icon-star-on"></i>标签管理
+			<i class="course-icon-tag-manage"></i>标签管理
 		</el-menu-item>
     <el-menu-item index="HomeWorkManage">
-    	<i class="el-icon-star-on"></i>作业管理
+    	<i class="course-icon-homework-manage"></i>作业管理
     </el-menu-item>
 	</el-menu>
 </template>

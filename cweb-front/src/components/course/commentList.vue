@@ -49,19 +49,7 @@
 		},
 		data() {
 			return {
-				comments: [{
-						user_name: "我是谁",
-						photo_path: "https://www.baidu.com/img/bd_logo1.png?where=super",
-						comment_content: "sssssssssss",
-						create_time: "6秒前"
-					},
-					{
-						user_name: "谁是我",
-						photo_path: "https://www.baidu.com/img/bd_logo1.png?where=super",
-						comment_content: "bbbbbbbbbbbbbb",
-						create_time: "8秒前"
-					}
-				]
+				comments: []
 			};
 		},
 		mounted() {
@@ -69,10 +57,18 @@
 		},
 		methods: {
 			go2Query() {
+        const loading = this.$loading({
+        	lock: true,
+        	text: '上传中...',
+        	spinner: 'el-icon-loading',
+        	background: 'rgba(0, 0, 0, 0.7)'
+        });
 				this.$axios.get("/v1/course_comments?course_id=" + this.courseId).then((response) => {
+          loading.close();
 					let message = response.data;
 					this.comments = response.data.items;
 				}, (response) => {
+          loading.close();
 					this.$message.error('获取评论失败');
 				});
 			},

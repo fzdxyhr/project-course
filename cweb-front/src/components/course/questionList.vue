@@ -55,10 +55,18 @@
 		},
 		methods: {
 			go2Query() {
+         const loading = this.$loading({
+        	lock: true,
+        	text: '上传中...',
+        	spinner: 'el-icon-loading',
+        	background: 'rgba(0, 0, 0, 0.7)'
+        });
 				this.$axios.get("/v1/course_questions?course_id=" + this.courseId).then((response) => {
+          loading.close();
 					let message = response.data;
 					this.comments = message.items;
 				}, (response) => {
+          loading.close();
 					this.$message.error('获取问题失败');
 				});
 			},

@@ -80,11 +80,19 @@
 				this.findClasses();
 			},
 			findClasses() {
+        const loading = this.$loading({
+        	lock: true,
+        	text: '加载中...',
+        	spinner: 'el-icon-loading',
+        	background: 'rgba(0, 0, 0, 0.7)'
+        });
 				this.$axios.get('/v1/classes?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then((
 					response) => {
+          loading.close();
 					this.tableData = response.data.items;
 					this.total = response.data.total;
 				}, (response) => {
+          loading.close();
 					this.$message.error('获取班级失败');
 				});
 			},

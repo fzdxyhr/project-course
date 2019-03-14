@@ -18,26 +18,27 @@
 	export default {
 		data() {
 			return {
-				key:"",
+				key: "",
 				homeworks: [],
-				page_no:1,
-				page_size:10
+				page_no: 1,
+				page_size: 10
 			}
 		},
-		mounted(){
+		mounted() {
 			this.go2Query();
 		},
 		methods: {
 			go2Query() {
-				this.$axios.get("/v1/homeworks?key=" + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then((
-					response) => {
-					let message = response.data;
-					this.homeworks = message.items;
-				}, (response) => {
-					this.$message.error('获取作业失败');
-				});
+				this.$axios.get("/v1/homeworks?key=" + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then(
+					(
+						response) => {
+						let message = response.data;
+						this.homeworks = message.items;
+					}, (response) => {
+						this.$message.error('获取作业失败');
+					});
 			},
-			go2Download(path){
+			go2Download(path) {
 				window.open(path);
 			}
 		}
@@ -46,8 +47,10 @@
 
 <style lang="scss">
 	.homework-index {
+		margin: auto 15%;
+
 		.homework-content {
-			margin-left: 10px;
+			margin-left: 20px;
 		}
 
 		.box-card {

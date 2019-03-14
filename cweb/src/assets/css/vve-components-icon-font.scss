@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'fastfont';  /* project id 1027702 */
-  src: url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.eot');
-  src: url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1027702_0leqtzkuw36.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_1027702_ft5e2yn4gee.eot');
+  src: url('//at.alicdn.com/t/font_1027702_ft5e2yn4gee.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1027702_ft5e2yn4gee.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1027702_ft5e2yn4gee.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1027702_ft5e2yn4gee.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1027702_ft5e2yn4gee.svg#iconfont') format('svg');
 }
 
 i[class^="course-icon"], i[class*=" course-icon"] {
@@ -27,4 +27,8 @@ i[class^="course-icon"], i[class*=" course-icon"] {
 
 $icf-css-prefix: "course-icon";
 
-.#{$icf-css-prefix}-vedio:before { content: "\e607"; } // 已添加
+.#{$icf-css-prefix}-user-manage:before { content: "\e7ff"; } // 已添加
+.#{$icf-css-prefix}-course-manage:before { content: "\e613"; }
+.#{$icf-css-prefix}-class-manage:before { content: "\e6c9"; }
+.#{$icf-css-prefix}-homework-manage:before { content: "\e632"; }
+.#{$icf-css-prefix}-tag-manage:before { content: "\e612"; }

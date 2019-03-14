@@ -51,7 +51,7 @@
 				total: 0
 			};
 		},
-		mounted(){
+		mounted() {
 			this.go2Query();
 		},
 		methods: {
@@ -63,16 +63,25 @@
 				this.page_no = val;
 				this.go2Query();
 			},
-			go2Query(){
-				this.$axios.get('/v1/homeworks?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then((
-					response) => {
-					this.tableData = response.data.items;
-					this.total = response.data.total;
-				}, (response) => {
-					this.$message.error('获取作业失败');
+			go2Query() {
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
 				});
+				this.$axios.get('/v1/homeworks?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then(
+					(
+						response) => {
+						loading.close()
+						this.tableData = response.data.items;
+						this.total = response.data.total;
+					}, (response) => {
+            loading.close()
+						this.$message.error('获取作业失败');
+					});
 			},
-			go2Update(row){
+			go2Update(row) {
 				this.rjDialog.
 				title("修改作业").
 				width("600px").
@@ -86,7 +95,7 @@
 					this.go2Query();
 				}).show();
 			},
-			go2Delete(row){
+			go2Delete(row) {
 				this.$confirm('此操作将永久删除该作业, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
@@ -109,13 +118,12 @@
 					});
 				});
 			},
-			go2Publish(){
+			go2Publish() {
 				this.rjDialog.
 				title("发布作业").
 				width("600px").
 				top("").
-				currentView(homeworkAdd, {
-				}).
+				currentView(homeworkAdd, {}).
 				closeOnClickModal(false).
 				showClose(true).
 				then((opt) => {
@@ -136,6 +144,7 @@
 				width: 250px;
 			}
 		}
+
 		.paging {
 			float: right;
 			margin-top: 10px;

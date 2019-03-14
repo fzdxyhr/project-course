@@ -22,12 +22,12 @@
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="课程教室">
+				<!-- 	<el-form-item label="课程教室">
 					<el-input v-model="dialog.form.course_room"></el-input>
 				</el-form-item>
 				<el-form-item label="最大可选人数">
 					<el-input v-model="dialog.form.max_student"></el-input>
-				</el-form-item>
+				</el-form-item> -->
 				<el-form-item label="课程简介">
 					<el-input type="textarea" :rows="3" v-model="dialog.form.course_desc"></el-input>
 				</el-form-item>
@@ -87,8 +87,8 @@
 					totalCourses: 0, //总条数
 					currentNum: 10, //每页多少条
 					searchText: '',
-				}
-
+				},
+        loading:""
 			}
 		},
 		mounted() {
@@ -100,9 +100,9 @@
 			imageUrl() {
 				return this.dialog.form.course_image_url;
 			},
-      host(){
-        return this.$store.state.host 
-      }
+			host() {
+				return this.$store.state.host
+			}
 		},
 		methods: {
 			setCurrentPage(num) {
@@ -141,7 +141,14 @@
 				});
 			},
 			getCourses(page, rows, search) { //获取数据(页数，每页多少条，关键词)
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				this.$axios.get("/v1/courses?key=" + search + "&page_no=" + page + "&page_size=" + rows).then((response) => {
+					loading.close();
 					let message = response.data;
 					this.coursesList = message.items;
 					this.page.totalCourses = message.total;
@@ -150,6 +157,7 @@
 					this.setSearchText(search);
 				}, (response) => {
 					this.$message.error('获取课程失败');
+					loading.close();
 				});
 			},
 			addCourse() { //显示添加的dialog
@@ -197,7 +205,7 @@
 						}
 
 					}, (response) => {
-						this.$message.error('链接失败');
+						this.$message.error('删除失败');
 					});
 				}).catch(() => {
 					this.$message({
@@ -213,8 +221,15 @@
 			onSubmit() { //处理添加或修改课程
 				let tempTagId = this.dialog.form.tag_id;
 				this.dialog.form.tag_id = this.dialog.form.tag_id.join(",");
+        const loading = this.$loading({
+        	lock: true,
+        	text: '加载中...',
+        	spinner: 'el-icon-loading',
+        	background: 'rgba(0, 0, 0, 0.7)'
+        });
 				if (!this.dialog.form.id) { //添加课程
 					this.$axios.post("/v1/courses", this.dialog.form).then((response) => {
+            loading.close()
 						if (response.status == 200) {
 							this.dialog.control = false;
 							this.$message.success('添加成功');
@@ -222,16 +237,16 @@
 						} else {
 							this.$message.error('添加失败');
 						}
-
 					}, (response) => {
+            loading.close()
 						this.dialog.form.tag_id = tempTagId;
-						this.$message.error('链接失败');
+						this.$message.error('添加失败');
 					});
 				} else { //修改课程
 					this.$axios.put("/v1/courses/" + this.dialog.form.id,
 						this.dialog.form
 					).then((response) => {
-						console.log("response=",response)
+            loading.close()
 						if (response.status == 200) {
 							this.dialog.control = false;
 							this.$message.success('修改成功');
@@ -239,9 +254,9 @@
 						} else {
 							this.$message.error('修改失败');
 						}
-
 					}, (response) => {
-						this.$message.error('链接失败');
+            loading.close()
+						this.$message.error('修改失败');
 					});
 				}
 
@@ -249,8 +264,15 @@
 			handleAvatarSuccess(file) {
 				this.dialog.form.course_image_url = file;
 				this.showImage = true;
+        this.loading.close();
 			},
 			beforeAvatarUpload(file) {
+        this.loading = this.$loading({
+        	lock: true,
+        	text: '上传中...',
+        	spinner: 'el-icon-loading',
+        	background: 'rgba(0, 0, 0, 0.7)'
+        });
 				const isLt2M = file.size / 1024 / 1024 < 4;
 				if (!isLt2M) {
 					this.$message.error('上传图片大小不能超过 4MB!');

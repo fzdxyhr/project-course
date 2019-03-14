@@ -73,6 +73,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User create(User user) {
+        if (StringUtils.isEmpty(user.getPassword())) {
+            user.setPassword(MD5Utils.MD5Encode("123456", "utf8"));
+        }
+        if (StringUtils.isEmpty(user.getRole())) {
+            user.setRole(RoleEnum.STUDENT.getValue());
+        }
         user.setCreateTime(new Date());
         return userRepository.save(user);
     }
@@ -125,11 +131,11 @@ public class UserServiceImpl implements UserService {
             User user = new User();
             Map<String, Integer> sexMap = getSexMap();
             user.setUserName(datas.get(i).length > 0 ? datas.get(i)[0].trim() : null);
-            user.setAccount(datas.get(i).length > 1 ? datas.get(i)[1].trim() : null);
+            user.setAccount(datas.get(i).length > 1 ? datas.get(i)[1].trim().replaceAll(",", "") : null);
             user.setPassword(MD5Utils.MD5Encode("123456", "utf8"));
             user.setSex(datas.get(i).length > 2 ? Integer.parseInt(sexMap.get(datas.get(i)[2].trim()).toString()) : null);
-            user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim() : null);
-            user.setTelephone(datas.get(i).length > 4 ? datas.get(i)[4].trim() : null);
+            user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim().replaceAll(",", "") : null);
+            user.setTelephone(datas.get(i).length > 4 ? datas.get(i)[4].trim().replaceAll(",", "") : null);
             user.setRole(RoleEnum.STUDENT.getValue());
             user.setClassId(classId);
             user.setIsAdmin(0);

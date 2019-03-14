@@ -1,18 +1,18 @@
 <template>
-	<article>
-		<section>
+	<div class="layout-index">
+		<div class="carousel-content">
 			<homePage-carousel></homePage-carousel>
-		</section>
-		<section>
+		</div>
+		<div class="course-content">
 			<homePage-content></homePage-content>
-		</section>
-	</article>
+		</div>
+	</div>
 </template>
 <script scoped>
 	//主页内容
 	import Carousel from './Carousel.vue'
 	import Content from './Content.vue'
-  
+
 	export default {
 		name: 'homePageLayout',
 		components: {
@@ -21,10 +21,14 @@
 		},
 	}
 </script>
-<style scoped>
-	article {
+<style lang="scss">
+	.layout-index {
 		min-width: 960px;
 		max-width: 1200px;
 		margin: 20px auto;
+    
+    .carousel-content {}
+    
+    .course-content {}
 	}
 </style>

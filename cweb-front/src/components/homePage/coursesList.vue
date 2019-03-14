@@ -33,7 +33,7 @@
 				rows: 10,
 				noMoreData: false,
 				key: "",
-				tagId:""
+				tagId: ""
 			}
 		},
 		created() {
@@ -52,8 +52,15 @@
 				}
 				this.key = key;
 				this.tagId = tagId;
-				this.$axios.get("/v1/courses?key=" + this.key + "&page_no=" + this.page + "&page_size=" + this.rows+"&tag_id="+this.tagId).then((
-					response) => {
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
+				this.$axios.get("/v1/courses?key=" + this.key + "&page_no=" + this.page + "&page_size=" + this.rows + "&tag_id=" +
+					this.tagId).then((response) => {
+					loading.close();
 					let message = response.data;
 					if (type === 'search') {
 						this.courseslist = [];
@@ -66,13 +73,14 @@
 					}
 					this.loadMoreCourse = false;
 				}, (response) => {
+          loading.close();
 					this.$message.error('获取课程失败');
 				});
 			},
 			getModeCourse() {
 				this.page++;
 				this.loadMoreCourse = true;
-				this.getCourses(this.key,this.tagId, 'more')
+				this.getCourses(this.key, this.tagId, 'more')
 			},
 			go2CourseDetail(courseId) {
 				this.$router.push({

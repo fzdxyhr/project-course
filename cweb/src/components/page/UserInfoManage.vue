@@ -76,22 +76,38 @@
 		mounted() {
 			this.findUsers();
 		},
+		computed: {
+			host() {
+				return this.$store.state.host
+			}
+		},
 		methods: {
 			findUsers() {
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				this.$axios.get("/v1/users?page_no=" + this.page.page_no + "&page_size=" + this.page.page_size).then((response) => {
+					loading.close()
 					let message = response.data;
 					this.tableData = message.items;
 					this.page.total = message.total;
 				}, (response) => {
+					loading.close()
 					this.$message.error('获取用户失败');
 				});
 			},
 			handleUpdate(row) {
 				this.rjDialog.
 				title("修改用户").
-				width("600px").
-				top("3%").
-				currentView(addUser, {data:row}).
+				width("700px").
+				top("").
+				currentView(addUser, {
+					data: row
+				}).
+				closeOnClickModal(false).
 				showClose(true).
 				then((opt) => {
 					this.findUsers();
@@ -100,9 +116,10 @@
 			go2Add() {
 				this.rjDialog.
 				title("新增用户").
-				width("600px").
-				top("1%").
+				width("700px").
+				top("").
 				currentView(addUser, {}).
+				closeOnClickModal(false).
 				showClose(true).
 				then((opt) => {
 					this.findUsers();
@@ -114,9 +131,10 @@
 				width("600px").
 				top("8%").
 				currentView(UploadImportData, {
-					uploadUrl: "/v1/users/import",
-					downloadUrl: "/v1/users/download"
+					uploadUrl: this.host + "/v1/users/import",
+					downloadUrl: this.host + "/v1/users/download"
 				}).
+				closeOnClickModal(false).
 				showClose(true).
 				then((opt) => {
 					this.findUsers();
@@ -158,7 +176,7 @@
 		}
 
 		.top-content {
-			margin: 10px 0;
+			margin: 10px 10px;
 		}
 	}
 </style>

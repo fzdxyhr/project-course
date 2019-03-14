@@ -8,7 +8,7 @@
 				<el-input v-model="form.homework_desc"></el-input>
 			</el-form-item>
 			<el-form-item label="作业文件路径" prop="homework_file_path">
-				<fileUpload isImg="file" @change="fileChange" buttonText="上传文件"
+				<fileUpload style="margin-top: -2px;" isImg="file" @change="fileChange" buttonText="上传文件"
 				 :showFileList="true" :fileList="fileList" :limit="2" listType="text"></fileUpload>
 			</el-form-item>
 		</el-form>

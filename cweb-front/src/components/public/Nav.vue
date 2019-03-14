@@ -9,9 +9,9 @@
 				<el-menu-item index="1" @click="go2Page('courseManage')">
 					主页
 				</el-menu-item>
-				<el-menu-item index="2" @click="go2Page('articleManage')">
+			<!-- 	<el-menu-item index="2" @click="go2Page('articleManage')">
 					文章列表
-				</el-menu-item>
+				</el-menu-item> -->
 				<el-menu-item index="3" @click="go2Page('homework')">
 					作业列表
 				</el-menu-item>

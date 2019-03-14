@@ -3,8 +3,9 @@
 		<div class="fixclear"></div>
 		<div v-if="comments.length > 0" style="margin-top: 20px;" v-for="item in comments">
 			<el-card class="box-card" style="height: 150px;">
-				<div class="content">
-					<img @click="go2CourseDetail(item.course_id)" style="float: left;cursor: pointer;" :src="item.course_path" :alt="item.course_name" width="150px" height="90px" />
+				<div class="comment-content">
+					<img @click="go2CourseDetail(item.course_id)" style="float: left;cursor: pointer;" :src="item.course_path" :alt="item.course_name"
+					 width="150px" height="90px" />
 					<div style="float: left;margin-left: 50px;">
 						<div class="user" @click="go2CourseDetail(item.course_id)">{{item.course_name}}</div>
 						<div class="comment-content">{{item.comment_content}}</div>
@@ -37,11 +38,19 @@
 		},
 		methods: {
 			go2Query() {
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				this.$axios.get("/v1/mine/comments?page_no=" + this.page_no + "&page_size=" + this.page_size).then((
 					response) => {
+					loading.close();
 					let message = response.data;
 					this.comments = message.items;
 				}, (response) => {
+          loading.close
 					this.$message.error('获取我的评论课程失败');
 				});
 			},
@@ -53,7 +62,7 @@
 					}
 				})
 			},
-			go2Study(){
+			go2Study() {
 				this.$router.push({
 					name: "courseManage"
 				});
@@ -67,7 +76,7 @@
 		.button-top {
 			float: right;
 		}
-		
+
 		.no-data-content {
 			text-align: center;
 			padding-top: 26%;
@@ -75,7 +84,7 @@
 			font-size: 14px;
 		}
 
-		.content {}
+		.comment-content {}
 
 		.page-content {
 			text-align: right;
@@ -86,7 +95,7 @@
 			color: #1c1f21;
 			font-weight: 700;
 		}
-		
+
 		.user:hover {
 			color: red;
 			cursor: pointer

@@ -26,9 +26,12 @@
 <style lang="scss">
 	.home {
 		height: 100%;
+    background-color: #eef1f6;
 
 		.content {
-			position: relative;
+      height: 100%;
+      background-color: white;
+      margin: 20px 0;
 		}
 	}
 </style>

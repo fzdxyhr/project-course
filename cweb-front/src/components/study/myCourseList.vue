@@ -37,8 +37,15 @@
 		},
 		methods: {
 			getCourses() { //获取数据(页数，每页多少条，关键词)
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				this.$axios.get("/v1/mine/courses?page_no=" + this.page + "&page_size=" + this.rows).then((
 					response) => {
+					loading.close();
 					let message = response.data;
 					message.items.forEach((c) => {
 						this.courseslist.push(c)
@@ -48,10 +55,11 @@
 					}
 					this.loadMoreCourse = false;
 				}, (response) => {
+          loading.close
 					this.$message.error('获取课程失败');
 				});
 			},
-			go2Study(){
+			go2Study() {
 				this.$router.push({
 					name: "courseManage"
 				});
@@ -78,7 +86,7 @@
 		margin-bottom: 20px;
 		position: relative;
 		padding-bottom: 60px;
-		
+
 		.no-data-content {
 			text-align: center;
 			padding-top: 26%;
