@@ -4,9 +4,12 @@ import com.yhr.course.course.entity.Homework;
 import com.yhr.course.course.entity.HomeworkSubmit;
 import com.yhr.course.course.service.HomeworkService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.HomeworkUserVo;
 import com.yhr.course.course.vo.HomeworkVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -56,6 +59,11 @@ public class HomeworkController {
     @RequestMapping(value = "/homeworks/submit", method = RequestMethod.POST)
     public HomeworkSubmit submit(@RequestBody HomeworkSubmit homeworkSubmit) {
         return homeworkService.submit(homeworkSubmit);
+    }
+
+    @RequestMapping(value = "/homeworks/{id}/users", method = RequestMethod.GET)
+    public List<HomeworkUserVo> listUsers(@PathVariable("id") Integer id) {
+        return homeworkService.listUsers(id);
     }
 
 }

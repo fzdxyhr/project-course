@@ -69,6 +69,16 @@
 		},
 		mounted() {
 			this.findClasses();
+			
+			if (window.addEventListener) {
+				window.addEventListener('message', function(e) {
+					console.log("tttttttttttttttttt",e)
+				}, false);
+			} else if (window.attachEvent) {
+				window.attachEvent('onmessage', function(e) {
+					console.log("ddddddddddddddddddddd",e)
+				});
+			}
 		},
 		methods: {
 			handleSizeChange(val) {

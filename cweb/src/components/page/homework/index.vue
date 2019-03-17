@@ -16,8 +16,9 @@
 				</el-table-column>
 				<el-table-column prop="create_time" label="创建时间" min-width="90px">
 				</el-table-column>
-				<el-table-column label="操作" min-width="80px">
+				<el-table-column label="操作" min-width="110px">
 					<template scope="scope">
+						<el-button icon="el-icon-view" type="text" @click="go2HomeworkDetail(scope.row)">查看作业提交</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="go2Update(scope.row)">修改</el-button>
 						<el-button icon="el-icon-delete" style="color: #f56c6c;" type="text" @click="go2Delete(scope.row)">删除</el-button>
 					</template>
@@ -36,11 +37,13 @@
 <script>
 	import rjDialog from '@components/common/dialog.vue'
 	import homeworkAdd from '@components/page/homework/homeworkAdd.vue'
+	import studentList from '@components/page/homework/studentList.vue'
 
 	export default {
 		components: {
 			rjDialog,
-			homeworkAdd
+			homeworkAdd,
+			studentList
 		},
 		data() {
 			return {
@@ -77,7 +80,7 @@
 						this.tableData = response.data.items;
 						this.total = response.data.total;
 					}, (response) => {
-            loading.close()
+						loading.close()
 						this.$message.error('获取作业失败');
 					});
 			},
@@ -87,6 +90,20 @@
 				width("600px").
 				top("").
 				currentView(homeworkAdd, {
+					data: row
+				}).
+				closeOnClickModal(false).
+				showClose(true).
+				then((opt) => {
+					this.go2Query();
+				}).show();
+			},
+			go2HomeworkDetail(row){
+				this.rjDialog.
+				title("查看作业提交情况").
+				width("600px").
+				top("").
+				currentView(studentList, {
 					data: row
 				}).
 				closeOnClickModal(false).

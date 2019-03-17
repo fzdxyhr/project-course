@@ -1,6 +1,6 @@
 <template>
 	<div class="submit-index">
-		<fileUpload isImg="file" @change="fileChange(item)" buttonText="上传作业"
+		<fileUpload isImg="file" @change="fileChange" buttonText="上传作业"
 		 :showFileList="true" :limit="2" listType="text"></fileUpload>
 		 <div style="text-align: right;">
 		 	<el-button type="primary" @click="go2Add">上传</el-button>
@@ -25,12 +25,13 @@
 		},
 		mounted(){
 			if (this.rjDialogParams().id) {
-				this.form.homework_id = id;
+				this.form.homework_id = this.rjDialogParams().id;
+				console.log("id",this.form.homework_id)
 			}
 		},
 		methods: {
 			go2Add(){
-				this.$axios.put("/v1/homeworks/submit", this.form).then((response) => {
+				this.$axios.post("/v1/homeworks/submit", this.form).then((response) => {
 					let message = response.data;
 					this.$message.success('提交作业成功');
 					this.closeRjDialog();
@@ -39,7 +40,7 @@
 				});
 			},
 			fileChange(res) {
-				this.form.homework_file_path = res;
+				this.form.homework_file_path = encodeURIComponent(res);
 			},
 			doCancel() {
 				this.closeRjDialog();

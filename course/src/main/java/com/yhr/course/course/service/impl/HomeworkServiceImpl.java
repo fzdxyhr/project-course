@@ -10,6 +10,7 @@ import com.yhr.course.course.service.HomeworkService;
 import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.HomeworkUserVo;
 import com.yhr.course.course.vo.HomeworkVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -20,10 +21,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -151,7 +149,33 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public HomeworkSubmit submit(HomeworkSubmit homeworkSubmit) {
-        homeworkSubmit.setCreateTime(new Date());
-        return homeworkSubmitRepository.save(homeworkSubmit);
+        HomeworkSubmit submit = homeworkSubmitRepository.findByHomeworkIdAndUserId(homeworkSubmit.getHomeworkId(), GaeaContext.getUserId());
+        if (submit == null) {
+            submit = new HomeworkSubmit();
+            submit.setCreateTime(new Date());
+        }
+        submit.setHomeworkId(homeworkSubmit.getHomeworkId());
+        submit.setHomeworkFilePath(homeworkSubmit.getHomeworkFilePath());
+        submit.setUserId(GaeaContext.getUserId());
+        return homeworkSubmitRepository.save(submit);
+    }
+
+    @Override
+    public List<HomeworkUserVo> listUsers(Integer id) {
+        List<HomeworkSubmit> homeworkSubmits = homeworkSubmitRepository.findByHomeworkId(id);
+        if (CollectionUtils.isEmpty(homeworkSubmits)) {
+            return Collections.EMPTY_LIST;
+        }
+        List<HomeworkUserVo> homeworkUserVoList = new ArrayList<>();
+        Map<Integer, User> userMap = userService.getAllUserMap();
+        for (HomeworkSubmit homeworkSubmit : homeworkSubmits) {
+            HomeworkUserVo homeworkUserVo = new HomeworkUserVo();
+            homeworkUserVo.setUserId(homeworkSubmit.getUserId());
+            homeworkUserVo.setHomeworkId(homeworkSubmit.getHomeworkId());
+            homeworkUserVo.setUserName(homeworkSubmit.getUserId() == null || userMap.get(homeworkSubmit.getUserId()) == null ? "" : userMap.get(homeworkSubmit.getUserId()).getUserName());
+            homeworkUserVo.setSubmitTime(homeworkSubmit.getCreateTime());
+            homeworkUserVoList.add(homeworkUserVo);
+        }
+        return homeworkUserVoList;
     }
 }

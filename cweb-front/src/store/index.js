@@ -5,8 +5,8 @@ Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {
-    host: "http://47.101.194.23:8085"
-    // host: "http://localhost:8085"
+    // host: "http://47.101.194.23:8085"
+    host: "http://localhost:8085"
   },
   mutations: {
 //     increment (state) {
