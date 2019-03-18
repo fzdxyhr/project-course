@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<iframe id="iframe" src="http://localhost:8888/home/backupConfigDialog"></iframe>
+		<iframe id="iframe" src="http://localhost:8888/home/softwareUpgradeDialog"></iframe>
 		<!-- <iframe id="iframe" src="http://localhost:8081/#/ClassManage" ></iframe> -->
 		<el-button type="primary" @click="send">发送消息</el-button>
 	</div>
@@ -15,7 +15,7 @@
 		data() {
 			return {
 				data: {
-					"initType": "new",
+					"initPageType": "webSubmit",
 					"devices": [{
 						"id": 2913,
 						"deviceId": "a3b572f6-0dc6-4c8f-a964-9b4b5fb31365",
@@ -116,7 +116,7 @@
 						"zonesValue": "默认区域-zone_1",
 						"area_name": "默认区域-zone_1",
 						"location": null,
-						"device_ip": "172.18.165.33",
+						"ip": "172.18.165.33",
 						"device_model": "S5750C-48GT4XS-H"
 					}, {
 						"id": 2916,

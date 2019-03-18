@@ -26,8 +26,10 @@
 		mounted(){
 			if (this.rjDialogParams().id) {
 				this.form.homework_id = this.rjDialogParams().id;
-				console.log("id",this.form.homework_id)
 			}
+      if (this.rjDialogParams().data) {
+      	this.form.homework_id = this.rjDialogParams().id;
+      }
 		},
 		methods: {
 			go2Add(){
@@ -40,7 +42,7 @@
 				});
 			},
 			fileChange(res) {
-				this.form.homework_file_path = encodeURIComponent(res);
+				this.form.homework_file_path = res;
 			},
 			doCancel() {
 				this.closeRjDialog();

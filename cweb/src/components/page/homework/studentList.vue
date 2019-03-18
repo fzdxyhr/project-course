@@ -4,7 +4,7 @@
 			<el-card>
 				<div style="">
 					<div style="width: 100px;float: left;">{{item.user_name.substring(0,10)}}<span v-if="item.user_name.length > 10">...</span></div>
-					<div style="margin-left: 5%;float: right;color: #409eff;cursor: pointer;" @click="go2Score">评分</div>
+					<div style="margin-left: 5%;float: right;color: #409eff;cursor: pointer;" @click="go2Score(item)">评分</div>
 					<div style="text-align: right;padding-top: 20px;font-size: 12px;clear: both;" :title="item.submit_time">{{item.submit_time}}</div>
 				</div>
 			</el-card>
