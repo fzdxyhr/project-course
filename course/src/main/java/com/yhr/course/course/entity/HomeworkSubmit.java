@@ -35,6 +35,10 @@ public class HomeworkSubmit {
     @Column(name = "homework_file_path")
     private String homeworkFilePath;
 
+    @ApiModelProperty("作业评分")
+    @Column(name = "score")
+    private Integer score;
+
     @ApiModelProperty("创建时间")
     @Column(name = "create_time")
     private Date createTime;

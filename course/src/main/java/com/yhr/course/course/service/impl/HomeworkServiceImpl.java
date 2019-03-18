@@ -97,15 +97,20 @@ public class HomeworkServiceImpl implements HomeworkService {
         sql.append(" limit ?,?");
         params.add(startIndex);
         params.add(pageSize);
-        List<HomeworkVo> tags = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<HomeworkVo>(HomeworkVo.class));
-        if (CollectionUtils.isNotEmpty(tags)) {
+        List<HomeworkVo> homeworkVos = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<HomeworkVo>(HomeworkVo.class));
+        if (CollectionUtils.isNotEmpty(homeworkVos)) {
             Map<Integer, User> userMap = userService.getAllUserMap();
-            for (HomeworkVo tag : tags) {
-                tag.setPublishTeacherName(tag.getPublishTeacher() == null || userMap.get(tag.getPublishTeacher()) == null ? "" : userMap.get(tag.getPublishTeacher()).getUserName());
+            for (HomeworkVo homeworkVo : homeworkVos) {
+                homeworkVo.setPublishTeacherName(homeworkVo.getPublishTeacher() == null || userMap.get(homeworkVo.getPublishTeacher()) == null ? "" : userMap.get(homeworkVo.getPublishTeacher()).getUserName());
+                //获取该学生作业评分值
+                HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByHomeworkIdAndUserId(homeworkVo.getId(), GaeaContext.getUserId());
+                if (homeworkSubmit != null) {
+                    homeworkVo.setScore(homeworkSubmit.getScore());
+                }
             }
         }
         result.setTotal(total);
-        result.setItems(tags);
+        result.setItems(homeworkVos);
         return result;
     }
 
@@ -177,5 +182,12 @@ public class HomeworkServiceImpl implements HomeworkService {
             homeworkUserVoList.add(homeworkUserVo);
         }
         return homeworkUserVoList;
+    }
+
+    @Override
+    public void score(Integer id, Integer userId, Integer score) {
+        HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByHomeworkIdAndUserId(id, userId);
+        homeworkSubmit.setScore(score);
+        homeworkSubmitRepository.save(homeworkSubmit);
     }
 }

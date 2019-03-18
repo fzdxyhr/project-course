@@ -32,6 +32,9 @@ public class HomeworkVo {
     @ApiModelProperty("作业文件路径")
     private String homeworkFilePath;
 
+    @ApiModelProperty("作业评分")
+    private Integer score;
+
     @ApiModelProperty("创建时间")
     private Date createTime;
 

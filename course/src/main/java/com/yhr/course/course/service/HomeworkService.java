@@ -31,4 +31,6 @@ public interface HomeworkService {
 
     List<HomeworkUserVo> listUsers(Integer id);
 
+    void score(Integer id, Integer userId, Integer score);
+
 }

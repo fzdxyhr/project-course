@@ -101,7 +101,7 @@
 			go2HomeworkDetail(row){
 				this.rjDialog.
 				title("查看作业提交情况").
-				width("600px").
+				width("700px").
 				top("").
 				currentView(studentList, {
 					data: row

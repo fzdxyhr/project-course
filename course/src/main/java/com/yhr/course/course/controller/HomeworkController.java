@@ -66,4 +66,9 @@ public class HomeworkController {
         return homeworkService.listUsers(id);
     }
 
+    @RequestMapping(value = "/homeworks/{id}/users/{user_id}/score", method = RequestMethod.PUT)
+    public void score(@PathVariable("id") Integer id, @PathVariable("user_id") Integer userId, @RequestParam("score") Integer score) {
+        homeworkService.score(id, userId, score);
+    }
+
 }

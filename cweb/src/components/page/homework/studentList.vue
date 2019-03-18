@@ -4,7 +4,7 @@
 			<el-card>
 				<div style="">
 					<div style="width: 100px;float: left;">{{item.user_name.substring(0,10)}}<span v-if="item.user_name.length > 10">...</span></div>
-					<div style="margin-left: 5%;float: right;color: #409eff;cursor: pointer;">评分</div>
+					<div style="margin-left: 5%;float: right;color: #409eff;cursor: pointer;" @click="go2Score">评分</div>
 					<div style="text-align: right;padding-top: 20px;font-size: 12px;clear: both;" :title="item.submit_time">{{item.submit_time}}</div>
 				</div>
 			</el-card>
@@ -12,11 +12,19 @@
 		<div style="text-align: center;" v-if="studentList.length === 0">
 			暂无学生提交作业
 		</div>
+    <rjDialog></rjDialog>
 	</div>
 </template>
 
 <script>
+  import rjDialog from '@components/common/dialog.vue'
+  import score from '@components/page/homework/score.vue'
+  
 	export default {
+    components: {
+    	rjDialog,
+      score
+    },
 		data() {
 			return {
 				studentList: [],
@@ -36,7 +44,20 @@
 				}, (response) => {
 					this.$message.error('获取学生作业失败');
 				});
-			}
+			},
+      go2Score(row){
+        this.rjDialog.
+        title("评分").
+        width("300px").
+        top("").
+        currentView(score, {
+        	data: row
+        }).
+        closeOnClickModal(false).
+        showClose(true).
+        then((opt) => {
+        }).show();
+      }
 		},
 	}
 </script>
