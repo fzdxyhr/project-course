@@ -29,7 +29,8 @@
 		background-color: #eef1f6;
 
 		.content {
-			height: 100%;
+			// height: 100%;
+      min-height: 590px;
 			background-color: white;
 			margin: 20px 0;
 		}

@@ -40,6 +40,10 @@
 		},
 		methods: {
 			go2Add(){
+        if(!this.form.homework_file_path) {
+          this.$message.error('请先上传作业');
+          return;
+        }
 				this.$axios.post("/v1/homeworks/submit", this.form).then((response) => {
 					let message = response.data;
 					this.$message.success('提交作业成功');

@@ -3,7 +3,7 @@
 		<div class="fixclear"></div>
 		<div v-if="comments.length > 0" style="margin-top: 20px;" v-for="item in comments">
 			<el-card class="box-card" style="height: 150px;">
-				<div class="comment-content">
+				<div class="comment-content-div">
 					<img @click="go2CourseDetail(item.course_id)" style="float: left;cursor: pointer;" :src="item.course_path" :alt="item.course_name"
 					 width="150px" height="90px" />
 					<div style="float: left;margin-left: 50px;">
@@ -84,7 +84,7 @@
 			font-size: 14px;
 		}
 
-		.comment-content {}
+		.comment-content-div {}
 
 		.page-content {
 			text-align: right;

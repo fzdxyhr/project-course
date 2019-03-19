@@ -22,7 +22,7 @@
 		},
 		data() {
 			return {
-				readcrumbs: ['用户管理', '信息管理'],
+				readcrumbs: ['用户管理'],
 			}
 		},
 		methods: {
@@ -60,5 +60,6 @@
 
 	.content>div:last-child {
 		height: 100%;
+    overflow: auto;
 	}
 </style>

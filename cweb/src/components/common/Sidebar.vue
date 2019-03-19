@@ -38,7 +38,7 @@
 			handleSelect(key, keyPath) {
 				var key_arr = {
 					user: "用户管理",
-					UserInfoManage: "信息管理",
+					UserInfoManage: "用户管理",
 					PermissionsManage: "权限管理",
 					CourseManage: "课程管理",
 					ClassManage:"班级管理",

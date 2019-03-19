@@ -6,7 +6,7 @@
 		<div class="fixclear"></div>
 		<div v-if="comments.length > 0" style="margin-top: 20px;" v-for="item in comments">
 			<el-card class="box-card" style="height: 150px;">
-				<div class="content">
+				<div class="content-body">
 					<img style="float: left;border-radius: 50%;" :src="item.photo_path" :alt="item.user_name" width="80px" height="80px" />
 					<div style="float: right;">
 						<el-rate v-model="item.score" disabled>
@@ -59,7 +59,7 @@
 			go2Query() {
         const loading = this.$loading({
         	lock: true,
-        	text: '上传中...',
+        	text: '加载中...',
         	spinner: 'el-icon-loading',
         	background: 'rgba(0, 0, 0, 0.7)'
         });
@@ -96,7 +96,7 @@
 			float: right;
 		}
 
-		.content {}
+		.content-body {}
 
 		.page-content {
 			text-align: right;

@@ -150,14 +150,25 @@
 				this.findUsers();
 				console.log(`当前页: ${val}`);
 			},
-			handleDelete(index, row) {
-				this.$axios.delete("/v1/users/" + row.id).then((response) => {
-					let message = response.data;
-					this.findUsers();
-					this.$message.success('删除用户成功');
-				}, (response) => {
-					this.$message.error('删除用户失败');
-				});
+			handleDelete(row) {
+        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          this.$axios.delete("/v1/users/" + row.id).then((response) => {
+          	let message = response.data;
+          	this.findUsers();
+          	this.$message.success('删除用户成功');
+          }, (response) => {
+          	this.$message.error('删除用户失败');
+          });
+        }).catch(() => {
+          this.$message({
+            type: 'info',
+            message: '已取消删除'
+          });          
+        });
 			}
 		}
 	}

@@ -192,6 +192,7 @@
 					data: row
 				}).
 				closeOnClickModal(false).
+        sizeSelf("class-student-index").
 				showClose(true).
 				then((opt) => {
 					this.findClasses();

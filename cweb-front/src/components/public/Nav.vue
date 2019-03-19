@@ -22,19 +22,18 @@
 				<li class="nav-user">
 					<el-dropdown>
 						<span class="el-dropdown-link">
-							<a href="#" class="user-icon">
-								<img v-if="!photoPath" src="../../../static/img/carousel.jpg" />
+							<a href="javascript:" class="user-icon">
+								<img @click="go2Page('login')" v-if="!photoPath" src="../../../static/img/carousel.jpg" />
 								<img v-if="photoPath" :src="photoPath" />
-								
 							</a>
 						</span>
-						<el-dropdown-menu slot="dropdown">
-							<el-dropdown-item>
+						<el-dropdown-menu slot="dropdown" >
+							<el-dropdown-item v-if="userName">
 								<div @click="go2Page('myStudy')">
 									<i class="fa fa-user fa-fw"></i> 我的学习
 								</div>
 							</el-dropdown-item>
-							<el-dropdown-item>
+							<el-dropdown-item v-if="userName">
 								<div @click="go2Logout">
 									<i class="fa fa-sign-out fa-fw"></i> 退出登录
 								</div>
