@@ -3,9 +3,13 @@
 		<div class="body-content" v-for="item in studentList" v-if="studentList.length > 0">
 			<el-card>
 				<div style="">
-					<div style="width: 100px;float: left;">{{item.user_name.substring(0,10)}}<span v-if="item.user_name.length > 10">...</span></div>
-					<div style="margin-left: 5%;float: right;color: #409eff;cursor: pointer;" @click="go2Score(item)">评分</div>
-					<div style="text-align: right;padding-top: 20px;font-size: 12px;clear: both;" :title="item.submit_time">{{item.submit_time}}</div>
+          <div>
+            <div style="float: left;color: #409eff;cursor: pointer;font-size: 14px;" @click="go2Download(item.submit_homework_file_path)">下载提交作业</div>
+            <div v-if="!item.score" style="margin-left: 5%;float: right;color: #409eff;cursor: pointer;font-size: 14px;" @click="go2Score(item)">评分</div>
+            <div v-if="item.score" style="margin-left: 5%;float: right;color: #409eff;cursor: pointer;font-size: 14px;" @click="go2Score(item)">修改评分</div>
+          </div>
+					<div style="width: 100px;clear: both;padding-top: 20px;">{{item.user_name.substring(0,10)}}<span v-if="item.user_name.length > 10">...</span></div>
+					<div style="text-align: right;padding-top: 20px;font-size: 12px;" :title="item.submit_time">{{item.submit_time}}</div>
 				</div>
 			</el-card>
 		</div>
@@ -45,6 +49,9 @@
 					this.$message.error('获取学生作业失败');
 				});
 			},
+      go2Download(path){
+        window.open(path);
+      },
       go2Score(row){
         this.rjDialog.
         title("评分").
@@ -56,7 +63,22 @@
         closeOnClickModal(false).
         showClose(true).
         then((opt) => {
+          this.go2Query();
         }).show();
+      },
+      go2UpdateScore(row){
+      	this.rjDialog.
+      	title("修改评分").
+      	width("300px").
+      	top("").
+      	currentView(score, {
+      		data: row
+      	}).
+      	closeOnClickModal(false).
+      	showClose(true).
+      	then((opt) => {
+          this.go2Query();
+      	}).show();
       }
 		},
 	}

@@ -106,6 +106,7 @@ public class HomeworkServiceImpl implements HomeworkService {
                 HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByHomeworkIdAndUserId(homeworkVo.getId(), GaeaContext.getUserId());
                 if (homeworkSubmit != null) {
                     homeworkVo.setScore(homeworkSubmit.getScore());
+                    homeworkVo.setSubmitHomeworkFilePath(homeworkSubmit.getHomeworkFilePath());
                 }
             }
         }
@@ -179,6 +180,8 @@ public class HomeworkServiceImpl implements HomeworkService {
             homeworkUserVo.setHomeworkId(homeworkSubmit.getHomeworkId());
             homeworkUserVo.setUserName(homeworkSubmit.getUserId() == null || userMap.get(homeworkSubmit.getUserId()) == null ? "" : userMap.get(homeworkSubmit.getUserId()).getUserName());
             homeworkUserVo.setSubmitTime(homeworkSubmit.getCreateTime());
+            homeworkUserVo.setSubmitHomeworkFilePath(homeworkSubmit.getHomeworkFilePath());
+            homeworkUserVo.setScore(homeworkSubmit.getScore());
             homeworkUserVoList.add(homeworkUserVo);
         }
         return homeworkUserVoList;

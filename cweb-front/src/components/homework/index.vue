@@ -4,8 +4,8 @@
 			<el-card class="box-card" v-for="item in homeworks">
 				<div slot="header" class="clearfix">
 					<span>{{item.homework_title}}</span>
-					<el-button v-if="!item.homework_file_path" style="float: right; padding: 3px 0 3px 10px" type="text" @click="go2Submit(item.id)">上传作业</el-button>
-          <el-button v-if="item.homework_file_path" style="float: right; padding: 3px 0 3px 10px" type="text" @click="go2Submit(item.id)">修改作业</el-button>
+					<el-button v-if="!item.submit_homework_file_path" style="float: right; padding: 3px 0 3px 10px" type="text" @click="go2Submit(item.id)">上传作业</el-button>
+          <el-button v-if="item.submit_homework_file_path" :disabled="item.score" style="float: right; padding: 3px 0 3px 10px" type="text" @click="go2Update(item)">修改上传作业</el-button>
 					<el-button style="float: right; padding: 3px 0" type="text" @click="go2Download(item.homework_file_path)">下载作业</el-button>
 				</div>
 				<div class="text item">
@@ -73,11 +73,12 @@
 			},
       go2Update(item){
       	this.rjDialog.
-      	title("修改作业").
+      	title("修改上传作业").
       	width("600px").
       	top("").
       	currentView(homeworkSubmit, {
-      		data: item
+      		data: item,
+          id: item.id
       	}).
       	closeOnClickModal(false).
       	showClose(true).

@@ -62,12 +62,15 @@
 				}
 			};
 		},
-    mounted(){
-      if (this.rjDialogParams().data) {
-      	this.homeworkId = this.rjDialogParams().data.homework_id;
-        this.userId = this.rjDialogParams().data.user_id;
-      }
-    },
+		mounted() {
+			if (this.rjDialogParams().data) {
+				this.homeworkId = this.rjDialogParams().data.homework_id;
+				this.userId = this.rjDialogParams().data.user_id;
+				if (this.rjDialogParams().data.score) {
+					this.form.score = this.rjDialogParams().data.score;
+				}
+			}
+		},
 		methods: {
 			doCancel() {
 				this.closeRjDialog();
@@ -79,14 +82,15 @@
 					spinner: 'el-icon-loading',
 					background: 'rgba(0, 0, 0, 0.7)'
 				});
-				this.$axios.put('/v1/homeworks/' + this.homeworkId + '/users/' + this.userId + '/score?score='+this.form.score).then((response) => {
-					loading.close()
-          this.$message.success('作业评分成功');
-          this.closeRjDialog();
-				}, (response) => {
-					loading.close()
-					this.$message.error('作业评分失败');
-				});
+				this.$axios.put('/v1/homeworks/' + this.homeworkId + '/users/' + this.userId + '/score?score=' + this.form.score).then(
+					(response) => {
+						loading.close()
+						this.$message.success('作业评分成功');
+						this.closeRjDialog();
+					}, (response) => {
+						loading.close()
+						this.$message.error('作业评分失败');
+					});
 			}
 		},
 	}

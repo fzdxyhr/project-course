@@ -32,6 +32,9 @@ public class HomeworkVo {
     @ApiModelProperty("作业文件路径")
     private String homeworkFilePath;
 
+    @ApiModelProperty("提交作业文件路径")
+    private String submitHomeworkFilePath;
+
     @ApiModelProperty("作业评分")
     private Integer score;
 
