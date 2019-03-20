@@ -56,6 +56,11 @@ public class CourseController {
         return courseService.get(id);
     }
 
+    @RequestMapping(value = "/courses/recommend", method = RequestMethod.GET)
+    public List<CourseVo> recommend() throws Exception {
+        return courseService.recommend();
+    }
+
     @RequestMapping(value = "/courses/{id}/study", method = RequestMethod.PUT)
     public void study(@PathVariable("id") Integer id, @RequestParam("chapter_id") Integer chapterId) throws Exception {
         courseService.study(id, chapterId);

@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface ClassesService {
 
-    PagerHelper<Classes> list(String key, Integer pageNo, Integer pageSize);
+    PagerHelper<Classes> list(String key, Integer pageNo, Integer pageSize) throws Exception;
 
     Classes create(Classes classes);
 

@@ -66,7 +66,7 @@
 
 		.left-content {
 			width: 100%;
-			height: 90%;
+			height: 700px;
 			float: left;
 		}
 

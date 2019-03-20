@@ -10,7 +10,7 @@ import java.util.List;
  */
 public interface UserRepository extends JpaRepository<User, Integer> {
 
-    User findByAccountAndPasswordAndIsAdminAndStatus(String account, String password,Integer isAdmin,Integer status);
+    User findByAccountAndPasswordAndStatus(String account, String password,Integer status);
 
     List<User> findByClassId(Integer classId);
 }

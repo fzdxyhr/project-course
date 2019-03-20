@@ -231,6 +231,40 @@ public class CourseServiceImpl implements CourseService {
         aliyunFileHandle.downloadFile(fileName, response.getOutputStream());
     }
 
+    /**
+     * 获取课程推荐
+     * 三条最新的，三条最热的
+     *
+     * @return
+     */
+    @Override
+    public List<CourseVo> recommend() {
+        List<CourseVo> courseVos = new ArrayList<>();
+        //获取课程学习最热前三条记录
+        StringBuffer sql = new StringBuffer("SELECT course_id,COUNT(student_id) student from s_course_student GROUP BY course_id ORDER BY student desc");
+        List<Object> params = new ArrayList<>();
+        sql.append(" limit ?,?");
+        params.add(1);
+        params.add(3);
+        List<CourseStudent> courseStudents = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseStudent.class));
+        if (CollectionUtils.isNotEmpty(courseStudents)) {
+            for (CourseStudent courseStudent : courseStudents) {
+                Course course = courseRepository.getOne(courseStudent.getCourseId());
+                if (course != null) {
+                    CourseVo courseVo = new CourseVo();
+                    courseVo.setId(course.getId());
+                    courseVo.setCourseImageUrl(course.getCourseImageUrl());
+                    courseVos.add(courseVo);
+                }
+            }
+        }
+        //获取最新的三条课程信息
+        StringBuffer newSql = new StringBuffer("select * from s_course order by create_time desc");
+        List<CourseVo> courseVoList = jdbcTemplate.query(newSql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseVo.class));
+        courseVos.addAll(courseVoList);
+        return courseVos;
+    }
+
     private List<CourseChapterVo> resolveChapter(List<CourseChapter> courseChapters, Integer courseId, boolean isNeedStudy) {
         if (CollectionUtils.isEmpty(courseChapters)) {
             return Collections.EMPTY_LIST;

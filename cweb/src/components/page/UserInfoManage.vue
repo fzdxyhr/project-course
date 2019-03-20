@@ -1,8 +1,10 @@
 <template>
 	<div class="user-info-index">
 		<div class="top-content">
-			<el-button type="primary" @click="go2Add" icon="el-icon-plus">新增用户</el-button>
-			<el-button type="primary" @click="go2Import">导入用户</el-button>
+			<el-button v-if="role ==='admin'" type="primary" @click="go2Add" icon="el-icon-plus">新增用户</el-button>
+      <el-button v-if="role ==='teacher'" type="primary" @click="go2Add" icon="el-icon-plus">新增学生</el-button>
+			<!-- <el-button type="primary" @click="go2Import">导入用户</el-button> -->
+      <span style="margin-left: 10px;color: rgb(147, 153, 159);">批量导入学生可前往班级管理中导入</span>
 		</div>
 		<div class="secction diyscrollbar">
 			<el-table :data="tableData" border>
@@ -66,6 +68,7 @@
 		data() {
 			return {
 				tableData: [],
+        role:"",
 				page: {
 					page_no: 1,
 					page_size: 10,
@@ -75,6 +78,10 @@
 		},
 		mounted() {
 			this.findUsers();
+      const user = JSON.parse(localStorage.getItem("USER"));
+      if(user) {
+      	this.role = user.role;
+      }
 		},
 		computed: {
 			host() {
@@ -101,7 +108,7 @@
 			},
 			handleUpdate(row) {
 				this.rjDialog.
-				title("修改用户").
+				title(this.role ==='admin'?"修改用户":"修改学生").
 				width("700px").
 				top("").
 				currentView(addUser, {
@@ -115,7 +122,7 @@
 			},
 			go2Add() {
 				this.rjDialog.
-				title("新增用户").
+				title(this.role ==='admin'?"新增用户":"新增学生").
 				width("700px").
 				top("").
 				currentView(addUser, {}).
@@ -151,24 +158,24 @@
 				console.log(`当前页: ${val}`);
 			},
 			handleDelete(row) {
-        this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$axios.delete("/v1/users/" + row.id).then((response) => {
-          	let message = response.data;
-          	this.findUsers();
-          	this.$message.success('删除用户成功');
-          }, (response) => {
-          	this.$message.error('删除用户失败');
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          });          
-        });
+				this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					this.$axios.delete("/v1/users/" + row.id).then((response) => {
+						let message = response.data;
+						this.findUsers();
+						this.$message.success('删除用户成功');
+					}, (response) => {
+						this.$message.error('删除用户失败');
+					});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
 			}
 		}
 	}

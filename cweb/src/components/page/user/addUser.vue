@@ -1,41 +1,41 @@
 <template>
 	<div class="add-user-index">
-		<el-form ref="form" :model="form" :inline="true" label-width="80px">
-			<el-form-item label="用户名称">
+		<el-form ref="form" :model="form" :inline="true" label-width="80px" :rules="rules">
+			<el-form-item label="用户名称" prop="user_name">
 				<el-input v-model="form.user_name"></el-input>
 			</el-form-item>
-			<el-form-item label="账号">
+			<el-form-item label="账号" prop="account">
 				<el-input v-model="form.account"></el-input>
 			</el-form-item>
-			<el-form-item label="身份证">
+			<!-- <el-form-item label="身份证">
 				<el-input v-model="form.id_card"></el-input>
+			</el-form-item> -->
+			<el-form-item label="手机号码" prop="telephone">
+				<el-input v-model="form.telephone"></el-input>
 			</el-form-item>
 			<!-- <el-form-item label="密码">
 				<el-input type="password" v-model="form.password"></el-input>
 			</el-form-item> -->
-			<el-form-item label="性别">
+			<el-form-item label="性别" prop="sex">
 				<el-radio-group v-model="form.sex">
 					<el-radio :label="1">男</el-radio>
 					<el-radio :label="2">女</el-radio>
 				</el-radio-group>
 			</el-form-item>
-			<el-form-item v-if="role =='admin'" label="角色">
+			<el-form-item v-if="role =='admin'" label="角色" prop="role">
 				<el-select v-model="form.role" placeholder="请选择">
 					<el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
 			</el-form-item>
-			<el-form-item label="所属班级" v-if="form.role === 'student'">
+			<el-form-item label="所属班级" v-if="form.role === 'student'" prop="class_id">
 				<el-select v-model="form.class_id" placeholder="请选择">
 					<el-option v-for="item in classes" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>
 				</el-select>
 			</el-form-item>
-			<el-form-item label="手机号码">
-				<el-input v-model="form.telephone"></el-input>
-			</el-form-item>
 			<div class="clearfix"></div>
-			<el-form-item label="用户图片">
+			<el-form-item label="用户图片" prop="photo_path">
 				<el-upload name="editormd-image-file" class="avatar-uploader" :action="host+`/v1/courses/images/upload`"
 				 :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 					<img v-if="showImage" :src="imageUrl" class="avatar">
@@ -76,24 +76,44 @@
 					value: "student"
 				}],
 				classes: [],
-        rules: {
-        	user_name: [{
-        		required: true,
-        		message: '请输入班级名称',
-        		trigger: 'change'
-        	}, ],
-        	class_desc: [{
-        		required: true,
-        		message: '请输入班级描述',
-        		trigger: 'change'
-        	}],
-        	teacher_id: [{
-        		required: true,
-        		message: '请选择授课老师',
-        		trigger: 'change'
-        	}]
-        },
-        loading:""
+				rules: {
+					user_name: [{
+						required: true,
+						message: '请输入用户名称',
+						trigger: 'change'
+					}, ],
+					account: [{
+						required: true,
+						message: '请输入用户账号',
+						trigger: 'change'
+					}],
+					telephone: [{
+						required: true,
+						message: '请输入手机号码',
+						trigger: 'change'
+					}],
+					sex: [{
+						required: true,
+						message: '请选择性别',
+						trigger: 'change'
+					}],
+					role: [{
+						required: true,
+						message: '请选择角色',
+						trigger: 'change'
+					}],
+					class_id: [{
+						required: true,
+						message: '请选择所属班级',
+						trigger: 'change'
+					}],
+					photo_path: [{
+						required: true,
+						message: '请上传用户图片',
+						trigger: 'change'
+					}]
+				},
+				loading: ""
 			}
 		},
 		mounted() {
@@ -138,17 +158,17 @@
 				});
 			},
 			handleAvatarSuccess(file) {
-        this.loading.close();
+				this.loading.close();
 				this.form.photo_path = file;
 				this.showImage = true;
 			},
 			beforeAvatarUpload(file) {
-         this.loading = this.$loading({
-        	lock: true,
-        	text: '上传中...',
-        	spinner: 'el-icon-loading',
-        	background: 'rgba(0, 0, 0, 0.7)'
-        });
+				this.loading = this.$loading({
+					lock: true,
+					text: '上传中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				const isLt2M = file.size / 1024 / 1024 < 4;
 				if (!isLt2M) {
 					this.$message.error('上传图片大小不能超过 4MB!');
@@ -156,24 +176,30 @@
 				return isLt2M;
 			},
 			go2Add() {
-				this.form.password = this.$md5(this.form.password)
-				if (this.form.id) {
-					this.$axios.put("/v1/users/" + this.form.id, this.form).then((response) => {
-						let message = response.data;
-						this.$message.success('修改用户成功');
-						this.closeRjDialog();
-					}, (response) => {
-						this.$message.error('修改用户失败');
-					});
-				} else {
-					this.$axios.post("/v1/users", this.form).then((response) => {
-						let message = response.data;
-						this.$message.success('新增用户成功');
-						this.closeRjDialog();
-					}, (response) => {
-						this.$message.error('新增用户失败');
-					});
-				}
+				this.$refs['form'].validate((valid) => {
+					if (valid) {
+						if (this.form.id) {
+							this.form.password = this.$md5(this.form.password)
+							this.$axios.put("/v1/users/" + this.form.id, this.form).then((response) => {
+								let message = response.data;
+								this.$message.success('修改用户成功');
+								this.closeRjDialog();
+							}, (response) => {
+								this.$message.error('修改用户失败');
+							});
+						} else {
+							this.$axios.post("/v1/users", this.form).then((response) => {
+								let message = response.data;
+								this.$message.success('新增用户成功');
+								this.closeRjDialog();
+							}, (response) => {
+								this.$message.error('新增用户失败');
+							});
+						}
+					} else {
+						return false;
+					}
+				});
 			},
 			doCancel() {
 				this.closeRjDialog();

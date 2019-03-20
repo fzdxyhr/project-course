@@ -25,7 +25,7 @@ public class ClassesController {
     @RequestMapping(value = "/classes", method = RequestMethod.GET)
     public PagerHelper<Classes> list(@RequestParam(value = "key", required = false) String key
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
-            , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) {
+            , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) throws Exception {
         return classesService.list(key, pageNo, pageSize);
     }
 

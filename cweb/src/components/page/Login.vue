@@ -132,7 +132,7 @@
 								this.$router.push('/Content');
 							}
 						}).catch((response) => {
-							this.$message.error('账号或密码错误');
+							this.$message.error(response.response.data.message || '账号或密码错误');
 							this.isBtnLogin = false;
 						});
 					} else {

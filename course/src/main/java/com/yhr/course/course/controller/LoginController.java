@@ -1,5 +1,6 @@
 package com.yhr.course.course.controller;
 
+import com.yhr.course.course.contants.RoleEnum;
 import com.yhr.course.course.dao.UserRepository;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.exception.ServiceException;
@@ -28,9 +29,12 @@ public class LoginController {
         if (userVo == null) {
             return new User();
         }
-        User user = userRepository.findByAccountAndPasswordAndIsAdminAndStatus(userVo.getAccount(), userVo.getPassword(), 1, 1);
+        User user = userRepository.findByAccountAndPasswordAndStatus(userVo.getAccount(), userVo.getPassword(), 1);
         if (user == null) {
-            throw new ServiceException("不存在对应的【" + userVo.getAccount() + "】账户");
+            throw new ServiceException("账号或密码错误");
+        }
+        if (RoleEnum.STUDENT.getValue().equals(user.getRole())) {
+            throw new ServiceException("您不是教师或者管理员,无法登录后台,请联系管理员");
         }
         return user;
     }

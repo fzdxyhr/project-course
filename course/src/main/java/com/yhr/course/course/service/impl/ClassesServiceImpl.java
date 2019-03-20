@@ -1,5 +1,7 @@
 package com.yhr.course.course.service.impl;
 
+import com.yhr.course.course.config.GaeaContext;
+import com.yhr.course.course.contants.RoleEnum;
 import com.yhr.course.course.dao.ClassesRepository;
 import com.yhr.course.course.dao.SignRepository;
 import com.yhr.course.course.dao.TagRepository;
@@ -47,13 +49,20 @@ public class ClassesServiceImpl implements ClassesService {
     private JdbcTemplate jdbcTemplate;
 
     @Override
-    public PagerHelper<Classes> list(String key, Integer pageNo, Integer pageSize) {
+    public PagerHelper<Classes> list(String key, Integer pageNo, Integer pageSize) throws Exception {
         PagerHelper<Classes> result = new PagerHelper<>();
         StringBuffer sql = new StringBuffer("select * from s_classes where 1=1");
         List<Object> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(key)) {
             sql.append(" and class_name like ?");
             params.add("%" + key + "%");
+        }
+
+        //判断是否为管理员,管理员不进行过滤
+        User user = userService.get(GaeaContext.getAdminUserId());
+        if (!RoleEnum.ADMIN.getValue().equals(user.getRole())) {
+            sql.append(" and teacher_id = ?");
+            params.add(GaeaContext.getAdminUserId());
         }
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");

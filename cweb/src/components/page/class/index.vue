@@ -12,16 +12,16 @@
 				</el-table-column>
 				<el-table-column prop="teacher_name" label="授课老师">
 				</el-table-column>
-        <el-table-column prop="progress" label="教学进度" min-width="50px">
-          <template scope="scope">{{scope.row.progress == null? 0 : scope.row.progress}}%</template>
-        </el-table-column>
+				<el-table-column prop="progress" label="教学进度" min-width="50px">
+					<template scope="scope">{{scope.row.progress == null? 0 : scope.row.progress}}%</template>
+				</el-table-column>
 				<el-table-column prop="monitor_name" label="班长">
 				</el-table-column>
 				<el-table-column prop="max_student" label="班级人数" min-width="50px">
 				</el-table-column>
 				<el-table-column prop="class_desc" label="班级描述">
 				</el-table-column>
-				<el-table-column prop="create_time" label="创建时间"  min-width="90px">
+				<el-table-column prop="create_time" label="创建时间" min-width="90px">
 				</el-table-column>
 				<el-table-column label="操作" min-width="160px">
 					<template scope="scope">
@@ -69,16 +69,16 @@
 		},
 		mounted() {
 			this.findClasses();
-			
-			if (window.addEventListener) {
-				window.addEventListener('message', function(e) {
-					console.log("tttttttttttttttttt",e)
-				}, false);
-			} else if (window.attachEvent) {
-				window.attachEvent('onmessage', function(e) {
-					console.log("ddddddddddddddddddddd",e)
-				});
-			}
+
+			// 			if (window.addEventListener) {
+			// 				window.addEventListener('message', function(e) {
+			// 					console.log("tttttttttttttttttt",e)
+			// 				}, false);
+			// 			} else if (window.attachEvent) {
+			// 				window.attachEvent('onmessage', function(e) {
+			// 					console.log("ddddddddddddddddddddd",e)
+			// 				});
+			// 			}
 		},
 		methods: {
 			handleSizeChange(val) {
@@ -90,19 +90,19 @@
 				this.findClasses();
 			},
 			findClasses() {
-        const loading = this.$loading({
-        	lock: true,
-        	text: '加载中...',
-        	spinner: 'el-icon-loading',
-        	background: 'rgba(0, 0, 0, 0.7)'
-        });
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				this.$axios.get('/v1/classes?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then((
 					response) => {
-          loading.close();
+					loading.close();
 					this.tableData = response.data.items;
 					this.total = response.data.total;
 				}, (response) => {
-          loading.close();
+					loading.close();
 					this.$message.error('获取班级失败');
 				});
 			},
@@ -149,8 +149,8 @@
 				width("600px").
 				top("8%").
 				currentView(UploadImportData, {
-					uploadUrl: "http://localhost:8085/v1/users/import?class_id=" + row.id,
-					downloadUrl: "http://localhost:8085/v1/users/download"
+					uploadUrl: this.$store.state.host + "/v1/users/import?class_id=" + row.id,
+					downloadUrl: this.$store.state.host + "/v1/users/download"
 				}).
 				showClose(true).
 				then((opt) => {
@@ -192,7 +192,7 @@
 					data: row
 				}).
 				closeOnClickModal(false).
-        sizeSelf("class-student-index").
+				sizeSelf("class-student-index").
 				showClose(true).
 				then((opt) => {
 					this.findClasses();

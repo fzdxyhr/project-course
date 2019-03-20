@@ -34,7 +34,9 @@ public interface CourseService {
 
     String uploadFile(MultipartFile multipartFile) throws Exception;
 
-    public void downloadImage(String fileName, HttpServletResponse response) throws Exception;
+    void downloadImage(String fileName, HttpServletResponse response) throws Exception;
 
-    public void downloadFile(String fileName, HttpServletResponse response) throws Exception;
+    void downloadFile(String fileName, HttpServletResponse response) throws Exception;
+
+    List<CourseVo> recommend();
 }

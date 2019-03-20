@@ -5,7 +5,7 @@ package com.yhr.course.course.contants;
  */
 public enum RoleEnum {
 
-    TEACHER("teacher"),STUDENT("student");
+    TEACHER("teacher"),STUDENT("student"),ADMIN("admin");
 
     private String value;
 

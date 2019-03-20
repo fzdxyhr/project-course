@@ -1,6 +1,7 @@
 package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.config.GaeaContext;
+import com.yhr.course.course.contants.RoleEnum;
 import com.yhr.course.course.dao.ClassesRepository;
 import com.yhr.course.course.dao.HomeworkRepository;
 import com.yhr.course.course.dao.HomeworkSubmitRepository;
@@ -42,7 +43,7 @@ public class HomeworkServiceImpl implements HomeworkService {
     private HomeworkSubmitRepository homeworkSubmitRepository;
 
     @Override
-    public PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize) {
+    public PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize) throws Exception {
         PagerHelper<HomeworkVo> result = new PagerHelper<>();
         StringBuffer sql = new StringBuffer("select * from s_homework where 1=1");
         List<Object> params = new ArrayList<>();
@@ -50,9 +51,12 @@ public class HomeworkServiceImpl implements HomeworkService {
             sql.append(" and homework_title like ?");
             params.add("%" + key + "%");
         }
-
-        sql.append(" and publish_teacher = ?");
-        params.add(GaeaContext.getAdminUserId());
+        //判断是否为管理员,管理员不进行过滤
+        User user = userService.get(GaeaContext.getAdminUserId());
+        if (!RoleEnum.ADMIN.getValue().equals(user.getRole())) {
+            sql.append(" and publish_teacher = ?");
+            params.add(GaeaContext.getAdminUserId());
+        }
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
         Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);

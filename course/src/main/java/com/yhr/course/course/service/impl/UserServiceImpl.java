@@ -80,6 +80,7 @@ public class UserServiceImpl implements UserService {
             user.setRole(RoleEnum.STUDENT.getValue());
         }
         user.setCreateTime(new Date());
+        user.setStatus(1);
         return userRepository.save(user);
     }
 

@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface HomeworkService {
 
-    PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize);
+    PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize) throws Exception;
 
     PagerHelper<HomeworkVo> listFront(String key, Integer pageNo, Integer pageSize) throws Exception;
 
