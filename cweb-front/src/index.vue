@@ -29,11 +29,12 @@
 		background-color: #eef1f6;
 
 		.content {
-			height: 100%;
-      // min-height: 590px;
+			// height: 100%;
+			min-height: 590px;
 			background-color: white;
 			margin: 20px 0;
 		}
+
 		.footer-content {
 			bottom: 0;
 			// position: absolute;

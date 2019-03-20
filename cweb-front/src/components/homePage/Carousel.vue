@@ -1,34 +1,48 @@
 <template>
 	<div class="carousel-index">
 		<el-carousel :interval="4000" type="card" height="350px">
-			<el-carousel-item v-for="img in imgs">
-				<img :src="img" />
+			<el-carousel-item v-for="item in images">
+				<img :src="item.course_image_url" @click="go2CourseDetail(item.id)"/>
 			</el-carousel-item>
 		</el-carousel>
 	</div>
 </template>
 <script>
-	import {
-		Carousel,
-		CarouselItem
-	} from 'element-ui'
 	//走马灯
 	export default {
 		name: 'carousel',
 		components: {
-			'el-carousel': Carousel,
-			'el-carousel-item': CarouselItem,
 		},
 		data: () => {
-			let imgs = [
-				"../../../../static/img/carousel.jpg",
-				"../../../../static/img/carousel.jpg",
-				"../../../../static/img/carousel.jpg"
-			];
+// 			let imgs = [
+// 				"../../../../static/img/carousel.jpg",
+// 				"../../../../static/img/carousel.jpg",
+// 				"../../../../static/img/carousel.jpg"
+// 			];
 			return {
-				imgs
+				images:[]
 			};
-		}
+		},
+		mounted(){
+			this.findCarousels();
+		},
+		methods: {
+			findCarousels() {
+				this.$axios.get('/v1/courses/recommend').then((response) => {
+					this.images = response.data;
+				}, (response) => {
+					this.$message.error('获取轮播信息');
+				});
+			},
+			go2CourseDetail(courseId) {
+				this.$router.push({
+					name: "courseDetail",
+					query: {
+						courseId: courseId
+					}
+				})
+			}
+		},
 	}
 </script>
 <style lang="scss">

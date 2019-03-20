@@ -12,7 +12,7 @@
 			<!-- 	<el-menu-item index="2" @click="go2Page('articleManage')">
 					文章列表
 				</el-menu-item> -->
-				<el-menu-item index="3" @click="go2Page('homework')">
+				<el-menu-item v-if="role === 'student'" index="3" @click="go2Page('homework')">
 					作业列表
 				</el-menu-item>
 				<!-- <li class="nav-search">
@@ -66,7 +66,8 @@
 				search: '',
 				activeIndex: "1",
 				userName: "",
-				photoPath:""
+				photoPath:"",
+				role:""
 			};
 		},
 		mounted() {
@@ -74,6 +75,7 @@
 			if(user) {
 				this.userName = user.user_name;
 				this.photoPath = user.photo_path;
+				this.role = user.role;
 			}
 		},
 		methods: {

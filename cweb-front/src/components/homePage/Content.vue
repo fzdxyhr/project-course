@@ -118,8 +118,8 @@
 		},
 		created() {
 			this.getAllTags();
-			const user = localStorage.getItem("WEBFRONT_USER");
-			if (user) {
+			const user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
+			if (user.role === 'student') {
 				this.getSignStatus();
 			}
 		}

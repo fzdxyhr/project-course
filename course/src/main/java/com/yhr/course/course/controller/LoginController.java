@@ -24,8 +24,8 @@ public class LoginController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public User login(@RequestBody UserVo userVo) throws Exception {
+    @RequestMapping(value = "/admin/login", method = RequestMethod.POST)
+    public User adminLogin(@RequestBody UserVo userVo) throws Exception {
         if (userVo == null) {
             return new User();
         }
@@ -35,6 +35,18 @@ public class LoginController {
         }
         if (RoleEnum.STUDENT.getValue().equals(user.getRole())) {
             throw new ServiceException("您不是教师或者管理员,无法登录后台,请联系管理员");
+        }
+        return user;
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public User login(@RequestBody UserVo userVo) throws Exception {
+        if (userVo == null) {
+            return new User();
+        }
+        User user = userRepository.findByAccountAndPasswordAndStatus(userVo.getAccount(), userVo.getPassword(), 1);
+        if (user == null) {
+            throw new ServiceException("账号或密码错误");
         }
         return user;
     }

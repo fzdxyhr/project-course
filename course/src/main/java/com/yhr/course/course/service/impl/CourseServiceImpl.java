@@ -2,6 +2,7 @@ package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.config.AliyunFileHandle;
 import com.yhr.course.course.config.GaeaContext;
+import com.yhr.course.course.config.WhiteListCache;
 import com.yhr.course.course.dao.CourseChapterRepository;
 import com.yhr.course.course.dao.CourseRepository;
 import com.yhr.course.course.dao.CourseStudentRepository;
@@ -239,7 +240,10 @@ public class CourseServiceImpl implements CourseService {
      */
     @Override
     public List<CourseVo> recommend() {
-        List<CourseVo> courseVos = new ArrayList<>();
+        List<CourseVo> courseVos = WhiteListCache.cache.getIfPresent("coursesRecommend") == null ? new ArrayList<>() : WhiteListCache.cache.getIfPresent("coursesRecommend");
+        if (CollectionUtils.isNotEmpty(courseVos)) {
+            return courseVos;
+        }
         //获取课程学习最热前三条记录
         StringBuffer sql = new StringBuffer("SELECT course_id,COUNT(student_id) student from s_course_student GROUP BY course_id ORDER BY student desc");
         List<Object> params = new ArrayList<>();
@@ -260,8 +264,10 @@ public class CourseServiceImpl implements CourseService {
         }
         //获取最新的三条课程信息
         StringBuffer newSql = new StringBuffer("select * from s_course order by create_time desc");
+        newSql.append(" limit ?,?");
         List<CourseVo> courseVoList = jdbcTemplate.query(newSql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseVo.class));
         courseVos.addAll(courseVoList);
+        WhiteListCache.cache.put("coursesRecommend", courseVos);
         return courseVos;
     }
 
