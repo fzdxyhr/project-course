@@ -8,24 +8,25 @@
 		</div>
 		<div class="table-content">
 			<el-table :data="tableData" style="width: 100%">
-				<el-table-column prop="class_name" label="班级名称">
+				<el-table-column show-overflow-tooltip prop="class_name" label="班级名称" min-width="50px">
 				</el-table-column>
-				<el-table-column prop="teacher_name" label="授课老师">
+				<el-table-column show-overflow-tooltip prop="teacher_name" label="授课老师" min-width="50px">
 				</el-table-column>
-				<el-table-column prop="progress" label="教学进度" min-width="50px">
+				<el-table-column show-overflow-tooltip prop="progress" label="教学进度" min-width="50px">
 					<template scope="scope">{{scope.row.progress == null? 0 : scope.row.progress}}%</template>
 				</el-table-column>
-				<el-table-column prop="monitor_name" label="班长">
+				<el-table-column show-overflow-tooltip prop="monitor_name" label="班长" min-width="60px">
 				</el-table-column>
-				<el-table-column prop="max_student" label="班级人数" min-width="50px">
+				<el-table-column show-overflow-tooltip prop="max_student" label="班级人数" min-width="50px">
 				</el-table-column>
-				<el-table-column prop="class_desc" label="班级描述">
+				<el-table-column show-overflow-tooltip prop="class_desc" label="班级描述">
 				</el-table-column>
-				<el-table-column prop="create_time" label="创建时间" min-width="90px">
+				<el-table-column show-overflow-tooltip prop="create_time" label="创建时间" min-width="80px">
 				</el-table-column>
-				<el-table-column label="操作" min-width="160px">
+				<el-table-column label="操作" min-width="200px">
 					<template scope="scope">
 						<el-button icon="el-icon-setting" type="text" @click="go2SetMonitor(scope.row)">设置班长</el-button>
+            <el-button icon="el-icon-setting" type="text" @click="go2SetSignTime(scope.row)">设置签到时间</el-button>
 						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="handleImport(scope.row)">导入学生</el-button>
 						<el-button icon="el-icon-view" style="color: #67c23a;" type="text" @click="go2ViewStudent(scope.row)">查看学生</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="handleUpdate(scope.row)">修改</el-button>
@@ -47,6 +48,7 @@
 	import rjDialog from '@components/common/dialog.vue'
 	import classesAdd from '@components/page/class/classesAdd.vue'
 	import setMonitor from '@components/page/class/setMonitor.vue'
+  import setSignTime from '@components/page/class/setSignTime.vue'
 	import studentList from '@components/page/class/studentList.vue'
 	import UploadImportData from '@components/common/UploadImportData.vue'
 
@@ -56,7 +58,8 @@
 			classesAdd,
 			setMonitor,
 			studentList,
-			UploadImportData
+			UploadImportData,
+      setSignTime
 		},
 		data() {
 			return {
@@ -143,6 +146,20 @@
 					this.findClasses();
 				}).show();
 			},
+      go2SetSignTime(row){
+        this.rjDialog.
+        title("设置签到时间").
+        width("600px").
+        top("").
+        currentView(setSignTime, {
+        	data: row
+        }).
+        closeOnClickModal(false).
+        showClose(true).
+        then((opt) => {
+        	this.findClasses();
+        }).show();
+      },
 			handleImport(row) {
 				this.rjDialog.
 				title("导入学生").

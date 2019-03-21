@@ -47,6 +47,14 @@ public class Classes {
     @Column(name = "progress")
     private Integer progress;
 
+    @ApiModelProperty("签到开始时间")
+    @Column(name = "sign_start_time")
+    private Date signStartTime;
+
+    @ApiModelProperty("签到结束时间")
+    @Column(name = "sign_end_time")
+    private Date signEndTime;
+
     @ApiModelProperty("创建时间")
     @Column(name = "create_time")
     private Date createTime;

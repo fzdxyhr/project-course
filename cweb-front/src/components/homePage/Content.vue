@@ -112,9 +112,25 @@
 						then((opt) => {}).show();
 					}
 				}, (response) => {
-					this.$message.error('获取标签失败');
+					this.$message.error('获取签到状态失败');
 				});
-			}
+			},
+      getSignTime(){
+        this.$axios.get('/v1/signs/status').then((response) => {
+        	if (response.data === 0) {
+        		this.rjDialog.
+        		title("签到提示").
+        		width("500px").
+        		top("10%").
+        		closeOnClickModal(false).
+        		currentView(signTip, {}).
+        		showClose(true).
+        		then((opt) => {}).show();
+        	}
+        }, (response) => {
+        	this.$message.error('获取签到状态失败');
+        });
+      }
 		},
 		created() {
 			this.getAllTags();

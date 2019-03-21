@@ -15,6 +15,7 @@ Vue.use(Router)
 export default new Router({
 	routes: [{
 			path: '/',
+      name:"index",
 			redirect: '/index'
 		},
 		{

@@ -9,7 +9,7 @@
 				<el-menu-item index="1" @click="go2Page('courseManage')">
 					主页
 				</el-menu-item>
-			<!-- 	<el-menu-item index="2" @click="go2Page('articleManage')">
+				<!-- 	<el-menu-item index="2" @click="go2Page('articleManage')">
 					文章列表
 				</el-menu-item> -->
 				<el-menu-item v-if="role === 'student'" index="3" @click="go2Page('homework')">
@@ -27,7 +27,7 @@
 								<img v-if="photoPath" :src="photoPath" />
 							</a>
 						</span>
-						<el-dropdown-menu slot="dropdown" >
+						<el-dropdown-menu slot="dropdown">
 							<el-dropdown-item v-if="userName">
 								<div @click="go2Page('myStudy')">
 									<i class="fa fa-user fa-fw"></i> 我的学习
@@ -66,13 +66,13 @@
 				search: '',
 				activeIndex: "1",
 				userName: "",
-				photoPath:"",
-				role:""
+				photoPath: "",
+				role: ""
 			};
 		},
 		mounted() {
 			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
-			if(user) {
+			if (user) {
 				this.userName = user.user_name;
 				this.photoPath = user.photo_path;
 				this.role = user.role;
@@ -99,7 +99,11 @@
 				currentView(logout, {}).
 				sizeSelf("logout-index").
 				showClose(true).
-				then((opt) => {}).show();
+				then((opt) => {
+					if (opt && !opt.isCancel) {
+						window.location.href = "/";
+					}
+				}).show();
 			}
 		}
 	}

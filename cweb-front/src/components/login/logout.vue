@@ -13,10 +13,11 @@
 		methods: {
 			logout() {
 				localStorage.removeItem("WEBFRONT_USER");
-				this.$router.push({name:"login"});
+				// this.$router.push({name:"index"});
+        this.closeRjDialog({isCancel:false});
 			},
       doCancel(){
-        this.closeRjDialog();
+        this.closeRjDialog({isCancel:true});
       }
 		},
 	}

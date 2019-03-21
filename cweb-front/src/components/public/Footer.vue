@@ -30,6 +30,7 @@
 		font-weight: 700;
 		color: #888;
 		line-height: 18px;
+    text-align: center;
 
 		a:link,
 		a:visited {

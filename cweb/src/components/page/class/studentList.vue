@@ -34,11 +34,18 @@
 		},
 		methods: {
 			go2Query() {
+        const loading = this.$loading({
+        	lock: true,
+        	text: '加载中...',
+        	spinner: 'el-icon-loading',
+        	background: 'rgba(0, 0, 0, 0.7)'
+        });
 				this.$axios.get('/v1/classes/' + this.classId + "/students").then((response) => {
-					console.log(response)
+          loading.close();
 					this.studentList = response.data;
 				}, (response) => {
-					this.$message.error('获取班级失败');
+          loading.close();
+					this.$message.error('获取班级学生失败');
 				});
 			}
 		},
