@@ -3,6 +3,7 @@ package com.yhr.course.course.service;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.utils.PagerHelper;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public interface UserService {
 
-    PagerHelper<User> list(String key,String role, Integer pageNo, Integer pageSize);
+    PagerHelper<User> list(String key, String role, Integer pageNo, Integer pageSize);
 
     User create(User user);
 
@@ -22,12 +23,14 @@ public interface UserService {
 
     void delete(Integer id) throws Exception;
 
+    void batchDelete(List<Integer> ids) throws Exception;
+
     User get(Integer id) throws Exception;
 
     void downloadTemplate(HttpServletResponse response) throws Exception;
 
-    void parseExcel(MultipartFile multipartFile,Integer classId) throws Exception;
+    void parseExcel(MultipartFile multipartFile, Integer classId) throws Exception;
 
-    Map<Integer,User> getAllUserMap();
+    Map<Integer, User> getAllUserMap();
 
 }

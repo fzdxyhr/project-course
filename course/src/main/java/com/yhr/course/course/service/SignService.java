@@ -1,6 +1,7 @@
 package com.yhr.course.course.service;
 
 import com.yhr.course.course.vo.SignClassesVo;
+import com.yhr.course.course.vo.SignTimeVo;
 
 import java.util.List;
 
@@ -14,4 +15,6 @@ public interface SignService {
     boolean sign(Integer teacherId);
 
     Integer getSignStatus();
+
+    SignTimeVo getSignTime();
 }

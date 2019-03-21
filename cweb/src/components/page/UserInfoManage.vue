@@ -2,12 +2,15 @@
 	<div class="user-info-index">
 		<div class="top-content">
 			<el-button v-if="role ==='admin'" type="primary" @click="go2Add" icon="el-icon-plus">新增用户</el-button>
-      <el-button v-if="role ==='teacher'" type="primary" @click="go2Add" icon="el-icon-plus">新增学生</el-button>
+			<el-button v-if="role ==='teacher'" type="primary" @click="go2Add" icon="el-icon-plus">新增学生</el-button>
 			<!-- <el-button type="primary" @click="go2Import">导入用户</el-button> -->
-      <span style="margin-left: 10px;color: rgb(147, 153, 159);">批量导入学生可前往班级管理中导入</span>
+			<el-button type="primary" @click="go2BatchDelete">批量删除</el-button>
+			<span style="margin-left: 10px;color: rgb(147, 153, 159);">批量导入学生可前往班级管理中导入</span>
 		</div>
-		<div class="secction diyscrollbar">
-			<el-table :data="tableData" border>
+		<div class="user-info diyscrollbar">
+			<el-table  height="420" :data="tableData" border @selection-change="handleSelectionChange">
+				<el-table-column type="selection" width="55">
+				</el-table-column>
 				<el-table-column prop="user_name" label="用户名">
 				</el-table-column>
 				<el-table-column prop="account" label="账号">
@@ -43,12 +46,12 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<div class="paging">
-				<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.page_no"
-				 :page-sizes="[10, 20, 50, 100]" :page-size="page.page_size" layout="total, sizes, prev, pager, next, jumper"
-				 :total="page.total">
-				</el-pagination>
-			</div>
+		</div>
+		<div class="paging">
+			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.page_no"
+			 :page-sizes="[10, 20, 50, 100]" :page-size="page.page_size" layout="total, sizes, prev, pager, next, jumper"
+			 :total="page.total">
+			</el-pagination>
 		</div>
 		<rjDialog></rjDialog>
 	</div>
@@ -68,7 +71,8 @@
 		data() {
 			return {
 				tableData: [],
-        role:"",
+				selectedData: [],
+				role: "",
 				page: {
 					page_no: 1,
 					page_size: 10,
@@ -78,10 +82,10 @@
 		},
 		mounted() {
 			this.findUsers();
-      const user = JSON.parse(localStorage.getItem("USER"));
-      if(user) {
-      	this.role = user.role;
-      }
+			const user = JSON.parse(localStorage.getItem("USER"));
+			if (user) {
+				this.role = user.role;
+			}
 		},
 		computed: {
 			host() {
@@ -89,6 +93,9 @@
 			}
 		},
 		methods: {
+			handleSelectionChange(val) {
+				this.selectedData = val;
+			},
 			findUsers() {
 				const loading = this.$loading({
 					lock: true,
@@ -108,7 +115,7 @@
 			},
 			handleUpdate(row) {
 				this.rjDialog.
-				title(this.role ==='admin'?"修改用户":"修改学生").
+				title(this.role === 'admin' ? "修改用户" : "修改学生").
 				width("700px").
 				top("").
 				currentView(addUser, {
@@ -122,7 +129,7 @@
 			},
 			go2Add() {
 				this.rjDialog.
-				title(this.role ==='admin'?"新增用户":"新增学生").
+				title(this.role === 'admin' ? "新增用户" : "新增学生").
 				width("700px").
 				top("").
 				currentView(addUser, {}).
@@ -146,6 +153,22 @@
 				then((opt) => {
 					this.findUsers();
 				}).show();
+			},
+			go2BatchDelete() {
+				if (this.selectedData.length == 0) {
+					this.$message.error('请先选择用户');
+					return;
+				}
+				let ids = [];
+				this.selectedData.forEach((item) => {
+					ids.push(item.id);
+				})
+				this.$axios.delete("/v1/users/batch?ids=" + ids).then((response) => {
+					loading.close();
+				}, (response) => {
+					loading.close();
+					this.$message.error('批量删除用户失败');
+				});
 			},
 			handleSizeChange(val) {
 				this.page.page_size = val;
@@ -187,6 +210,10 @@
 			margin: 5px;
 			width: calc(100% - 10px);
 		}
+// 		.user-info {
+// 			height: 420px;
+// 			overflow: auto;
+// 		}
 
 		.paging {
 			text-align: right;

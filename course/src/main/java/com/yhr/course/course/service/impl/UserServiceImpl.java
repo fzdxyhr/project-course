@@ -23,6 +23,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.transaction.Transactional;
 import java.util.*;
 
 /**
@@ -101,6 +102,17 @@ public class UserServiceImpl implements UserService {
             throw new ServiceException("不存在【" + id + "】对应的标签");
         }
         userRepository.delete(tempTag);
+    }
+
+    @Override
+    @Transactional
+    public void batchDelete(List<Integer> ids) throws Exception {
+        if (CollectionUtils.isEmpty(ids)) {
+            return;
+        }
+        for (Integer id : ids) {
+            userRepository.deleteById(id);
+        }
     }
 
     @Override

@@ -5,6 +5,7 @@ import com.yhr.course.course.service.SignService;
 import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.SignClassesVo;
+import com.yhr.course.course.vo.SignTimeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,6 +34,11 @@ public class SignController {
     @RequestMapping(value = "/signs/status", method = RequestMethod.GET)
     public Integer getSignStatus() {
         return signService.getSignStatus();
+    }
+
+    @RequestMapping(value = "/signs/time", method = RequestMethod.GET)
+    public SignTimeVo getSignTime() {
+        return signService.getSignTime();
     }
 
 }

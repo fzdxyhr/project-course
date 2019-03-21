@@ -9,6 +9,7 @@ import com.yhr.course.course.entity.Sign;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.service.SignService;
 import com.yhr.course.course.vo.SignClassesVo;
+import com.yhr.course.course.vo.SignTimeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -40,6 +41,13 @@ public class SignServiceImpl implements SignService {
         Sign sign = signRepository.findByStudentIdAndTeacherIdAndCreateTime(user.getId(), classes.getTeacherId(), simpleDateFormat.format(new Date()));
         User teacher = userRepository.getOne(classes.getTeacherId());
         SignClassesVo signClassesVo = SignClassesVo.from(classes, teacher.getUserName(), sign == null ? 0 : 1);
+        signClassesVo.setCanSign(0);
+        if (classes != null && classes.getSignStartTime() != null && classes.getSignEndTime() != null) {
+            Date currentTime = new Date();
+            if (currentTime.before(classes.getSignEndTime()) && currentTime.after(classes.getSignStartTime())) {
+                signClassesVo.setCanSign(1);
+            }
+        }
         signClassesVos.add(signClassesVo);
         return signClassesVos;
     }
@@ -65,5 +73,18 @@ public class SignServiceImpl implements SignService {
         Classes classes = classesRepository.getOne(user.getClassId());
         Sign sign = signRepository.findByStudentIdAndTeacherIdAndCreateTime(user.getId(), classes.getTeacherId(), simpleDateFormat.format(new Date()));
         return sign == null ? 0 : 1;
+    }
+
+    @Override
+    public SignTimeVo getSignTime() {
+        User user = userRepository.getOne(GaeaContext.getUserId());
+        Classes classes = classesRepository.getOne(user.getClassId());
+        if (classes != null) {
+            SignTimeVo signTimeVo = new SignTimeVo();
+            signTimeVo.setSignStartTime(classes.getSignStartTime());
+            signTimeVo.setSignEndTime(classes.getSignEndTime());
+            return signTimeVo;
+        }
+        return null;
     }
 }

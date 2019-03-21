@@ -33,6 +33,9 @@ public class SignClassesVo {
     @ApiModelProperty("是否签到（0:未签到,1:已签到）")
     private Integer sign;
 
+    @ApiModelProperty("是否可以签到（0:不可以,1:可以）")
+    private Integer canSign;
+
     @ApiModelProperty("创建时间")
     private Date createTime;
 

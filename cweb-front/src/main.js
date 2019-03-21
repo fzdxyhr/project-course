@@ -12,6 +12,7 @@ import VueAwesomeSwiper from 'vue-awesome-swiper'
 
 // require styles
 import 'swiper/dist/css/swiper.css'
+
 import md5 from 'js-md5';
 import axios from './axios'; //通过import引入
 import store from './store'; //通过import引入

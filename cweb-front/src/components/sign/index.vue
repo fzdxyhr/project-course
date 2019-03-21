@@ -7,7 +7,7 @@
 					<span style="font-size: 18px;">{{item.class_name}}</span>
 					<div class="bottom clearfix">
 						<div class="time">{{ item.teacher_name }}</div>
-						<el-button type="text" class="button" @click="go2Sign(item.teacher_id)">签到</el-button>
+						<el-button type="text" class="button" :disabled="item.can_sign === 0" @click="go2Sign(item.teacher_id)">签到</el-button>
 					</div>
 				</div>
 			</el-card>

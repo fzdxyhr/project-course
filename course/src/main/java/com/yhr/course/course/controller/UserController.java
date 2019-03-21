@@ -11,6 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -44,6 +45,11 @@ public class UserController {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable("id") Integer id) throws Exception {
         userService.delete(id);
+    }
+
+    @RequestMapping(value = "/users/batch", method = RequestMethod.DELETE)
+    public void batchDelete(@RequestParam("ids") List<Integer> ids) throws Exception {
+        userService.batchDelete(ids);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.GET)

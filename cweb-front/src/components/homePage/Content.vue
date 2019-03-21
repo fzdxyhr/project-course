@@ -6,6 +6,13 @@
 				<el-input type="text" placeholder="输入课程名查找" suffix-icon="el-icon-search" v-model="searchText">
 				</el-input>
 			</div>
+			<swiper style="height: 40px;margin-top: 14px;float: right;" :options="swiperOption" ref="aaaa">
+				<swiper-slide>最近听说会下雨啊。。。。。</swiper-slide>
+				<swiper-slide>国内要闻，阿萨达所大所大所大所大所大所多</swiper-slide>
+			</swiper>
+			<div style="float: right;margin-top: 14px;margin-right: 10px;">
+				资讯:
+			</div>
 		</div>
 		<div class="course-labels">
 			<el-row>
@@ -37,10 +44,15 @@
 		<rjDialog></rjDialog>
 	</div>
 </template>
-<script scoped>
+<script>
+	import 'swiper/dist/css/swiper.css'
 	import coursesList from './coursesList.vue'
 	import rjDialog from '@components/common/dialog.vue'
 	import signTip from '@components/sign/signTip.vue'
+	import {
+		swiper,
+		swiperSlide
+	} from 'vue-awesome-swiper'
 
 	//主页走马灯下的内容
 	export default {
@@ -48,7 +60,9 @@
 		components: {
 			coursesList,
 			signTip,
-			rjDialog
+			rjDialog,
+			swiper,
+			swiperSlide
 		},
 		watch: {
 			searchText(newValue, oldValue) {
@@ -66,7 +80,12 @@
 					iconRotate: 0,
 				},
 				tags: [],
-				selectedId: ""
+				selectedId: "",
+				swiperOption: {
+					direction: 'vertical',
+					autoplay: true,
+					loop : true
+				}
 			}
 		},
 		methods: {
@@ -115,28 +134,26 @@
 					this.$message.error('获取签到状态失败');
 				});
 			},
-      getSignTime(){
-        this.$axios.get('/v1/signs/status').then((response) => {
-        	if (response.data === 0) {
-        		this.rjDialog.
-        		title("签到提示").
-        		width("500px").
-        		top("10%").
-        		closeOnClickModal(false).
-        		currentView(signTip, {}).
-        		showClose(true).
-        		then((opt) => {}).show();
-        	}
-        }, (response) => {
-        	this.$message.error('获取签到状态失败');
-        });
-      }
+			getSignTime() {
+				this.$axios.get('/v1/signs/time').then((response) => {
+					if (response.data) {
+						let currentDateTime = new Date().getTime();
+						let startTime = new Date(response.data.sign_start_time).getTime();
+						let endTime = new Date(response.data.sign_end_time).getTime();
+						if (currentDateTime >= startTime && currentDateTime <= endTime) {
+							this.getSignStatus();
+						}
+					}
+				}, (response) => {
+					this.$message.error('获取签到状态失败');
+				});
+			}
 		},
 		created() {
 			this.getAllTags();
 			const user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
 			if (user.role === 'student') {
-				this.getSignStatus();
+				this.getSignTime();
 			}
 		}
 	}
