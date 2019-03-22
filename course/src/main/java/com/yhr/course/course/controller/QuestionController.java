@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/v1")
-public class CourseQuestionController {
+public class QuestionController {
 
     @Autowired
     private QuestionService questionService;
@@ -30,6 +30,11 @@ public class CourseQuestionController {
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
             , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) throws Exception {
         return questionService.list(key, null, courseId, pageNo, pageSize);
+    }
+
+    @RequestMapping(value = "/course_questions/{id}", method = RequestMethod.GET)
+    public QuestionVo get(@PathVariable("id") Integer id) throws Exception {
+        return questionService.get(id);
     }
 
 }

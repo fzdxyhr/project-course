@@ -14,7 +14,8 @@
 				<div class="fixclear"></div>
 				<div class="page-content">
 					<div style="float: left;margin-left: 23%;">
-						<span style="margin-right: 5px;" v-text="answerTotal"></span>回答
+						<span style="margin-right: 5px;" v-text="item.answer_vos.length"></span>
+            <span style="color: #66b1ff;cursor: pointer;" @click="go2Answer(item)">回答</span>
 					</div>
 					<div style="float: right;">{{item.create_time}}</div>
 				</div>
@@ -23,17 +24,24 @@
 		<div v-if="questions.length == 0" class="no-data-content">
 			暂时没有提问~~~ <el-button style="margin-left: 10px;" size="small" type="primary" @click="go2Study">去学习</el-button>
 		</div>
+    <rjDialog></rjDialog>
 	</div>
 </template>
 
 <script>
+  import rjDialog from '@components/common/dialog.vue'
+  import answerList from '@components/course/answerList.vue'
+  
 	export default {
-		components: {},
+		components: {
+      rjDialog,
+      answerList
+    },
 		data() {
 			return {
 				answerTotal: 0,
 				page_no: 1,
-				page_size: 10,
+				page_size: 10000,
 				questions: []
 			};
 		},
@@ -41,6 +49,22 @@
 			this.go2Query();
 		},
 		methods: {
+      go2Answer(item){
+      	this.rjDialog.
+      	title("查看回复").
+      	width("700px").
+      	top("").
+      	closeOnClickModal(false).
+      	currentView(answerList, {
+      		questionId: item.id,
+          type:"mystudy"
+      	}).
+      	sizeSelf("answer-list-index").
+      	showClose(true).
+      	then((opt) => {
+      		this.go2Query();
+      	}).show();
+      },
 			go2Query() {
 				const loading = this.$loading({
 					lock: true,

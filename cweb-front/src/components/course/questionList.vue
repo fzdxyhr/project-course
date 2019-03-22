@@ -6,7 +6,7 @@
 		<div class="fixclear"></div>
 		<div style="margin-top: 20px;" v-for="item in comments">
 			<el-card class="box-card" style="height: 150px;">
-				<div class="content">
+				<div class="content-aaaa">
 					<img style="float: left;border-radius: 50%;" :src="item.photo_path" :alt="item.user_name" width="80px" height="80px" />
 					<div style="float: left;margin-left: 50px;">
 						<div class="title">{{item.user_name}}</div>
@@ -15,7 +15,10 @@
 				</div>
 				<div class="fixclear"></div>
 				<div class="page-content">
-					<div style="float: left;margin-left: 17%;"><span style="margin-right: 5px;" v-text="answerTotal"></span>回答</div>
+					<div style="float: left;margin-left: 17%;">
+						<span style="margin-right: 5px;" v-text="item.answer_vos.length"></span>
+						<span style="color: #66b1ff;cursor: pointer;" @click="go2Answer(item)">回答</span>
+					</div>
 					<div style="float: right;">{{item.create_time}}</div>
 				</div>
 			</el-card>
@@ -30,18 +33,20 @@
 <script>
 	import rjDialog from '@components/common/dialog.vue'
 	import questionAdd from '@components/course/questionAdd.vue'
+  import answerList from '@components/course/answerList.vue'
 
 	export default {
 		components: {
 			rjDialog,
-			questionAdd
+			questionAdd,
+      answerList
 		},
 		props: {
 			courseName: {
 				type: String
 			},
 			courseId: {
-				type: Number
+				type: String
 			},
 		},
 		data() {
@@ -55,28 +60,45 @@
 		},
 		methods: {
 			go2Query() {
-         const loading = this.$loading({
-        	lock: true,
-        	text: '加载中...',
-        	spinner: 'el-icon-loading',
-        	background: 'rgba(0, 0, 0, 0.7)'
-        });
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				this.$axios.get("/v1/course_questions?course_id=" + this.courseId).then((response) => {
-          loading.close();
+					loading.close();
 					let message = response.data;
 					this.comments = message.items;
 				}, (response) => {
-          loading.close();
+					loading.close();
 					this.$message.error('获取问题失败');
 				});
 			},
+      go2Answer(item){
+        this.rjDialog.
+        title("我要回答").
+        width("700px").
+        top("").
+        closeOnClickModal(false).
+        currentView(answerList, {
+        	questionId: item.id
+        }).
+        sizeSelf("answer-list-index").
+        showClose(true).
+        then((opt) => {
+        	this.go2Query();
+        }).show();
+      },
 			go2Question() {
 				this.rjDialog.
 				title("我要提问").
 				width("600px").
 				top("2%").
 				closeOnClickModal(false).
-				currentView(questionAdd, {courseId: this.courseId}).
+				currentView(questionAdd, {
+					courseId: this.courseId
+				}).
 				sizeSelf("question-add-index").
 				showClose(true).
 				then((opt) => {
@@ -93,7 +115,7 @@
 			float: right;
 		}
 
-		.content {}
+		.content-aaaa {}
 
 		.page-content {
 			margin-top: 10px;

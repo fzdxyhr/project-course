@@ -7,10 +7,26 @@
 				</el-input>
 			</div>
 			<swiper style="height: 40px;margin-top: 14px;float: right;" :options="swiperOption" ref="aaaa">
-				<swiper-slide>最近听说会下雨啊。。。。。</swiper-slide>
-				<swiper-slide>国内要闻，阿萨达所大所大所大所大所大所多</swiper-slide>
+				<swiper-slide>
+					<a style="color: #93999f;" href="http://www.citnews.com.cn/technews/tech/201903/94793.html" target="_blank">AndroidQ强势来袭，国产自研系统还有未来吗？</a>
+				</swiper-slide>
+				<swiper-slide>
+					<a style="color: #93999f;" href="http://www.citnews.com.cn/internet/intelligence/201903/94414.html" target="_blank">大西洋月刊： 人工智能将如何重新重塑人类社会秩序</a>
+				</swiper-slide>
+        <swiper-slide>
+        	<a style="color: #93999f;" href="http://www.citnews.com.cn/technews/mobilephone/201903/94986.html" target="_blank">OPPO首部5G手机获得5G CE认证，商用进度再次领先</a>
+        </swiper-slide>
+        <swiper-slide>
+        	<a style="color: #93999f;" href="http://www.citnews.com.cn/technews/tech/201901/92729.html" target="_blank">Facebook正式成立AR事业群，即将发布AR产品</a>
+        </swiper-slide>
+        <swiper-slide>
+        	<a style="color: #93999f;" href="http://www.citnews.com.cn/technews/tech/201902/93389.html" target="_blank">消息称苹果3月25日举行发布会 或正式推出新闻订阅服务</a>
+        </swiper-slide>
+        <swiper-slide>
+        	<a style="color: #93999f;" href="http://www.citnews.com.cn/internet/intelligence/201902/93946.html" target="_blank">人工智能急需变革？比起英特尔的焦虑 互联网企业更想蹚这一池芯片水</a>
+        </swiper-slide>
 			</swiper>
-			<div style="float: right;margin-top: 14px;margin-right: 10px;">
+			<div style="float: right;margin-top: 14px;margin-right: 10px;color: #93999f;">
 				资讯:
 			</div>
 		</div>
@@ -84,7 +100,7 @@
 				swiperOption: {
 					direction: 'vertical',
 					autoplay: true,
-					loop : true
+					loop: true
 				}
 			}
 		},

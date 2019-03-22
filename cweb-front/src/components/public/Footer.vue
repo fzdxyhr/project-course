@@ -1,18 +1,19 @@
 <template>
 	<div class="footer-index">
 		<p>
-			<a href="#">关于本站</a>
+      友情链接:
+			<a href="https://www.51zxw.net/" target="_blank" style="margin-left: 5px;">我要自学网</a>
 			&nbsp;-&nbsp;
-			<a href="#">联系我们</a>
+			<a href="https://www.imooc.com/" target="_blank">慕课网</a>
 			&nbsp;-&nbsp;
-			<a href="#">加入我们</a>
+			<a href="https://www.zcool.com.cn/" target="_blank">站酷网</a>
 			&nbsp;-&nbsp;
-			<a href="#">问题反馈</a>
+			<a href="http://www.wercontest.org/about_wer.php" target="_blank">WER</a>
 			&nbsp;-&nbsp;
-			<a href="">帮助</a>
+			<a href="http://www.i3done.com/" target="_blank">3D one</a>
 		</p>
-		<p>
-			版权所有&#169;yanhuorong-2019
+		<p style="margin-top: 10px;">
+			版权所有&#169;yanlili-2019.&nbsp;&nbsp;本网站推荐使用Chrome浏览器
 		</p>
 	</div>
 </template>

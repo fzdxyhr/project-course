@@ -44,7 +44,7 @@
 				type: String
 			},
 			courseId: {
-				type: Number
+				type: String
 			},
 		},
 		data() {

@@ -8,6 +8,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019/3/8.
@@ -45,4 +46,7 @@ public class QuestionVo {
 
     @ApiModelProperty("创建时间")
     private Date createTime;
+
+    @ApiModelProperty("该问题下的回复信息")
+    private List<AnswerVo> answerVos;
 }
