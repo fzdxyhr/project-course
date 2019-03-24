@@ -28,7 +28,7 @@
 					</el-option>
 				</el-select>
 			</el-form-item>
-			<el-form-item label="所属班级" v-if="form.role === 'student'" prop="class_id">
+			<el-form-item label="所属班级" v-if="form.role === 'student' || role =='teacher'" prop="class_id">
 				<el-select v-model="form.class_id" placeholder="请选择">
 					<el-option v-for="item in classes" :key="item.value" :label="item.label" :value="item.value">
 					</el-option>

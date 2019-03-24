@@ -6,6 +6,7 @@ import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.StudentVo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2019-01-10.
@@ -23,5 +24,7 @@ public interface ClassesService {
     Classes get(Integer id) throws Exception;
 
     List<StudentVo> findClassesStudent(Integer classId);
+
+    Map<Integer, Classes> getAllClassesMap();
 
 }

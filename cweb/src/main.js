@@ -11,6 +11,11 @@ import md5 from 'js-md5'
 import axios from './axios'; //通过import引入
 import store from './store'; //通过import引入
 
+import echarts from 'echarts'
+Vue.prototype.$echarts = echarts 
+import ECharts from 'vue-echarts/components/ECharts'  
+Vue.component('v-chart', ECharts)
+
 Vue.config.productionTip = false
 
 Vue.prototype.$md5 = md5

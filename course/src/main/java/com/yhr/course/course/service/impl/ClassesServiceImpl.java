@@ -138,4 +138,16 @@ public class ClassesServiceImpl implements ClassesService {
         }
         return studentVos;
     }
+
+    public Map<Integer, Classes> getAllClassesMap() {
+        List<Classes> classesList = classesRepository.findAll();
+        if (CollectionUtils.isEmpty(classesList)) {
+            return new HashMap<>();
+        }
+        Map<Integer, Classes> classesMap = new HashMap<>();
+        for (Classes classes : classesList) {
+            classesMap.put(classes.getId(), classes);
+        }
+        return classesMap;
+    }
 }

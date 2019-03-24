@@ -8,7 +8,7 @@
 			<span style="margin-left: 10px;color: rgb(147, 153, 159);">批量导入学生可前往班级管理中导入</span>
 		</div>
 		<div class="user-info diyscrollbar">
-			<el-table  height="520" :data="tableData" border @selection-change="handleSelectionChange">
+			<el-table :data="tableData" border @selection-change="handleSelectionChange">
 				<el-table-column type="selection" width="55">
 				</el-table-column>
 				<el-table-column prop="user_name" label="用户名">
@@ -229,10 +229,10 @@
 			margin: 5px;
 			width: calc(100% - 10px);
 		}
-// 		.user-info {
-// 			height: 420px;
-// 			overflow: auto;
-// 		}
+		.user-info {
+			height: calc(100% - 120px);
+			overflow: auto;
+		}
 
 		.paging {
 			text-align: right;

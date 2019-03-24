@@ -1,24 +1,28 @@
 <template>
-	<div class="homework-index">
+	<div class="teach-index">
 		<div class="button-group">
 			<el-input placeholder="请输入内容" v-model="key">
 				<i slot="suffix" class="el-input__icon el-icon-search"></i>
 			</el-input>
-			<el-button type="primary" @click="go2Publish">发布作业</el-button>
+			<el-button type="primary" @click="go2Publish">新增教学情况</el-button>
 		</div>
-		<div class="table-content diyscrollbar">
+		<div class="teach-table-content diyscrollbar">
 			<el-table :data="tableData" style="width: 100%">
-				<el-table-column prop="homework_title" label="作业标题">
+				<el-table-column prop="teach_classes_name" label="教学班级">
 				</el-table-column>
-				<el-table-column prop="publish_teacher_name" label="发布老师">
+				<el-table-column prop="teach_content_name" label="教学内容" min-width="120px">
 				</el-table-column>
-				<el-table-column prop="homework_desc" label="作业描述">
+				<el-table-column prop="teach_evaluation" label="教学评价" min-width="50px">
+					<template slot-scope="scope">
+						{{comment[scope.row.teach_evaluation]}}
+					</template>
 				</el-table-column>
-				<el-table-column prop="create_time" label="创建时间" min-width="90px">
+				<el-table-column prop="teach_remark" label="教学说明" min-width="120px">
+				</el-table-column>
+				<el-table-column prop="teach_start_time" label="教学开始时间" min-width="90px">
 				</el-table-column>
 				<el-table-column label="操作" min-width="110px">
 					<template scope="scope">
-						<el-button icon="el-icon-view" type="text" @click="go2HomeworkDetail(scope.row)">查看作业提交</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="go2Update(scope.row)">修改</el-button>
 						<el-button icon="el-icon-delete" style="color: #f56c6c;" type="text" @click="go2Delete(scope.row)">删除</el-button>
 					</template>
@@ -36,14 +40,12 @@
 
 <script>
 	import rjDialog from '@components/common/dialog.vue'
-	import homeworkAdd from '@components/page/homework/homeworkAdd.vue'
-	import studentList from '@components/page/homework/studentList.vue'
+	import teachAdd from '@components/page/teach/teachAdd.vue'
 
 	export default {
 		components: {
 			rjDialog,
-			homeworkAdd,
-			studentList
+			teachAdd
 		},
 		data() {
 			return {
@@ -51,7 +53,14 @@
 				tableData: [],
 				page_no: 1,
 				page_size: 10,
-				total: 0
+				total: 0,
+				comment:{
+					1:"很差",
+					2:"差",
+					3:"中等",
+					4:"良好",
+					5:"优秀"
+				}
 			};
 		},
 		mounted() {
@@ -73,7 +82,7 @@
 					spinner: 'el-icon-loading',
 					background: 'rgba(0, 0, 0, 0.7)'
 				});
-				this.$axios.get('/v1/homeworks?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then(
+				this.$axios.get('/v1/teachs?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then(
 					(
 						response) => {
 						loading.close()
@@ -81,29 +90,15 @@
 						this.total = response.data.total;
 					}, (response) => {
 						loading.close()
-						this.$message.error('获取作业失败');
+						this.$message.error('获取教学失败');
 					});
 			},
 			go2Update(row) {
 				this.rjDialog.
-				title("修改作业").
-				width("600px").
+				title("修改教学信息").
+				width("800px").
 				top("").
-				currentView(homeworkAdd, {
-					data: row
-				}).
-				closeOnClickModal(false).
-				showClose(true).
-				then((opt) => {
-					this.go2Query();
-				}).show();
-			},
-			go2HomeworkDetail(row){
-				this.rjDialog.
-				title("查看作业提交情况").
-				width("700px").
-				top("").
-				currentView(studentList, {
+				currentView(teachAdd, {
 					data: row
 				}).
 				closeOnClickModal(false).
@@ -113,20 +108,20 @@
 				}).show();
 			},
 			go2Delete(row) {
-				this.$confirm('此操作将永久删除该作业, 是否继续?', '提示', {
+				this.$confirm('此操作将永久删除该教学信息, 是否继续?', '提示', {
 					confirmButtonText: '确定',
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$axios.delete('/v1/classes/' + row.id).then((
+					this.$axios.delete('/v1/teachs/' + row.id).then((
 						response) => {
 						this.$message({
 							type: 'success',
-							message: '删除作业成功!'
+							message: '删除教学信息成功!'
 						});
 						this.go2Query();
 					}, (response) => {
-						this.$message.error('删除作业失败');
+						this.$message.error('删除教学信息失败');
 					});
 				}).catch(() => {
 					this.$message({
@@ -137,10 +132,10 @@
 			},
 			go2Publish() {
 				this.rjDialog.
-				title("发布作业").
-				width("600px").
+				title("新增教学信息").
+				width("800px").
 				top("").
-				currentView(homeworkAdd, {}).
+				currentView(teachAdd, {}).
 				closeOnClickModal(false).
 				showClose(true).
 				then((opt) => {
@@ -152,7 +147,7 @@
 </script>
 
 <style lang="scss">
-	.homework-index {
+	.teach-index {
 		.button-group {
 			margin-left: 10px;
 			margin-top: 10px;
@@ -161,8 +156,9 @@
 				width: 250px;
 			}
 		}
-		.table-content {
-			height: calc(100% - 110px);
+
+		.teach-table-content {
+			height: calc(100% - 106px);
 			overflow: auto;
 		}
 

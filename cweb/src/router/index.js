@@ -16,7 +16,7 @@ export default new Router({
 		component: resolve => require(['../components/common/Content.vue'], resolve),
 		children: [{
 			path: '/',
-			redirect: '/UserInfoManage'
+			redirect: '/index'
 		}, {
 			path: '/CourseManage',
 			component: resolve => require(['../components/page/CourseManage.vue'], resolve)
@@ -38,7 +38,12 @@ export default new Router({
 		}, {
 			path: '/HomeWorkManage',
 			component: resolve => require(['../components/page/homework/index.vue'], resolve)
+		}, {
+			path: '/TeachManage',
+			component: resolve => require(['../components/page/teach/index.vue'], resolve)
+		}, {
+			path: '/index',
+			component: resolve => require(['../components/page/statistics/index.vue'], resolve)
 		}]
-
-	}, ]
+	}]
 })

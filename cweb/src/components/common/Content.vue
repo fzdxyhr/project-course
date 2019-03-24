@@ -59,7 +59,7 @@
 	}
 
 	.content>div:last-child {
-		height: 100%;
+		height: calc(100% - 10px)
     /* overflow: auto; */
 	}
 </style>
