@@ -1,5 +1,6 @@
 package com.yhr.course.course.service;
 
+import com.yhr.course.course.vo.CourseStatisticVo;
 import com.yhr.course.course.vo.HomeworkStatisticVo;
 import com.yhr.course.course.vo.SignStatisticVo;
 
@@ -12,7 +13,10 @@ import java.util.List;
  */
 public interface StatisticsService {
 
-    List<SignStatisticVo> getSignStatistic(Integer classId);
+    List<SignStatisticVo> getSignStatistic(Integer days, Integer classId);
 
     List<HomeworkStatisticVo> getHomeworkStatistic(Integer classId);
+
+    List<CourseStatisticVo> getCourseStatistic(Integer classId);
+
 }

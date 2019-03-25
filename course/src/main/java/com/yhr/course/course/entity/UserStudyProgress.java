@@ -21,7 +21,7 @@ public class UserStudyProgress {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @ApiModelProperty("用户标识")
+    @ApiModelProperty("用户学习标识")
     private Integer id;
 
     @ApiModelProperty("课程标识")

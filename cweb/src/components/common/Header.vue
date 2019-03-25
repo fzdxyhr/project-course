@@ -55,7 +55,7 @@
 				this.rjDialog.
 				title("退出提示").
 				width("500px").
-				top("2%").
+				top("").
 				closeOnClickModal(false).
 				currentView(logout, {}).
 				sizeSelf("admin-logout-index").
