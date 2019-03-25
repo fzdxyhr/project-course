@@ -20,6 +20,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -28,6 +29,10 @@ import java.util.*;
 
 @Service
 public class TeachServiceImpl implements TeachService {
+
+    public static final SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+
+    public static String[] weekdays = new String[]{"一", "二", "三", "四", "五", "六", "日"};
 
     @Autowired
     private TeachRepository teachRepository;
@@ -63,6 +68,7 @@ public class TeachServiceImpl implements TeachService {
             for (TeachVo teach : teaches) {
                 teach.setTeachClassesName(teach.getTeachClasses() == null || classesMap.get(teach.getTeachClasses()) == null ? "" : classesMap.get(teach.getTeachClasses()).getClassName());
                 teach.setTeachContentName(getContentName(teach.getTeachContent()));
+                teach.setTeachTime(getDateContent(teach.getTeachStartTime(), teach.getTeachEndTime()));
             }
         }
         result.setTotal(total);
@@ -138,6 +144,20 @@ public class TeachServiceImpl implements TeachService {
         return chapterTreeVos;
     }
 
+    private String getDateContent(Date startDate, Date endDate) {
+        if (startDate == null) {
+            return "";
+        }
+        Calendar calendar = Calendar.getInstance();
+        calendar.setFirstDayOfWeek(Calendar.MONDAY);
+        calendar.setTime(startDate);
+        StringBuffer result = new StringBuffer();
+        result.append("第" + calendar.get(Calendar.WEEK_OF_YEAR) + "周 ");
+        result.append("周" + weekdays[calendar.get(Calendar.DAY_OF_WEEK) - 1] + "\n");
+        result.append(format.format(startDate));
+        result.append("-" + format.format(endDate));
+        return result.toString();
+    }
 
     private String getContentName(String contentIds) {
         if (StringUtils.isEmpty(contentIds)) {

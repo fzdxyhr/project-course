@@ -35,6 +35,9 @@ public class TeachVo {
     @ApiModelProperty("教学说明")
     private String teachRemark;
 
+    @ApiModelProperty("教学时间")
+    private String teachTime;
+
     @ApiModelProperty("教学开始时间")
     private Date teachStartTime;
 

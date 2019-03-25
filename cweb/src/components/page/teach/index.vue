@@ -19,7 +19,7 @@
 				</el-table-column>
 				<el-table-column prop="teach_remark" label="教学说明" min-width="120px">
 				</el-table-column>
-				<el-table-column prop="teach_start_time" label="教学开始时间" min-width="90px">
+				<el-table-column prop="teach_time" label="教学时间" min-width="90px">
 				</el-table-column>
 				<el-table-column label="操作" min-width="110px">
 					<template scope="scope">
