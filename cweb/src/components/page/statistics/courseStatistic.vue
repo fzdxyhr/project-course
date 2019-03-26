@@ -2,7 +2,7 @@
 	<div class="course-statistic-index">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix" style="padding: 4px 0;">
-        <span>班级学生学习情况统计</span>
+        <span style="font-size: 14px;font-weight: 600;">班级学生学习情况统计</span>
         <div style="float: right; margin: -8px 0">
           <span>班级: </span>
           <el-select size="small" v-model="chassId" placeholder="请选择班级" @change="selectChange">

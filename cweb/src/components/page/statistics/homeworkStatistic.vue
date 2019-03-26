@@ -2,7 +2,7 @@
 	<div class="homework-statistic-index">
 		<el-card class="box-card">
 			<div slot="header" class="clearfix" style="padding: 4px 0;">
-				<span>作业提交情况统计</span>
+				<span style="font-size: 14px;font-weight: 600;">作业提交情况统计</span>
 				<div style="float: right; margin: -8px 0">
 					<span>教师: </span>
 					<el-select size="small" :disabled="isTeacher" v-model="teacherId" placeholder="请选择教师" @change="selectChange">
