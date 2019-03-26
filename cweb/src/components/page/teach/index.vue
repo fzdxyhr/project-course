@@ -7,19 +7,19 @@
 			<el-button type="primary" @click="go2Publish">新增教学情况</el-button>
 		</div>
 		<div class="teach-table-content diyscrollbar">
-			<el-table :data="tableData" style="width: 100%">
-				<el-table-column prop="teach_classes_name" label="教学班级">
+			<el-table :data="tableData" style="width: 100%" tooltip-effect="dark">
+				<el-table-column show-overflow-tooltip prop="teach_classes_name" label="教学班级">
 				</el-table-column>
-				<el-table-column prop="teach_content_name" label="教学内容" min-width="120px">
+				<el-table-column show-overflow-tooltip prop="teach_content_name" label="教学内容" min-width="120px">
 				</el-table-column>
-				<el-table-column prop="teach_evaluation" label="教学评价" min-width="50px">
+				<el-table-column show-overflow-tooltip prop="teach_evaluation" label="教学评价" min-width="50px">
 					<template slot-scope="scope">
 						{{comment[scope.row.teach_evaluation]}}
 					</template>
 				</el-table-column>
-				<el-table-column prop="teach_remark" label="教学说明" min-width="120px">
+				<el-table-column show-overflow-tooltip prop="teach_remark" label="教学说明" min-width="120px">
 				</el-table-column>
-				<el-table-column prop="teach_time" label="教学时间" min-width="90px">
+				<el-table-column prop="teach_time" label="教学时间" min-width="90px" show-overflow-tooltip>
 				</el-table-column>
 				<el-table-column label="操作" min-width="110px">
 					<template scope="scope">
@@ -159,7 +159,8 @@
 
 		.teach-table-content {
 			height: calc(100% - 106px);
-			overflow: auto;
+			overflow-y: auto;
+      overflow-x: hidden;
 		}
 
 		.paging {

@@ -22,7 +22,7 @@
 		},
 		data() {
 			return {
-				readcrumbs: ['用户管理'],
+				readcrumbs: ['首页'],
 			}
 		},
 		methods: {

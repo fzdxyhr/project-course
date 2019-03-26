@@ -22,98 +22,99 @@
 	export default {
 		name: 'tagsList',
 		props: ['sonTagsList'],
-		components: {
-		},
+		components: {},
 		data() {
 			return {}
 		},
-		methods:{
-			getModeTags(){
+		methods: {
+			getModeTags() {
 				var top = this.$el.scrollHeight - this.$el.clientHeight - this.$el.scrollTop
-				if(!top) {
-					this.$emit('sonGetTags',10,'');
+				if (!top) {
+					this.$emit('sonGetTags', 10, '');
 				}
 
 			},
-			amendTag(tag){
-				this.$emit('sonAmendTag',tag);
+			amendTag(tag) {
+				this.$emit('sonAmendTag', tag);
 			},
-			delTag(tag){
-				this.$emit('sonDelTag',tag);
+			delTag(tag) {
+				this.$emit('sonDelTag', tag);
 			},
 		}
 	}
 </script>
 
-<style>
+<style lang="scss">
 	.tags-list {
 		position: relative;
 		padding: 5px 10px;
 		overflow: auto;
 		height: calc(100% - 66px);
-	}
 
-	.clearfix:before,
-	.clearfix:after {
-		display: table;
-		content: "";
-	}
 
-	.clearfix:after {
-		clear: both;
-	}
+		.clearfix:before,
+		.clearfix:after {
+			display: table;
+			content: "";
+		}
 
-	.box-card {
-		width: 250px;
-		margin: 5px;
-		float: left;
-	}
+		.clearfix:after {
+			clear: both;
+		}
 
-	.box-card .el-card__header {
-		padding: 10px;
-	}
+		.box-card {
+			width: 250px;
+			margin: 5px;
+			float: left;
+		}
 
-	.card-top {}
+		.box-card .el-card__header {
+			padding: 10px;
+		}
 
-	.card-top .el-button {
-		float: right;
-	}
+		.card-top {}
 
-	.card-top .el-button {
-		margin-left: 5px;
-		padding: 7px;
-	}
+		.card-top .el-button {
+			float: right;
+		}
 
-	.tag {
-		display: inline-block;
-		font-size: 13px;
-		border: 1px solid #20A0FF;
-		padding: 0px 10px;
-		line-height: 24px;
-		border-radius: 40px;
-		cursor: pointer;
-		color: #1D8CE0;
-		max-width: 130px;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
+		.card-top .el-button {
+			margin-left: 5px;
+			padding: 7px;
+		}
 
-	.tag:hover {
-		background-color: #eee;
-	}
+		.tag {
+			display: inline-block;
+			font-size: 13px;
+			border: 1px solid #20A0FF;
+			padding: 0px 10px;
+			line-height: 24px;
+			border-radius: 40px;
+			cursor: pointer;
+			color: #1D8CE0;
+			max-width: 130px;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+		}
 
-	.t-describe {
-		height: 64px;
-		font-size: 13px;
-		line-height: 22px;
-		/*仅仅webkit内核(移动端多数为webkit内核)*/
-		display: -webkit-box !important;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		word-break: break-all;
-		-webkit-box-orient: vertical;
-		-webkit-line-clamp: 3;
-		/*行数*/
+		.tag:hover {
+			background-color: #eee;
+		}
+
+		.t-describe {
+			height: 64px;
+			font-size: 13px;
+			line-height: 22px;
+			/*仅仅webkit内核(移动端多数为webkit内核)*/
+			display: -webkit-box !important;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			word-break: break-all;
+			-webkit-box-orient: vertical;
+			-webkit-line-clamp: 3;
+			/*行数*/
+		}
+
 	}
 </style>
