@@ -7,7 +7,7 @@
 		<!-- <el-menu-item index="PermissionsManage">权限管理</el-menu-item> -->
 		<!-- </el-submenu> -->
 		<el-menu-item index="index">
-			<i class="course-icon-user-manage"></i>首页
+			<i class="course-icon-index"></i>首页
 		</el-menu-item>
 		<el-menu-item index="UserInfoManage">
 			<i class="course-icon-user-manage"></i>用户管理
@@ -28,7 +28,7 @@
 			<i class="course-icon-homework-manage"></i>作业管理
 		</el-menu-item>
 		<el-menu-item index="TeachManage">
-			<i class="course-icon-homework-manage"></i>教学管理
+			<i class="course-icon-teach-manage"></i>教学管理
 		</el-menu-item>
 	</el-menu>
 </template>
