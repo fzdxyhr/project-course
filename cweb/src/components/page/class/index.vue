@@ -233,6 +233,9 @@
 
 		.table-content {
 			margin-top: 10px;
+      height: calc(100% - 120px);
+      overflow-y: auto;
+      overflow-x: hidden;
 		}
 
 		.paging {

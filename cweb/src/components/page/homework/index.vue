@@ -163,7 +163,8 @@
 		}
 		.table-content {
 			height: calc(100% - 110px);
-			overflow: auto;
+			overflow-y: auto;
+      overflow-x: hidden;
 		}
 
 		.paging {

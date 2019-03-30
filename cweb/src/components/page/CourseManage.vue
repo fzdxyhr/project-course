@@ -6,7 +6,7 @@
 			 :child-courses-list='coursesList' @sonDelCourse="fatherDelCourse" @childGetCourses="getCourses" @childAmendCourse="fatherAmendCourse"></v-courses-list>
 		</div>
 		<el-dialog :title="dialog.title" :visible.sync="dialog.control" size="small">
-			<el-form ref="dialog.form" :model="dialog.form" label-width="100px">
+			<el-form ref="dialog.form" :model="dialog.form" label-width="100px" :inline="true">
 				<el-form-item label="课程名">
 					<el-input v-model="dialog.form.course_name"></el-input>
 				</el-form-item>
@@ -28,12 +28,15 @@
 				<el-form-item label="最大可选人数">
 					<el-input v-model="dialog.form.max_student"></el-input>
 				</el-form-item> -->
+        <div class="clearfix"></div>
 				<el-form-item label="课程简介">
 					<el-input type="textarea" :rows="3" v-model="dialog.form.course_desc"></el-input>
 				</el-form-item>
+        <div class="clearfix"></div>
 				<el-form-item label="课程提示">
 					<el-input type="textarea" :rows="3" v-model="dialog.form.course_tip"></el-input>
 				</el-form-item>
+        <div class="clearfix"></div>
 				<el-form-item label="课程图片">
 					<el-upload name="editormd-image-file" class="avatar-uploader" :action="host + `/v1/courses/images/upload`"
 					 :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">

@@ -231,7 +231,8 @@
 		}
 		.user-info {
 			height: calc(100% - 120px);
-			overflow: auto;
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
 
 		.paging {

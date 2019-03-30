@@ -73,7 +73,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User create(User user) {
+    public User create(User user) throws Exception {
+        User tempUser = userRepository.findByAccount(user.getAccount());
+        if (tempUser != null) {
+            throw new ServiceException("账号【" + user.getAccount() + "】已存在");
+        }
         if (StringUtils.isEmpty(user.getPassword())) {
             user.setPassword(MD5Utils.MD5Encode("123456", "utf8"));
         }

@@ -75,7 +75,9 @@
 							name: "filePlay",
 							query: {
 								type: type,
-								path: encodeURIComponent(firstChapter.chapter_file_path)
+								path: encodeURIComponent(firstChapter.chapter_file_path),
+                chapterName: encodeURIComponent(firstChapter.chapter_name),
+                courseId: this.courseId
 							}
 						})
 					}
@@ -109,7 +111,9 @@
 						name: "filePlay",
 						query: {
 							type: type,
-							path: encodeURIComponent(firstChapter.chapter_file_path)
+							path: encodeURIComponent(firstChapter.chapter_file_path),
+              chapterName: encodeURIComponent(firstChapter.chapter_name),
+              courseId: this.courseId
 						}
 					})
 				}

@@ -17,7 +17,7 @@ public interface UserService {
 
     PagerHelper<User> list(String key, String role, Integer pageNo, Integer pageSize);
 
-    User create(User user);
+    User create(User user) throws Exception;
 
     User update(Integer id, User user) throws Exception;
 

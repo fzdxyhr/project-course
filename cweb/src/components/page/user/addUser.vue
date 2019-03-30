@@ -52,6 +52,14 @@
 </template>
 
 <script>
+	var validatePhone = (rule, value, callback) => {
+		var pattern = new RegExp("^(0|1)(3|4|5|6|7|8|9)[0-9]{9}$");
+		if (value && !pattern.test(value)) {
+			callback(new Error('请输入正确的手机号码'));
+		}
+		callback();
+	};
+
 	export default {
 		data() {
 			return {
@@ -90,6 +98,9 @@
 					telephone: [{
 						required: true,
 						message: '请输入手机号码',
+						trigger: 'change'
+					}, {
+						validator: validatePhone,
 						trigger: 'change'
 					}],
 					sex: [{
@@ -179,7 +190,6 @@
 				this.$refs['form'].validate((valid) => {
 					if (valid) {
 						if (this.form.id) {
-							this.form.password = this.$md5(this.form.password)
 							this.$axios.put("/v1/users/" + this.form.id, this.form).then((response) => {
 								let message = response.data;
 								this.$message.success('修改用户成功');
@@ -188,12 +198,13 @@
 								this.$message.error('修改用户失败');
 							});
 						} else {
+              this.form.password = this.$md5(this.form.password)
 							this.$axios.post("/v1/users", this.form).then((response) => {
 								let message = response.data;
 								this.$message.success('新增用户成功');
 								this.closeRjDialog();
 							}, (response) => {
-								this.$message.error('新增用户失败');
+								this.$message.error(response.response.data.message || '新增用户失败');
 							});
 						}
 					} else {
