@@ -198,7 +198,6 @@
 								this.$message.error('修改用户失败');
 							});
 						} else {
-              this.form.password = this.$md5(this.form.password)
 							this.$axios.post("/v1/users", this.form).then((response) => {
 								let message = response.data;
 								this.$message.success('新增用户成功');

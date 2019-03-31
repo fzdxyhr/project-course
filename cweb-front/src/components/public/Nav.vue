@@ -29,7 +29,12 @@
 						</span>
 						<el-dropdown-menu slot="dropdown">
 							<el-dropdown-item v-if="userName">
-								<div @click="go2Page('myStudy')">
+								<div @click="go2UserInfoPage('myStudy')">
+									<i class="fa fa-user fa-fw"></i> 基本信息
+								</div>
+							</el-dropdown-item>
+							<el-dropdown-item v-if="userName">
+								<div @click="go2MyCoursePage('myStudy')">
 									<i class="fa fa-user fa-fw"></i> 我的学习
 								</div>
 							</el-dropdown-item>
@@ -86,6 +91,16 @@
 				console.log(ev);
 			},
 			go2Page(url) {
+				this.$router.push({
+					name: url
+				});
+			},
+			go2UserInfoPage(url) {
+				this.$router.push({
+					name: 'userInfo',
+				});
+			},
+			go2MyCoursePage(url) {
 				this.$router.push({
 					name: url
 				});

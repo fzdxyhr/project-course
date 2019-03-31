@@ -4,9 +4,9 @@
 			<span>班级名称: </span>
 			<el-input v-model="key" placeholder="请输入班级名称"></el-input>
 			<el-button type="primary" icon="el-icon-search" @click="findClasses">查询</el-button>
-			<el-button type="primary" icon="el-icon-plus" @click="go2Add">添加班级</el-button>
+			<el-button v-if="role === 'admin'" type="primary" icon="el-icon-plus" @click="go2Add">添加班级</el-button>
 		</div>
-		<div class="table-content">
+		<div class="table-content diyscrollbar">
 			<el-table :data="tableData" style="width: 100%">
 				<el-table-column show-overflow-tooltip prop="class_name" label="班级名称" min-width="50px">
 				</el-table-column>
@@ -26,7 +26,7 @@
 				<el-table-column label="操作" min-width="200px">
 					<template scope="scope">
 						<el-button icon="el-icon-setting" type="text" @click="go2SetMonitor(scope.row)">设置班长</el-button>
-            <el-button icon="el-icon-setting" type="text" @click="go2SetSignTime(scope.row)">设置签到时间</el-button>
+						<el-button icon="el-icon-setting" type="text" @click="go2SetSignTime(scope.row)">设置签到时间</el-button>
 						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="handleImport(scope.row)">导入学生</el-button>
 						<el-button icon="el-icon-view" style="color: #67c23a;" type="text" @click="go2ViewStudent(scope.row)">查看学生</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="handleUpdate(scope.row)">修改</el-button>
@@ -48,7 +48,7 @@
 	import rjDialog from '@components/common/dialog.vue'
 	import classesAdd from '@components/page/class/classesAdd.vue'
 	import setMonitor from '@components/page/class/setMonitor.vue'
-  import setSignTime from '@components/page/class/setSignTime.vue'
+	import setSignTime from '@components/page/class/setSignTime.vue'
 	import studentList from '@components/page/class/studentList.vue'
 	import UploadImportData from '@components/common/UploadImportData.vue'
 
@@ -59,7 +59,7 @@
 			setMonitor,
 			studentList,
 			UploadImportData,
-      setSignTime
+			setSignTime
 		},
 		data() {
 			return {
@@ -67,12 +67,16 @@
 				tableData: [],
 				page_no: 1,
 				page_size: 10,
-				total: 0
+				total: 0,
+				role:""
 			}
 		},
 		mounted() {
 			this.findClasses();
-
+			const user = JSON.parse(localStorage.getItem("USER"));
+			if (user && user.role) {
+				this.role = user.role;
+			}
 			// 			if (window.addEventListener) {
 			// 				window.addEventListener('message', function(e) {
 			// 					console.log("tttttttttttttttttt",e)
@@ -146,20 +150,20 @@
 					this.findClasses();
 				}).show();
 			},
-      go2SetSignTime(row){
-        this.rjDialog.
-        title("设置签到时间").
-        width("600px").
-        top("").
-        currentView(setSignTime, {
-        	data: row
-        }).
-        closeOnClickModal(false).
-        showClose(true).
-        then((opt) => {
-        	this.findClasses();
-        }).show();
-      },
+			go2SetSignTime(row) {
+				this.rjDialog.
+				title("设置签到时间").
+				width("600px").
+				top("").
+				currentView(setSignTime, {
+					data: row
+				}).
+				closeOnClickModal(false).
+				showClose(true).
+				then((opt) => {
+					this.findClasses();
+				}).show();
+			},
 			handleImport(row) {
 				this.rjDialog.
 				title("导入学生").
@@ -233,9 +237,9 @@
 
 		.table-content {
 			margin-top: 10px;
-      height: calc(100% - 120px);
-      overflow-y: auto;
-      overflow-x: hidden;
+			height: calc(100% - 120px);
+			overflow-y: auto;
+			overflow-x: hidden;
 		}
 
 		.paging {

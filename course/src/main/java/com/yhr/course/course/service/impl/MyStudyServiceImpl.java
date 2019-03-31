@@ -39,9 +39,9 @@ public class MyStudyServiceImpl implements MyStudyService {
     @Override
     public PagerHelper<CourseVo> findMyCourse(Integer pageNo, Integer pageSize) {
         PagerHelper<CourseVo> result = new PagerHelper<>();
-        StringBuffer sql = new StringBuffer("select a.* from s_course a,s_course_student b where 1=1 and a.id = b.course_id");
+        StringBuffer sql = new StringBuffer("select a.* from s_course a,s_user_study_progress b where 1=1 and a.id = b.course_id");
         List<Object> params = new ArrayList<>();
-        sql.append(" and b.student_id = ?");
+        sql.append(" and b.user_id = ?");
         params.add(GaeaContext.getUserId());
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");

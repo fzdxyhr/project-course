@@ -28,12 +28,20 @@ public class CourseController {
     @Autowired
     private CourseService courseService;
 
+    @RequestMapping(value = "/courses/front", method = RequestMethod.GET)
+    public PagerHelper<CourseVo> listFront(@RequestParam(value = "key", required = false) String key
+            , @RequestParam(value = "tag_id", required = false) Integer tagId
+            , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
+            , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) throws Exception {
+        return courseService.list(key, tagId, true, pageNo, pageSize);
+    }
+
     @RequestMapping(value = "/courses", method = RequestMethod.GET)
     public PagerHelper<CourseVo> list(@RequestParam(value = "key", required = false) String key
             , @RequestParam(value = "tag_id", required = false) Integer tagId
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
-            , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) {
-        return courseService.list(key, tagId, pageNo, pageSize);
+            , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) throws Exception {
+        return courseService.list(key, tagId, false, pageNo, pageSize);
     }
 
     @RequestMapping(value = "/courses", method = RequestMethod.POST)

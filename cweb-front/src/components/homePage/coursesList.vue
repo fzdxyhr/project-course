@@ -58,7 +58,7 @@
 					spinner: 'el-icon-loading',
 					background: 'rgba(0, 0, 0, 0.7)'
 				});
-				this.$axios.get("/v1/courses?key=" + this.key + "&page_no=" + this.page + "&page_size=" + this.rows + "&tag_id=" +
+				this.$axios.get("/v1/courses/front?key=" + this.key + "&page_no=" + this.page + "&page_size=" + this.rows + "&tag_id=" +
 					this.tagId).then((response) => {
 					loading.close();
 					let message = response.data;

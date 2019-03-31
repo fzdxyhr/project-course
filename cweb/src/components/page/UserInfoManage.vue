@@ -1,6 +1,8 @@
 <template>
 	<div class="user-info-index">
 		<div class="top-content">
+			<el-input v-model="key" placeholder="请输入用户名或者账号"></el-input>
+			<el-button type="primary" @click="findUsers" icon="el-icon-search">查询</el-button>
 			<el-button v-if="role ==='admin'" type="primary" @click="go2Add" icon="el-icon-plus">新增用户</el-button>
 			<el-button v-if="role ==='teacher'" type="primary" @click="go2Add" icon="el-icon-plus">新增学生</el-button>
 			<!-- <el-button type="primary" @click="go2Import">导入用户</el-button> -->
@@ -49,8 +51,7 @@
 		</div>
 		<div class="paging">
 			<el-pagination @size-change="handleSizeChange" @current-change="handleCurrentChange" :current-page="page.page_no"
-			 :page-sizes="[10, 20, 50, 100]" :page-size="page.page_size" layout="total, sizes, prev, pager, next, jumper"
-			 :total="page.total">
+			 :page-sizes="[10, 20, 50, 100]" :page-size="page.page_size" layout="total, sizes, prev, pager, next, jumper" :total="page.total">
 			</el-pagination>
 		</div>
 		<rjDialog></rjDialog>
@@ -77,7 +78,8 @@
 					page_no: 1,
 					page_size: 10,
 					total: 0
-				}
+				},
+				key: ""
 			}
 		},
 		mounted() {
@@ -103,15 +105,16 @@
 					spinner: 'el-icon-loading',
 					background: 'rgba(0, 0, 0, 0.7)'
 				});
-				this.$axios.get("/v1/users?page_no=" + this.page.page_no + "&page_size=" + this.page.page_size).then((response) => {
-					loading.close()
-					let message = response.data;
-					this.tableData = message.items;
-					this.page.total = message.total;
-				}, (response) => {
-					loading.close()
-					this.$message.error('获取用户失败');
-				});
+				this.$axios.get("/v1/users?page_no=" + this.page.page_no + "&page_size=" + this.page.page_size + "&key=" + this.key)
+					.then((response) => {
+						loading.close()
+						let message = response.data;
+						this.tableData = message.items;
+						this.page.total = message.total;
+					}, (response) => {
+						loading.close()
+						this.$message.error('获取用户失败');
+					});
 			},
 			handleUpdate(row) {
 				this.rjDialog.
@@ -159,35 +162,35 @@
 					this.$message.error('请先选择用户');
 					return;
 				}
-        this.$confirm('确认删除选中用户吗', '提示', {
-        	confirmButtonText: '确定',
-        	cancelButtonText: '取消',
-        	type: 'warning'
-        }).then(() => {
-        	let ids = [];
-        	this.selectedData.forEach((item) => {
-        		ids.push(item.id);
-        	})
-          const loading = this.$loading({
-          	lock: true,
-          	text: '加载中...',
-          	spinner: 'el-icon-loading',
-          	background: 'rgba(0, 0, 0, 0.7)'
-          });
-        	this.$axios.delete("/v1/users/batch?ids=" + ids).then((response) => {
-        		loading.close();
-            this.$message.success('批量删除用户成功');
-            this.findUsers();
-        	}, (response) => {
-        		loading.close();
-        		this.$message.error('批量删除用户失败');
-        	});
-        }).catch(() => {
-        	this.$message({
-        		type: 'info',
-        		message: '已取消删除'
-        	});
-        });
+				this.$confirm('确认删除选中用户吗', '提示', {
+					confirmButtonText: '确定',
+					cancelButtonText: '取消',
+					type: 'warning'
+				}).then(() => {
+					let ids = [];
+					this.selectedData.forEach((item) => {
+						ids.push(item.id);
+					})
+					const loading = this.$loading({
+						lock: true,
+						text: '加载中...',
+						spinner: 'el-icon-loading',
+						background: 'rgba(0, 0, 0, 0.7)'
+					});
+					this.$axios.delete("/v1/users/batch?ids=" + ids).then((response) => {
+						loading.close();
+						this.$message.success('批量删除用户成功');
+						this.findUsers();
+					}, (response) => {
+						loading.close();
+						this.$message.error('批量删除用户失败');
+					});
+				}).catch(() => {
+					this.$message({
+						type: 'info',
+						message: '已取消删除'
+					});
+				});
 			},
 			handleSizeChange(val) {
 				this.page.page_size = val;
@@ -229,6 +232,10 @@
 			margin: 5px;
 			width: calc(100% - 10px);
 		}
+		.top-content .el-input {
+			width: 240px;
+		}
+
 		.user-info {
 			height: calc(100% - 120px);
 			overflow-y: auto;

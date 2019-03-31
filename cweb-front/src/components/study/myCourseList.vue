@@ -16,7 +16,7 @@
 		</div>
 		<div v-if="courseslist.length > 0" class="getMode">
 			<el-button type="primary" v-if="!noMoreData" @click="getModeCourse" icon="el-icon-arrow-down" :loading="loadMoreCourse">加载更多</el-button>
-			<div v-if="noMoreData" style="font-size: 14px;color: #93999f;">暂无更多数据了~~~</div>
+			<div v-if="noMoreData" style="font-size: 14px;color: #93999f;width: 130px;">暂无更多数据了~~~</div>
 		</div>
 	</div>
 </template>
@@ -50,12 +50,12 @@
 					message.items.forEach((c) => {
 						this.courseslist.push(c)
 					})
-					if (message.items.length === 0) {
+					if (message.items.length === 0 || message.items.length == message.total) {
 						this.noMoreData = true;
 					}
 					this.loadMoreCourse = false;
 				}, (response) => {
-          loading.close
+					loading.close
 					this.$message.error('获取课程失败');
 				});
 			},

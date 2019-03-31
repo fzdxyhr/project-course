@@ -25,7 +25,7 @@
 									<el-input v-model="loginData.email" placeholder="邮箱" auto-complete="off"></el-input>
 								</el-form-item>-->
 								<el-form-item prop="user_name">
-									<el-input type="text" placeholder="用户名" v-model="registerData.user_name" auto-complete="off"></el-input>
+									<el-input type="text" placeholder="账号" v-model="registerData.user_name" auto-complete="off"></el-input>
 								</el-form-item>
 								<el-form-item prop="password">
 									<el-input type="password" placeholder="密码" v-model="registerData.password" auto-complete="off"></el-input>
@@ -46,7 +46,7 @@
 						<div>
 							<el-form :model="loginData" :rules="loginRules" ref="loginData">
 								<el-form-item prop="user_name">
-									<el-input type="text" placeholder="用户名" v-model="loginData.user_name" auto-complete="off"></el-input>
+									<el-input type="text" placeholder="账号" v-model="loginData.user_name" auto-complete="off"></el-input>
 								</el-form-item>
 								<el-form-item prop="password">
 									<el-input type="password" placeholder="密码" v-model="loginData.password" auto-complete="off"

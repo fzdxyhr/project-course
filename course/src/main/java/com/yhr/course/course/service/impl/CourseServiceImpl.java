@@ -3,17 +3,16 @@ package com.yhr.course.course.service.impl;
 import com.yhr.course.course.config.AliyunFileHandle;
 import com.yhr.course.course.config.GaeaContext;
 import com.yhr.course.course.config.WhiteListCache;
+import com.yhr.course.course.contants.RoleEnum;
 import com.yhr.course.course.dao.CourseChapterRepository;
 import com.yhr.course.course.dao.CourseRepository;
 import com.yhr.course.course.dao.CourseStudentRepository;
 import com.yhr.course.course.dao.UserStudyProgressRepository;
-import com.yhr.course.course.entity.Course;
-import com.yhr.course.course.entity.CourseChapter;
-import com.yhr.course.course.entity.CourseStudent;
-import com.yhr.course.course.entity.UserStudyProgress;
+import com.yhr.course.course.entity.*;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.CourseService;
 import com.yhr.course.course.service.TagService;
+import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.CourseChapterVo;
 import com.yhr.course.course.vo.CourseVo;
@@ -43,7 +42,7 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
-    private CourseStudentRepository courseStudentRepository;
+    private UserService userService;
     @Autowired
     private CourseChapterRepository courseChapterRepository;
     @Autowired
@@ -54,7 +53,7 @@ public class CourseServiceImpl implements CourseService {
     private TagService tagService;
 
     @Override
-    public PagerHelper<CourseVo> list(String key, Integer tagId, Integer pageNo, Integer pageSize) {
+    public PagerHelper<CourseVo> list(String key, Integer tagId, boolean isFront, Integer pageNo, Integer pageSize) throws Exception {
         PagerHelper<CourseVo> result = new PagerHelper<>();
         StringBuffer sql = new StringBuffer("select * from s_course where 1=1");
         List<Object> params = new ArrayList<>();
@@ -65,6 +64,15 @@ public class CourseServiceImpl implements CourseService {
         if (tagId != null) {
             sql.append(" and tag_id like ?");
             params.add("%" + tagId + "%");
+        }
+
+        if (!isFront) {
+            //判断是否为管理员,管理员不进行过滤
+            User user = userService.get(GaeaContext.getAdminUserId());
+            if (!RoleEnum.ADMIN.getValue().equals(user.getRole())) {
+                sql.append(" and teacher_id = ?");
+                params.add(GaeaContext.getAdminUserId());
+            }
         }
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");

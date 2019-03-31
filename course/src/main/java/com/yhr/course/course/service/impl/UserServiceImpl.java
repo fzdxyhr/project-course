@@ -13,6 +13,7 @@ import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.ExcelUtils;
 import com.yhr.course.course.utils.MD5Utils;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.UserPwdVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -46,7 +47,8 @@ public class UserServiceImpl implements UserService {
         StringBuffer sql = new StringBuffer("select * from s_user where 1=1");
         List<Object> params = new ArrayList<>();
         if (StringUtils.isNotEmpty(key)) {
-            sql.append(" and user_name like ?");
+            sql.append(" and (user_name like ? or account like ?)");
+            params.add("%" + key + "%");
             params.add("%" + key + "%");
         }
         if (StringUtils.isNotEmpty(role)) {
@@ -100,10 +102,23 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updatePwd(Integer id, UserPwdVo userPwdVo) throws Exception {
+        User tempUser = userRepository.getOne(id);
+        if (tempUser == null) {
+            throw new ServiceException("不存在【" + id + "】对应的用户");
+        }
+        if (!tempUser.getPassword().equals(userPwdVo.getOldPassword())) {
+            throw new ServiceException("原密码不对，请重新输入");
+        }
+        tempUser.setPassword(userPwdVo.getNewPassword());
+        return userRepository.save(tempUser);
+    }
+
+    @Override
     public void delete(Integer id) throws Exception {
         User tempTag = userRepository.getOne(id);
         if (tempTag == null) {
-            throw new ServiceException("不存在【" + id + "】对应的标签");
+            throw new ServiceException("不存在【" + id + "】对应的用户");
         }
         userRepository.delete(tempTag);
     }
@@ -134,7 +149,7 @@ public class UserServiceImpl implements UserService {
         Map<String, String> operationMap = new HashMap<String, String>();
         Map<String, Object> valueMap = new HashMap<String, Object>();
         String fileName = "学生模板";
-        String[] headers = new String[]{"用户名称", "账号", "性别", "身份证", "手机号码"};
+        String[] headers = new String[]{"用户名称", "账号", "性别", "手机号码"};
         exportExcelUtil.exportExcel(fileName, headers, new ArrayList<>(), "yyyy-MM-dd HH:mm:ss", fileName, response, operationMap, valueMap);
     }
 
@@ -151,8 +166,8 @@ public class UserServiceImpl implements UserService {
             user.setAccount(datas.get(i).length > 1 ? datas.get(i)[1].trim().replaceAll(",", "") : null);
             user.setPassword(MD5Utils.MD5Encode("123456", "utf8"));
             user.setSex(datas.get(i).length > 2 ? Integer.parseInt(sexMap.get(datas.get(i)[2].trim()).toString()) : null);
-            user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim().replaceAll(",", "") : null);
-            user.setTelephone(datas.get(i).length > 4 ? datas.get(i)[4].trim().replaceAll(",", "") : null);
+//            user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim().replaceAll(",", "") : null);
+            user.setTelephone(datas.get(i).length > 3 ? datas.get(i)[3].trim().replaceAll(",", "") : null);
             user.setRole(RoleEnum.STUDENT.getValue());
             user.setClassId(classId);
             user.setIsAdmin(0);

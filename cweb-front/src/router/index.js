@@ -9,6 +9,7 @@ import filePlay from '@components/course/filePlay'
 import signIndex from '@components/sign/index'
 import homework from '@components/homework/index'
 import testFrame from '@components/course/testFrame'
+import userInfo from '@components/user/index.vue'
 
 Vue.use(Router)
 
@@ -58,9 +59,9 @@ export default new Router({
 				name: "homework",
 				component: homework,
 			},{
-				path: 'testFrame',
-				name: "testFrame",
-				component: testFrame,
+				path: 'userInfo',
+				name: "userInfo",
+				component: userInfo,
 			}]
 		}
 	]

@@ -3,6 +3,7 @@ package com.yhr.course.course.controller;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.service.UserService;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.UserPwdVo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,11 @@ public class UserController {
     @RequestMapping(value = "/users/{id}", method = RequestMethod.PUT)
     public User update(@PathVariable("id") Integer id, @RequestBody User user) throws Exception {
         return userService.update(id, user);
+    }
+
+    @RequestMapping(value = "/users/{id}/pwd", method = RequestMethod.PUT)
+    public User updatePwd(@PathVariable("id") Integer id, @RequestBody UserPwdVo userPwdVo) throws Exception {
+        return userService.updatePwd(id, userPwdVo);
     }
 
     @RequestMapping(value = "/users/{id}", method = RequestMethod.DELETE)

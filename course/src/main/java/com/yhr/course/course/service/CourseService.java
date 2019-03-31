@@ -16,7 +16,7 @@ import java.util.List;
  */
 public interface CourseService {
 
-    PagerHelper<CourseVo> list(String key, Integer tagId, Integer pageNo, Integer pageSize);
+    PagerHelper<CourseVo> list(String key, Integer tagId, boolean isFront, Integer pageNo, Integer pageSize) throws Exception;
 
     Course create(Course course);
 

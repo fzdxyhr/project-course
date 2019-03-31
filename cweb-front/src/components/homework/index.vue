@@ -1,23 +1,27 @@
 <template>
 	<div class="homework-index">
 		<div class="homework-content">
-			<el-card class="box-card" v-for="item in homeworks">
+			<el-card v-if="homeworks.length > 0" class="box-card" v-for="item in homeworks">
 				<div slot="header" class="clearfix">
 					<span>{{item.homework_title}}</span>
 					<el-button v-if="!item.submit_homework_file_path" style="float: right; padding: 3px 0 3px 10px" type="text" @click="go2Submit(item.id)">上传作业</el-button>
-          <el-button v-if="item.submit_homework_file_path" :disabled="item.score" style="float: right; padding: 3px 0 3px 10px" type="text" @click="go2Update(item)">修改上传作业</el-button>
+					<el-button v-if="item.submit_homework_file_path" :disabled="item.score" style="float: right; padding: 3px 0 3px 10px"
+					 type="text" @click="go2Update(item)">修改上传作业</el-button>
 					<el-button style="float: right; padding: 3px 0" type="text" @click="go2Download(item.homework_file_path)">下载作业</el-button>
 				</div>
 				<div class="text item">
 					{{item.homework_desc}}
 				</div>
-        <div v-if="item.score" style="float: right;position: absolute;right: 0;bottom: 0;margin-bottom: 15px;margin-right: 15px;">
-        	评分: {{item.score}}
-        </div>
-        <div v-if="!item.score" style="float: right;position: absolute;right: 0;bottom: 0;margin-bottom: 15px;margin-right: 15px;">
-        	暂无评分,请提交作业
-        </div>
+				<div v-if="item.score" style="float: right;position: absolute;right: 0;bottom: 0;margin-bottom: 15px;margin-right: 15px;">
+					评分: {{item.score}}
+				</div>
+				<div v-if="!item.score" style="float: right;position: absolute;right: 0;bottom: 0;margin-bottom: 15px;margin-right: 15px;">
+					暂无评分,请提交作业
+				</div>
 			</el-card>
+			<div v-if="homeworks.length == 0" style="text-align: center;padding-top: 15%;color: #787d82;">
+				暂无老师下发作业~~~
+			</div>
 		</div>
 		<rjDialog></rjDialog>
 	</div>
@@ -26,7 +30,7 @@
 <script>
 	import rjDialog from '@components/common/dialog.vue'
 	import homeworkSubmit from '@components/homework/homeworkSubmit.vue'
-	
+
 	export default {
 		components: {
 			rjDialog,
@@ -45,26 +49,27 @@
 		},
 		methods: {
 			go2Query() {
-        const loading = this.$loading({
-        	lock: true,
-        	text: '加载中...',
-        	spinner: 'el-icon-loading',
-        	background: 'rgba(0, 0, 0, 0.7)'
-        });
-				this.$axios.get("/v1/homeworks/front?key=" + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then(
-					(response) => {
-            loading.close();
-						let message = response.data;
-						this.homeworks = message.items;
-					}, (response) => {
-            loading.close();
-						this.$message.error('获取作业失败');
-					});
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
+				this.$axios.get("/v1/homeworks/front?key=" + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size)
+					.then(
+						(response) => {
+							loading.close();
+							let message = response.data;
+							this.homeworks = message.items;
+						}, (response) => {
+							loading.close();
+							this.$message.error('获取作业失败');
+						});
 			},
 			go2Download(path) {
 				window.open(path);
 			},
-			go2Submit(id){
+			go2Submit(id) {
 				this.rjDialog.
 				title("上传作业").
 				width("600px").
@@ -78,21 +83,21 @@
 					this.go2Query();
 				}).show();
 			},
-      go2Update(item){
-      	this.rjDialog.
-      	title("修改上传作业").
-      	width("600px").
-      	top("").
-      	currentView(homeworkSubmit, {
-      		data: item,
-          id: item.id
-      	}).
-      	closeOnClickModal(false).
-      	showClose(true).
-      	then((opt) => {
-      		this.go2Query();
-      	}).show();
-      }
+			go2Update(item) {
+				this.rjDialog.
+				title("修改上传作业").
+				width("600px").
+				top("").
+				currentView(homeworkSubmit, {
+					data: item,
+					id: item.id
+				}).
+				closeOnClickModal(false).
+				showClose(true).
+				then((opt) => {
+					this.go2Query();
+				}).show();
+			}
 		}
 	}
 </script>
@@ -107,14 +112,14 @@
 
 		.box-card {
 			display: inline-block;
-      position: relative;
+			position: relative;
 			width: 500px;
 			height: 200px;
 			margin: 20px;
-      
-      .el-card__body {
-        height: 120px;
-      }
+
+			.el-card__body {
+				height: 120px;
+			}
 		}
 
 		.text {

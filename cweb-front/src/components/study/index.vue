@@ -7,10 +7,10 @@
 			<div style="text-align: center;margin-top: 30px;">
 				<span style="font-size: 15px;font-weight: 600;">{{userName}}</span>
 			</div>
-			<div style="text-align: center;margin-top: 10px;">
+			<!-- <div style="text-align: center;margin-top: 10px;">
 				<span style="font-size: 14px;">学习时长:{{studyTime}}h</span>
 				<span style="font-size: 14px;margin-left: 15px;">参与课程:{{courseTotal}}</span>
-			</div>
+			</div> -->
 			<div class="button-info">
 				<ul class="ul-body">
 					<li>
@@ -38,6 +38,7 @@
 			<myCourseList v-if="selectCurrent == 'myCourse'"></myCourseList>
 			<myCommentList v-if="selectCurrent == 'myComment'"></myCommentList>
 			<myQuestionList v-if="selectCurrent == 'myQuestion'"></myQuestionList>
+			<userInfo v-if="selectCurrent == 'userInfo'"></userInfo>
 		</div>
 	</div>
 </template>
@@ -46,12 +47,14 @@
 	import myCourseList from './myCourseList.vue'
 	import myCommentList from './myCommentList.vue'
 	import myQuestionList from './myQuestionList.vue'
+	import userInfo from '@components/user/index.vue'
 
 	export default {
 		components: {
 			myCourseList,
 			myCommentList,
-			myQuestionList
+			myQuestionList,
+			userInfo
 		},
 		data() {
 			return {
@@ -63,7 +66,7 @@
 				selectCurrent: "myCourse"
 			}
 		},
-		mounted(){
+		created(){
 			let user = JSON.parse(localStorage.getItem("WEBFRONT_USER"));
 			this.userName = user.user_name;
 			this.photoPath = user.photo_path;

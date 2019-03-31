@@ -3,6 +3,7 @@ package com.yhr.course.course.service;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.entity.User;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.UserPwdVo;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +21,8 @@ public interface UserService {
     User create(User user) throws Exception;
 
     User update(Integer id, User user) throws Exception;
+
+    User updatePwd(Integer id, UserPwdVo userPwdVo) throws Exception;
 
     void delete(Integer id) throws Exception;
 

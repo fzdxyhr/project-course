@@ -16,9 +16,9 @@
 					</el-option>
 				</el-select>
 			</el-form-item>
-			<el-form-item label="班级人数" prop="max_student">
+			<!-- <el-form-item label="班级人数" prop="max_student">
 				<el-input v-model="form.max_student"></el-input>
-			</el-form-item>
+			</el-form-item> -->
 		</el-form>
 		<div style="text-align: right;">
 			<el-button v-if="!form.id" type="primary" @click="go2Add">创建</el-button>
