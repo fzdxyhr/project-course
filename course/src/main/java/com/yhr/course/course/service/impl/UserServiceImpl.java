@@ -1,5 +1,6 @@
 package com.yhr.course.course.service.impl;
 
+import com.yhr.course.course.config.GaeaContext;
 import com.yhr.course.course.contants.RoleEnum;
 import com.yhr.course.course.dao.ClassesRepository;
 import com.yhr.course.course.dao.TagRepository;
@@ -55,6 +56,17 @@ public class UserServiceImpl implements UserService {
             sql.append(" and role = ?");
             params.add(role);
         }
+
+        //判断是否为管理员,管理员不进行过滤; 如果是老师，则查询对应班级的学生
+        User tempUser = userRepository.getOne(GaeaContext.getAdminUserId());
+        if (!RoleEnum.ADMIN.getValue().equals(tempUser.getRole())) {
+            List<Classes> classesList = classesRepository.findByTeacherId(GaeaContext.getAdminUserId());
+            if (CollectionUtils.isEmpty(classesList)) {
+                return result;
+            }
+            sql.append(" and class_id in (" + buildParam(classesList, params) + ")");
+        }
+
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
         Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);
 
@@ -187,6 +199,21 @@ public class UserServiceImpl implements UserService {
             userMap.put(user.getId(), user);
         }
         return userMap;
+    }
+
+    private String buildParam(List<Classes> classes, List<Object> params) {
+        StringBuffer str = new StringBuffer();
+        if (CollectionUtils.isEmpty(classes)) {
+            return "";
+        }
+        for (Classes classes1 : classes) {
+            str.append(",?");
+            params.add(classes1.getId());
+        }
+        if (str.length() > 0) {
+            str.deleteCharAt(0);
+        }
+        return str.toString();
     }
 
     public Map<Integer, Classes> getAllClassesMap() {
