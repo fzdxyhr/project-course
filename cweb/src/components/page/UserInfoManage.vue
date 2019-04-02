@@ -17,12 +17,17 @@
 				</el-table-column>
 				<el-table-column prop="account" label="账号">
 				</el-table-column>
+				<el-table-column prop="class_name" label="班级名称">
+				</el-table-column>
+				<el-table-column prop="role" label="角色">
+					<template scope="scope">
+						{{scope.row.role == 'admin'? "管理员" : scope.row.role == 'teacher' ? "老师" : "学生"}}
+					</template>
+				</el-table-column>
 				<el-table-column prop="sex" label="性别">
 					<template scope="scope">
 						{{scope.row.sex == 1?"男":"女"}}
 					</template>
-				</el-table-column>
-				<el-table-column prop="class_name" label="班级标识">
 				</el-table-column>
 				<el-table-column prop="status" label="状态">
 					<template scope="scope">
@@ -34,11 +39,6 @@
 						{{scope.row.is_admin == 0?"否":"是"}}
 					</template>
 				</el-table-column> -->
-				<el-table-column prop="role" label="角色">
-					<template scope="scope">
-						{{scope.row.role == 'admin'? "管理员" : scope.row.role == 'teacher' ? "老师" : "学生"}}
-					</template>
-				</el-table-column>
 				<el-table-column prop="create_time" label="创建时间" min-width="120px">
 				</el-table-column>
 				<el-table-column label="操作" min-width="140px">

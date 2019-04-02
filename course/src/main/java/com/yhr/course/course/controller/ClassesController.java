@@ -54,4 +54,9 @@ public class ClassesController {
         return classesService.findClassesStudent(id);
     }
 
+    @RequestMapping(value = "/classes/{id}/students/export", method = RequestMethod.GET)
+    public List<StudentVo> exportStudent(@PathVariable("id") Integer id) throws Exception {
+        return classesService.findClassesStudent(id);
+    }
+
 }

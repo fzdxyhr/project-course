@@ -48,6 +48,7 @@ public class LoginController {
         if (user == null) {
             throw new ServiceException("账号或密码错误");
         }
+
         return user;
     }
 

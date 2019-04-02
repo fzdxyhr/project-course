@@ -15,20 +15,21 @@
 				<el-table-column show-overflow-tooltip prop="progress" label="教学进度" min-width="50px">
 					<template scope="scope">{{scope.row.progress == null? 0 : scope.row.progress}}%</template>
 				</el-table-column>
-				<el-table-column show-overflow-tooltip prop="monitor_name" label="班长" min-width="60px">
-				</el-table-column>
-				<el-table-column show-overflow-tooltip prop="max_student" label="班级人数" min-width="50px">
-				</el-table-column>
+				<!-- <el-table-column show-overflow-tooltip prop="monitor_name" label="班长" min-width="60px">
+				</el-table-column> -->
+				<!-- <el-table-column show-overflow-tooltip prop="max_student" label="班级人数" min-width="50px">
+				</el-table-column> -->
 				<el-table-column show-overflow-tooltip prop="class_desc" label="班级描述">
 				</el-table-column>
 				<el-table-column show-overflow-tooltip prop="create_time" label="创建时间" min-width="80px">
 				</el-table-column>
 				<el-table-column label="操作" min-width="200px">
 					<template scope="scope">
-						<el-button icon="el-icon-setting" type="text" @click="go2SetMonitor(scope.row)">设置班长</el-button>
+						<!-- <el-button icon="el-icon-setting" type="text" @click="go2SetMonitor(scope.row)">设置班长</el-button> -->
 						<el-button icon="el-icon-setting" type="text" @click="go2SetSignTime(scope.row)">设置签到时间</el-button>
 						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="handleImport(scope.row)">导入学生</el-button>
 						<el-button icon="el-icon-view" style="color: #67c23a;" type="text" @click="go2ViewStudent(scope.row)">查看学生</el-button>
+						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="handleExport(scope.row)">导出学生</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="handleUpdate(scope.row)">修改</el-button>
 						<el-button icon="el-icon-delete" style="color: #f56c6c;" type="text" @click="handleDelete(scope.row)">删除</el-button>
 					</template>
@@ -112,6 +113,9 @@
 					loading.close();
 					this.$message.error('获取班级失败');
 				});
+			},
+			handleExport(row){
+				
 			},
 			handleDelete(row) {
 				this.$confirm('此操作将永久删除该教师, 是否继续?', '提示', {

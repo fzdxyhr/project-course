@@ -152,6 +152,10 @@ public class UserServiceImpl implements UserService {
         if (tempUser == null) {
             throw new ServiceException("不存在【" + id + "】对应的标签");
         }
+        if (tempUser.getClassId() != null) {
+            Classes classes = classesRepository.getOne(tempUser.getClassId());
+            tempUser.setClassName(classes == null ? "" : classes.getClassName());
+        }
         return tempUser;
     }
 

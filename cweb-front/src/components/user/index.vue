@@ -12,13 +12,16 @@
 							<div class="photo-info">
 								<img :src="form.photo_path" width="200" height="220" />
 								<div class="user-name">{{form.user_name}}</div>
-								<fileUpload style="width: 110px;margin-left: 40%;margin-top: 15px;" @change="fileChange" buttonText="修改头像"
+								<fileUpload style="width: 110px;margin-left: 218px;margin-top: 15px;" @change="fileChange" buttonText="修改头像"
 								 :showFileList="false" :limit="2"></fileUpload>
 							</div>
 						</el-col>
 						<el-col :span="14">
 							<div class="detail-info">
 								<el-form ref="form" :model="form" label-width="120px" :rules="basicRules">
+									<el-form-item label="所属班级">
+										<label>{{form.class_name}}</label>
+									</el-form-item>
 									<el-form-item label="性别" style="width: 85%;">
 										<el-radio v-model="form.sex" :label="1">男</el-radio>
 										<el-radio v-model="form.sex" :label="2">女</el-radio>
@@ -28,9 +31,6 @@
 									</el-form-item>
 									<el-form-item label="手机号码" style="width: 85%;" prop="telephone">
 										<el-input v-model="form.telephone" suffix-icon="el-icon-mobile-phone"></el-input>
-									</el-form-item>
-									<el-form-item label="上次登录时间">
-										<label>{{form.create_time}}</label>
 									</el-form-item>
 								</el-form>
 							</div>

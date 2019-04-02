@@ -25,6 +25,8 @@ public interface ClassesService {
 
     List<StudentVo> findClassesStudent(Integer classId);
 
+    void exportStudent(Integer classId);
+
     Map<Integer, Classes> getAllClassesMap();
 
 }

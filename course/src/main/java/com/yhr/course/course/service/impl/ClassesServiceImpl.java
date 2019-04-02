@@ -139,6 +139,11 @@ public class ClassesServiceImpl implements ClassesService {
         return studentVos;
     }
 
+    @Override
+    public void exportStudent(Integer classId) {
+        List<User> users = userRepository.findByClassId(classId);
+    }
+
     public Map<Integer, Classes> getAllClassesMap() {
         List<Classes> classesList = classesRepository.findAll();
         if (CollectionUtils.isEmpty(classesList)) {
