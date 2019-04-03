@@ -19,6 +19,7 @@
 				<el-table-column label="操作" min-width="110px">
 					<template scope="scope">
 						<el-button icon="el-icon-view" type="text" @click="go2HomeworkDetail(scope.row)">查看作业提交</el-button>
+						<el-button icon="el-icon-view" type="text" @click="exportSubmitStudent(scope.row)">导出提交学生</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="go2Update(scope.row)">修改</el-button>
 						<el-button icon="el-icon-delete" style="color: #f56c6c;" type="text" @click="go2Delete(scope.row)">删除</el-button>
 					</template>
@@ -38,12 +39,14 @@
 	import rjDialog from '@components/common/dialog.vue'
 	import homeworkAdd from '@components/page/homework/homeworkAdd.vue'
 	import studentList from '@components/page/homework/studentList.vue'
+	import exportSelect from '@components/page/homework/exportSelect.vue'
 
 	export default {
 		components: {
 			rjDialog,
 			homeworkAdd,
-			studentList
+			studentList,
+			exportSelect
 		},
 		data() {
 			return {
@@ -83,6 +86,19 @@
 						loading.close()
 						this.$message.error('获取作业失败');
 					});
+			},
+			exportSubmitStudent(row){
+				this.rjDialog.
+				title("导出作业提交学生").
+				width("700px").
+				top("").
+				currentView(exportSelect, {
+					data: row
+				}).
+				closeOnClickModal(false).
+				showClose(true).
+				then((opt) => {
+				}).show();
 			},
 			go2Update(row) {
 				this.rjDialog.

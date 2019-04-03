@@ -5,12 +5,15 @@ import com.yhr.course.course.contants.RoleEnum;
 import com.yhr.course.course.dao.ClassesRepository;
 import com.yhr.course.course.dao.HomeworkRepository;
 import com.yhr.course.course.dao.HomeworkSubmitRepository;
+import com.yhr.course.course.dao.UserRepository;
 import com.yhr.course.course.entity.*;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.HomeworkService;
 import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.service.UserService;
+import com.yhr.course.course.utils.ExcelUtils;
 import com.yhr.course.course.utils.PagerHelper;
+import com.yhr.course.course.vo.HomeworkUserExportVo;
 import com.yhr.course.course.vo.HomeworkUserVo;
 import com.yhr.course.course.vo.HomeworkVo;
 import org.apache.commons.collections4.CollectionUtils;
@@ -22,6 +25,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 /**
@@ -41,6 +45,8 @@ public class HomeworkServiceImpl implements HomeworkService {
     private ClassesRepository classesRepository;
     @Autowired
     private HomeworkSubmitRepository homeworkSubmitRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public PagerHelper<HomeworkVo> list(String key, Integer pageNo, Integer pageSize) throws Exception {
@@ -196,5 +202,43 @@ public class HomeworkServiceImpl implements HomeworkService {
         HomeworkSubmit homeworkSubmit = homeworkSubmitRepository.findByHomeworkIdAndUserId(id, userId);
         homeworkSubmit.setScore(score);
         homeworkSubmitRepository.save(homeworkSubmit);
+    }
+
+    @Override
+    public void exportSubmitStudent(HttpServletResponse response, Integer id, Integer classId) {
+        Homework homework = homeworkRepository.getOne(id);
+        Classes classes = null;
+        List<Integer> userIds = new ArrayList<>();
+        List<HomeworkSubmit> homeworkSubmits = new ArrayList<>();
+        if (classId != null) {
+            classes = classesRepository.getOne(classId);
+            List<User> users = userRepository.findByClassId(classId);
+            if (CollectionUtils.isNotEmpty(users)) {
+                for (User user : users) {
+                    userIds.add(user.getId());
+                }
+            }
+            homeworkSubmits = homeworkSubmitRepository.findByHomeworkIdAndUserIdIn(id, userIds);
+        } else {
+            homeworkSubmits = homeworkSubmitRepository.findByHomeworkId(id);
+        }
+        List<HomeworkUserExportVo> userExportVos = new ArrayList<>();
+        Map<Integer, User> userMap = userService.getAllUserMap();
+        for (HomeworkSubmit homeworkSubmit : homeworkSubmits) {
+            HomeworkUserExportVo userExportVo = new HomeworkUserExportVo();
+            userExportVo.setClassName(classes == null ? "" : classes.getClassName());
+            userExportVo.setHomeworkName(homework.getHomeworkTitle());
+            userExportVo.setScore(homeworkSubmit.getScore());
+            userExportVo.setUserName(homeworkSubmit.getUserId() == null || userMap.get(homeworkSubmit.getUserId()) == null ? "" : userMap.get(homeworkSubmit.getUserId()).getUserName());
+            userExportVo.setSubmitHomeworkFilePath(homeworkSubmit.getHomeworkFilePath());
+            userExportVo.setSubmitTime(homeworkSubmit.getCreateTime());
+            userExportVos.add(userExportVo);
+        }
+        ExcelUtils<HomeworkUserExportVo> exportExcelUtil = new ExcelUtils<>();
+        Map<String, String> operationMap = new HashMap<String, String>();
+        Map<String, Object> valueMap = new HashMap<String, Object>();
+        String fileName = classes == null ? "所有提交作业学生" : classes.getClassName() + "提交作业学生";
+        String[] headers = new String[]{"用户名称", "班级名称", "作业名称", "评分", "提交作业文件路径", "提交时间"};
+        exportExcelUtil.exportExcel(fileName, headers, userExportVos, "yyyy-MM-dd HH:mm:ss", fileName, response, operationMap, valueMap);
     }
 }

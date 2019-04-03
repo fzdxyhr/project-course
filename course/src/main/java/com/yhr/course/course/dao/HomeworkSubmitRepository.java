@@ -13,4 +13,6 @@ public interface HomeworkSubmitRepository extends JpaRepository<HomeworkSubmit, 
     List<HomeworkSubmit> findByHomeworkId(Integer homeworkId);
 
     HomeworkSubmit findByHomeworkIdAndUserId(Integer homeworkId, Integer userId);
+
+    List<HomeworkSubmit> findByHomeworkIdAndUserIdIn(Integer homeworkId, List<Integer> userIds);
 }

@@ -9,6 +9,7 @@ import com.yhr.course.course.vo.HomeworkVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -69,6 +70,12 @@ public class HomeworkController {
     @RequestMapping(value = "/homeworks/{id}/users/{user_id}/score", method = RequestMethod.PUT)
     public void score(@PathVariable("id") Integer id, @PathVariable("user_id") Integer userId, @RequestParam("score") Integer score) {
         homeworkService.score(id, userId, score);
+    }
+
+    @RequestMapping(value = "/homeworks/{id}/users/export", method = RequestMethod.GET)
+    public void exportSubmitStudent(HttpServletResponse response, @PathVariable("id") Integer id
+            , @RequestParam(value = "class_id", required = false) Integer classId) {
+        homeworkService.exportSubmitStudent(response, id, classId);
     }
 
 }

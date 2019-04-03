@@ -7,7 +7,9 @@ import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.HomeworkUserVo;
 import com.yhr.course.course.vo.HomeworkVo;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -32,5 +34,7 @@ public interface HomeworkService {
     List<HomeworkUserVo> listUsers(Integer id);
 
     void score(Integer id, Integer userId, Integer score);
+
+    void exportSubmitStudent(HttpServletResponse response, Integer id, Integer classId);
 
 }

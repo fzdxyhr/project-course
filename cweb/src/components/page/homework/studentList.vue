@@ -13,8 +13,8 @@
 				</div>
 			</el-card>
 		</div>
-		<div style="text-align: center;" v-if="studentList.length === 0">
-			暂无学生提交作业
+		<div style="text-align: center;height: 150px;" v-if="studentList.length === 0">
+			<div style="padding-top: 5%;">暂无学生提交作业</div>
 		</div>
     <rjDialog></rjDialog>
 	</div>
