@@ -9,6 +9,7 @@ import com.yhr.course.course.vo.StudentVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -55,8 +56,13 @@ public class ClassesController {
     }
 
     @RequestMapping(value = "/classes/{id}/students/export", method = RequestMethod.GET)
-    public List<StudentVo> exportStudent(@PathVariable("id") Integer id) throws Exception {
-        return classesService.findClassesStudent(id);
+    public void exportStudent(HttpServletResponse response, @PathVariable("id") Integer id) throws Exception {
+        classesService.exportStudent(response, id);
+    }
+
+    @RequestMapping(value = "/classes/{id}/students/sign/export", method = RequestMethod.GET)
+    public void exportSignStudent(HttpServletResponse response, @PathVariable("id") Integer id) throws Exception {
+        classesService.exportSignStudent(response, id);
     }
 
 }

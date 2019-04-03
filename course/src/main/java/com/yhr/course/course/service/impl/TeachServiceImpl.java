@@ -9,9 +9,12 @@ import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.ClassesService;
 import com.yhr.course.course.service.TagService;
 import com.yhr.course.course.service.TeachService;
+import com.yhr.course.course.utils.ExcelUtils;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.ChapterTreeVo;
+import com.yhr.course.course.vo.TeachExportVo;
 import com.yhr.course.course.vo.TeachVo;
+import com.yhr.course.course.vo.UserSignExportVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -20,6 +23,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -46,13 +50,13 @@ public class TeachServiceImpl implements TeachService {
     private ClassesService classesService;
 
     @Override
-    public PagerHelper<TeachVo> list(String key, Integer pageNo, Integer pageSize) {
+    public PagerHelper<TeachVo> list(Integer classId, Integer pageNo, Integer pageSize) {
         PagerHelper<TeachVo> result = new PagerHelper<>();
         StringBuffer sql = new StringBuffer("select * from s_teach where 1=1");
         List<Object> params = new ArrayList<>();
-        if (StringUtils.isNotEmpty(key)) {
-            sql.append(" and tag_name like ?");
-            params.add("%" + key + "%");
+        if (classId != null) {
+            sql.append(" and teach_classes = ?");
+            params.add(classId);
         }
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
@@ -142,6 +146,39 @@ public class TeachServiceImpl implements TeachService {
             chapterTreeVos.add(chapterTreeVo);
         }
         return chapterTreeVos;
+    }
+
+    @Override
+    public void exportTeach(HttpServletResponse response, Integer classId) throws Exception {
+        Collection<TeachVo> teachVoCollection = list(classId, 1, Integer.MAX_VALUE).getItems();
+        ExcelUtils<TeachExportVo> exportExcelUtil = new ExcelUtils<>();
+        Map<String, String> operationMap = new HashMap<>();
+        Map<String, Object> valueMap = new HashMap<>();
+        Classes classes = null;
+        if (classId != null) {
+            classes = classesService.get(classId);
+        }
+        String fileName = classId == null ? "全部教学情况" : classes.getClassName() + "教学情况";
+        String[] headers = new String[]{"教学班级", "教学内容", "教学评价", "教学说明", "教学时间"};
+        List<TeachExportVo> teachExportVos = new ArrayList<>();
+        Map<Integer, String> starMap = getStarMap();
+        for (TeachVo teachVo : teachVoCollection) {
+            TeachExportVo teachExportVo = new TeachExportVo();
+            BeanUtils.copyProperties(teachVo, teachExportVo);
+            teachExportVo.setTeachEvaluation(starMap.getOrDefault(teachVo.getTeachEvaluation(), ""));
+            teachExportVos.add(teachExportVo);
+        }
+        exportExcelUtil.exportExcel(fileName, headers, teachExportVos, "yyyy-MM-dd HH:mm:ss", fileName, response, operationMap, valueMap);
+    }
+
+    private Map<Integer, String> getStarMap() {
+        Map<Integer, String> result = new HashMap<>();
+        result.put(1, "很差");
+        result.put(2, "差");
+        result.put(3, "中等");
+        result.put(4, "良好");
+        result.put(5, "优秀");
+        return result;
     }
 
     private String getDateContent(Date startDate, Date endDate) {

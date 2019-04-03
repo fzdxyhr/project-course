@@ -6,6 +6,7 @@ import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.ChapterTreeVo;
 import com.yhr.course.course.vo.TeachVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +15,7 @@ import java.util.Map;
  */
 public interface TeachService {
 
-    PagerHelper<TeachVo> list(String key, Integer pageNo, Integer pageSize);
+    PagerHelper<TeachVo> list(Integer classId, Integer pageNo, Integer pageSize);
 
     TeachVo create(TeachVo teach);
 
@@ -25,5 +26,7 @@ public interface TeachService {
     Teach get(Integer id) throws Exception;
 
     List<ChapterTreeVo> chapterTree() throws Exception;
+
+    void exportTeach(HttpServletResponse response, Integer classId) throws Exception;
 
 }

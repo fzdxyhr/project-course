@@ -5,6 +5,7 @@ import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.StudentVo;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +26,9 @@ public interface ClassesService {
 
     List<StudentVo> findClassesStudent(Integer classId);
 
-    void exportStudent(Integer classId);
+    void exportStudent(HttpServletResponse response,Integer classId);
+
+    void exportSignStudent(HttpServletResponse response,Integer classId);
 
     Map<Integer, Classes> getAllClassesMap();
 

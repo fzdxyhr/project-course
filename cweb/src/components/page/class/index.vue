@@ -23,13 +23,13 @@
 				</el-table-column>
 				<el-table-column show-overflow-tooltip prop="create_time" label="创建时间" min-width="80px">
 				</el-table-column>
-				<el-table-column label="操作" min-width="200px">
+				<el-table-column label="操作" min-width="170px">
 					<template scope="scope">
 						<!-- <el-button icon="el-icon-setting" type="text" @click="go2SetMonitor(scope.row)">设置班长</el-button> -->
 						<el-button icon="el-icon-setting" type="text" @click="go2SetSignTime(scope.row)">设置签到时间</el-button>
 						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="handleImport(scope.row)">导入学生</el-button>
-						<el-button icon="el-icon-view" style="color: #67c23a;" type="text" @click="go2ViewStudent(scope.row)">查看学生</el-button>
-						<el-button icon="el-icon-upload" style="color: #67c23a;" type="text" @click="handleExport(scope.row)">导出学生</el-button>
+						<el-button icon="el-icon-view" style="color: #67c23a;" type="text" @click="go2ViewStudent(scope.row)">查看学生签到</el-button>
+						<el-button icon="el-icon-download" style="color: #67c23a;" type="text" @click="handleExport(scope.row)">导出学生</el-button>
 						<el-button icon="el-icon-edit" type="text" @click="handleUpdate(scope.row)">修改</el-button>
 						<el-button icon="el-icon-delete" style="color: #f56c6c;" type="text" @click="handleDelete(scope.row)">删除</el-button>
 					</template>
@@ -72,6 +72,11 @@
 				role:""
 			}
 		},
+    computed: {
+    	host() {
+    		return this.$store.state.host
+    	}
+    },
 		mounted() {
 			this.findClasses();
 			const user = JSON.parse(localStorage.getItem("USER"));
@@ -115,7 +120,7 @@
 				});
 			},
 			handleExport(row){
-				
+				window.location = this.host+"/v1/classes/"+row.id+"/students/export";
 			},
 			handleDelete(row) {
 				this.$confirm('此操作将永久删除该教师, 是否继续?', '提示', {
@@ -210,7 +215,7 @@
 			},
 			go2ViewStudent(row) {
 				this.rjDialog.
-				title("查看学生").
+				title("查看学生签到").
 				width("850px").
 				top("").
 				currentView(studentList, {

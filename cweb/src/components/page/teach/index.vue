@@ -1,10 +1,13 @@
 <template>
 	<div class="teach-index">
 		<div class="button-group">
-			<el-input placeholder="请输入内容" v-model="key">
-				<i slot="suffix" class="el-input__icon el-icon-search"></i>
-			</el-input>
+			<el-select v-model="key" placeholder="请选择" clearable>
+				<el-option v-for="item in classes" :key="item.value" :label="item.label" :value="item.value">
+				</el-option>
+			</el-select>
+			<el-button type="primary" @click="go2Query">查询</el-button>
 			<el-button type="primary" @click="go2Publish">新增教学情况</el-button>
+			<el-button type="primary" @click="go2Export">导出教学情况</el-button>
 		</div>
 		<div class="teach-table-content diyscrollbar">
 			<el-table :data="tableData" style="width: 100%" tooltip-effect="dark">
@@ -51,20 +54,27 @@
 			return {
 				key: "",
 				tableData: [],
+				classes: [],
 				page_no: 1,
 				page_size: 10,
 				total: 0,
-				comment:{
-					1:"很差",
-					2:"差",
-					3:"中等",
-					4:"良好",
-					5:"优秀"
+				comment: {
+					1: "很差",
+					2: "差",
+					3: "中等",
+					4: "良好",
+					5: "优秀"
 				}
 			};
 		},
+		computed: {
+			host() {
+				return this.$store.state.host
+			}
+		},
 		mounted() {
 			this.go2Query();
+			this.findClasses();
 		},
 		methods: {
 			handleSizeChange(val) {
@@ -82,7 +92,7 @@
 					spinner: 'el-icon-loading',
 					background: 'rgba(0, 0, 0, 0.7)'
 				});
-				this.$axios.get('/v1/teachs?key=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then(
+				this.$axios.get('/v1/teachs?class_id=' + this.key + "&page_no=" + this.page_no + "&page_size=" + this.page_size).then(
 					(
 						response) => {
 						loading.close()
@@ -92,6 +102,22 @@
 						loading.close()
 						this.$message.error('获取教学失败');
 					});
+			},
+			findClasses() {
+				this.$axios.get("/v1/classes?page_no=1&page_size=10000").then((response) => {
+					this.classes = [];
+					response.data.items.forEach((item) => {
+						let temp = {};
+						temp.label = item.class_name;
+						temp.value = item.id;
+						this.classes.push(temp);
+					})
+				}, (response) => {
+					this.$message.error('获取班级失败');
+				});
+			},
+			go2Export() {
+				window.location = this.host + "/v1/teachs/export?class_id=" + this.key;
 			},
 			go2Update(row) {
 				this.rjDialog.
@@ -160,7 +186,7 @@
 		.teach-table-content {
 			height: calc(100% - 106px);
 			overflow-y: auto;
-      overflow-x: hidden;
+			overflow-x: hidden;
 		}
 
 		.paging {

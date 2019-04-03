@@ -1,11 +1,16 @@
 <template>
 	<div class="class-student-index">
-		<div class="tip">仅为当天学生的签到情况</div>
+		<div class="tip">
+			<span>仅为当天学生的签到情况</span>
+		</div>
+		<div>
+			<el-button type="text" @click="exportSignData">导出学生签到</el-button>
+		</div>
 		<div class="body-content" v-for="item in studentList" v-if="studentList.length > 0">
 			<el-card>
 				<div style="padding-top: 15px;padding-bottom: 5px;width: 150px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;">
 					<div style="display: inline-block;">{{item.user_name}}</div>
-					<div style="display: inline-block;margin-left: 23px;width: 80px;overflow: hidden;white-space: nowrap;text-overflow: ellipsis;"
+					<div style="display: inline-block;margin-left: 15px;width: 80px;white-space: nowrap;text-overflow: ellipsis;"
 					 :title="item.account">{{item.account}}</div>
 				</div>
 			</el-card>
@@ -26,6 +31,11 @@
 				classId: ""
 			};
 		},
+		computed: {
+			host() {
+				return this.$store.state.host
+			}
+		},
 		mounted() {
 			if (this.rjDialogParams().data) {
 				this.classId = this.rjDialogParams().data.id;
@@ -34,19 +44,22 @@
 		},
 		methods: {
 			go2Query() {
-        const loading = this.$loading({
-        	lock: true,
-        	text: '加载中...',
-        	spinner: 'el-icon-loading',
-        	background: 'rgba(0, 0, 0, 0.7)'
-        });
+				const loading = this.$loading({
+					lock: true,
+					text: '加载中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				this.$axios.get('/v1/classes/' + this.classId + "/students").then((response) => {
-          loading.close();
+					loading.close();
 					this.studentList = response.data;
 				}, (response) => {
-          loading.close();
+					loading.close();
 					this.$message.error('获取班级学生失败');
 				});
+			},
+			exportSignData() {
+				window.location = this.host + "/v1/classes/" + this.classId + "/students/sign/export";
 			}
 		},
 	}
@@ -77,6 +90,7 @@
 			right: 0;
 			top: 0;
 		}
+
 		.not-sign-content {
 			width: 75px;
 			height: 20px;
@@ -88,4 +102,3 @@
 		}
 	}
 </style>
-

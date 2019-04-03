@@ -8,6 +8,7 @@ import com.yhr.course.course.vo.TeachVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 /**
@@ -22,10 +23,10 @@ public class TeachController {
     private TeachService teachService;
 
     @RequestMapping(value = "/teachs", method = RequestMethod.GET)
-    public PagerHelper<TeachVo> list(@RequestParam(value = "key", required = false) String key
+    public PagerHelper<TeachVo> list(@RequestParam(value = "class_id", required = false) Integer classId
             , @RequestParam(value = "page_no", defaultValue = "1") Integer pageNo
             , @RequestParam(value = "page_size", defaultValue = "10") Integer pageSize) {
-        return teachService.list(key, pageNo, pageSize);
+        return teachService.list(classId, pageNo, pageSize);
     }
 
     @RequestMapping(value = "/teachs", method = RequestMethod.POST)
@@ -47,9 +48,15 @@ public class TeachController {
     public Teach get(@PathVariable("id") Integer id) throws Exception {
         return teachService.get(id);
     }
+
     @RequestMapping(value = "/courses/chapter/tree", method = RequestMethod.GET)
     public List<ChapterTreeVo> chapterTree() throws Exception {
         return teachService.chapterTree();
+    }
+
+    @RequestMapping(value = "/teachs/export", method = RequestMethod.GET)
+    public void get(HttpServletResponse response, @RequestParam(value = "class_id", required = false) Integer classId) throws Exception {
+        teachService.exportTeach(response, classId);
     }
 
 }

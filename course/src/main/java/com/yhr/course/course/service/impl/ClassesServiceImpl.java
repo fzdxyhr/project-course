@@ -13,8 +13,11 @@ import com.yhr.course.course.entity.User;
 import com.yhr.course.course.exception.ServiceException;
 import com.yhr.course.course.service.ClassesService;
 import com.yhr.course.course.service.UserService;
+import com.yhr.course.course.utils.ExcelUtils;
 import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.StudentVo;
+import com.yhr.course.course.vo.UserExportVo;
+import com.yhr.course.course.vo.UserSignExportVo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
@@ -23,6 +26,7 @@ import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletResponse;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -140,8 +144,46 @@ public class ClassesServiceImpl implements ClassesService {
     }
 
     @Override
-    public void exportStudent(Integer classId) {
+    public void exportStudent(HttpServletResponse response, Integer classId) {
+        List<UserExportVo> exportVos = new ArrayList<>();
+        Classes classes = classesRepository.getOne(classId);
         List<User> users = userRepository.findByClassId(classId);
+        ExcelUtils<UserExportVo> exportExcelUtil = new ExcelUtils<>();
+        Map<String, String> operationMap = new HashMap<>();
+        Map<String, Object> valueMap = new HashMap<>();
+        String fileName = classes == null ? "学生" : classes.getClassName() + "学生";
+        String[] headers = new String[]{"学生名称", "学生账号", "班级名称", "身份证", "性别", "手机号码", "状态", "创建时间"};
+        for (User user : users) {
+            UserExportVo exportVo = new UserExportVo();
+            BeanUtils.copyProperties(user, exportVo);
+            exportVo.setClassName(classes.getClassName());
+            exportVo.setSex(user.getSex() == 1 ? "男" : "女");
+            exportVo.setStatus(user.getStatus() == 1 ? "有效" : "失效");
+            exportVos.add(exportVo);
+        }
+        exportExcelUtil.exportExcel(fileName, headers, exportVos, "yyyy-MM-dd HH:mm:ss", fileName, response, operationMap, valueMap);
+    }
+
+    @Override
+    public void exportSignStudent(HttpServletResponse response, Integer classId) {
+        List<User> users = userRepository.findByClassId(classId);
+        Classes classes = classesRepository.getOne(classId);
+        ExcelUtils<UserSignExportVo> exportExcelUtil = new ExcelUtils<>();
+        Map<String, String> operationMap = new HashMap<>();
+        Map<String, Object> valueMap = new HashMap<>();
+        String fileName = classes == null ? "学生" + simpleDateFormat.format(new Date()) + "签到数据" : classes.getClassName() + "学生" + simpleDateFormat.format(new Date()) + "签到数据";
+        String[] headers = new String[]{"学生名称", "学生账号", "班级名称", "是否签到"};
+        List<UserSignExportVo> studentVos = new ArrayList<>();
+        for (User user : users) {
+            Sign sign = signRepository.findByStudentIdAndTeacherIdAndCreateTime(user.getId(), classes.getTeacherId(), simpleDateFormat.format(new Date()));
+            UserSignExportVo studentVo = new UserSignExportVo();
+            studentVo.setUserName(user.getUserName());
+            studentVo.setAccount(user.getAccount());
+            studentVo.setSign(sign == null ? "未签到" : "已签到");
+            studentVo.setClassName(classes == null ? "" : classes.getClassName());
+            studentVos.add(studentVo);
+        }
+        exportExcelUtil.exportExcel(fileName, headers, studentVos, "yyyy-MM-dd HH:mm:ss", fileName, response, operationMap, valueMap);
     }
 
     public Map<Integer, Classes> getAllClassesMap() {
