@@ -22,7 +22,7 @@ public class HomeworkUserExportVo {
     private String homeworkName;
 
     @ApiModelProperty("评分")
-    private Integer score;
+    private String score;
 
     @ApiModelProperty("提交作业文件路径")
     private String submitHomeworkFilePath;

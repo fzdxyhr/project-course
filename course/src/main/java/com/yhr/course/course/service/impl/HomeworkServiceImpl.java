@@ -225,10 +225,15 @@ public class HomeworkServiceImpl implements HomeworkService {
         List<HomeworkUserExportVo> userExportVos = new ArrayList<>();
         Map<Integer, User> userMap = userService.getAllUserMap();
         for (HomeworkSubmit homeworkSubmit : homeworkSubmits) {
+            User user = userRepository.getOne(homeworkSubmit.getUserId());
+            Classes tempClasses = null;
+            if (user != null) {
+                tempClasses = classesRepository.getOne(user.getClassId());
+            }
             HomeworkUserExportVo userExportVo = new HomeworkUserExportVo();
-            userExportVo.setClassName(classes == null ? "" : classes.getClassName());
+            userExportVo.setClassName(tempClasses == null ? "" : tempClasses.getClassName());
             userExportVo.setHomeworkName(homework.getHomeworkTitle());
-            userExportVo.setScore(homeworkSubmit.getScore());
+            userExportVo.setScore(homeworkSubmit.getScore() == null ? "" : "" + homeworkSubmit.getScore());
             userExportVo.setUserName(homeworkSubmit.getUserId() == null || userMap.get(homeworkSubmit.getUserId()) == null ? "" : userMap.get(homeworkSubmit.getUserId()).getUserName());
             userExportVo.setSubmitHomeworkFilePath(homeworkSubmit.getHomeworkFilePath());
             userExportVo.setSubmitTime(homeworkSubmit.getCreateTime());
