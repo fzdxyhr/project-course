@@ -76,9 +76,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$axios.post("url", {
-						"id": tag.id
-					}).then((response) => {
+					this.$axios.delete("/v1/tags/"+tag.id).then((response) => {
 						this.$message.error('删除标签成功');
 					}, (response) => {
 						this.$message.error('删除标签失败');

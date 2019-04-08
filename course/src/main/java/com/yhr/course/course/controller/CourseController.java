@@ -1,7 +1,6 @@
 package com.yhr.course.course.controller;
 
 import com.yhr.course.course.entity.Course;
-import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.entity.Tag;
 import com.yhr.course.course.service.CourseService;
 import com.yhr.course.course.service.TagService;

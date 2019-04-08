@@ -1,10 +1,6 @@
 package com.yhr.course.course.service.impl;
 
 import com.yhr.course.course.config.GaeaContext;
-import com.yhr.course.course.dao.CourseRepository;
-import com.yhr.course.course.dao.CourseStudentRepository;
-import com.yhr.course.course.entity.CourseChapter;
-import com.yhr.course.course.entity.CourseStudent;
 import com.yhr.course.course.service.CourseCommentService;
 import com.yhr.course.course.service.MyStudyService;
 import com.yhr.course.course.service.QuestionService;
@@ -12,8 +8,6 @@ import com.yhr.course.course.utils.PagerHelper;
 import com.yhr.course.course.vo.CourseCommentVo;
 import com.yhr.course.course.vo.CourseVo;
 import com.yhr.course.course.vo.QuestionVo;
-import org.apache.commons.collections4.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -43,6 +37,7 @@ public class MyStudyServiceImpl implements MyStudyService {
         List<Object> params = new ArrayList<>();
         sql.append(" and b.user_id = ?");
         params.add(GaeaContext.getUserId());
+        sql.append(" group by b.course_id");
 
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
         Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);

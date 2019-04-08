@@ -199,7 +199,7 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$axios.delete("/admin/course/" + id).then((response) => {
+					this.$axios.delete("/v1/courses/" + id).then((response) => {
 						if (response.data.data) {
 							this.$message.success('删除成功');
 							this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
