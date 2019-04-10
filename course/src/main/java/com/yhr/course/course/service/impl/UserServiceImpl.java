@@ -185,6 +185,7 @@ public class UserServiceImpl implements UserService {
 //            user.setIdCard(datas.get(i).length > 3 ? datas.get(i)[3].trim().replaceAll(",", "") : null);
             user.setTelephone(datas.get(i).length > 3 ? datas.get(i)[3].trim().replaceAll(",", "") : null);
             user.setRole(RoleEnum.STUDENT.getValue());
+            user.setStatus(1);
             user.setClassId(classId);
             user.setIsAdmin(0);
             user.setCreateTime(new Date());
