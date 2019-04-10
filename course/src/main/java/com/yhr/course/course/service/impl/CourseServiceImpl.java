@@ -65,7 +65,6 @@ public class CourseServiceImpl implements CourseService {
             sql.append(" and tag_id like ?");
             params.add("%" + tagId + "%");
         }
-
         if (!isFront) {
             //判断是否为管理员,管理员不进行过滤
             User user = userService.get(GaeaContext.getAdminUserId());
@@ -74,7 +73,6 @@ public class CourseServiceImpl implements CourseService {
                 params.add(GaeaContext.getAdminUserId());
             }
         }
-
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
         Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);
 
@@ -85,8 +83,10 @@ public class CourseServiceImpl implements CourseService {
         List<CourseVo> courseVos = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseVo.class));
         if (CollectionUtils.isNotEmpty(courseVos)) {
             for (CourseVo courseVo : courseVos) {
+                //获取课程章节信息
                 List<CourseChapter> courseChapters = courseChapterRepository.findByCourseId(courseVo.getId());
                 courseVo.setCourseChapterVos(resolveChapter(courseChapters, courseVo.getId(), false));
+                //解析课程的标签
                 courseVo.setTags(getTagNames(courseVo.getTagId()));
             }
         }
