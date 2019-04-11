@@ -5,18 +5,19 @@
 			<v-courses-list @setSearchText="setSearchText" @setCurrentNum="setCurrentNum" @setCurrentPage="setCurrentPage" :page="page"
 			 :child-courses-list='coursesList' @sonDelCourse="fatherDelCourse" @childGetCourses="getCourses" @childAmendCourse="fatherAmendCourse"></v-courses-list>
 		</div>
-		<el-dialog :title="dialog.title" :visible.sync="dialog.control" size="small">
-			<el-form ref="dialog.form" :model="dialog.form" label-width="100px" :inline="true">
-				<el-form-item label="课程名">
+		<el-dialog :title="dialog.title" :visible.sync="dialog.control" size="small" top="2%" :close-on-click-modal="false"
+		 :open="dialogOpen">
+			<el-form ref="dialogForm" class="form-class" :model="dialog.form" label-width="100px" :inline="true" :rules="rules">
+				<el-form-item label="课程名" prop="course_name">
 					<el-input v-model="dialog.form.course_name"></el-input>
 				</el-form-item>
-				<el-form-item label="任课老师">
+				<el-form-item label="任课老师" prop="teacher_id">
 					<el-select v-model="dialog.form.teacher_id" placeholder="请选择">
 						<el-option v-for="item in teachers" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
 					</el-select>
 				</el-form-item>
-				<el-form-item label="标签">
+				<el-form-item label="标签" prop="tag_id">
 					<el-select v-model="dialog.form.tag_id" multiple placeholder="请选择">
 						<el-option v-for="item in tags" :key="item.value" :label="item.label" :value="item.value">
 						</el-option>
@@ -28,16 +29,16 @@
 				<el-form-item label="最大可选人数">
 					<el-input v-model="dialog.form.max_student"></el-input>
 				</el-form-item> -->
-        <div class="clearfix"></div>
-				<el-form-item label="课程简介">
+				<div class="clearfix"></div>
+				<el-form-item label="课程简介" prop="course_desc">
 					<el-input type="textarea" :rows="3" v-model="dialog.form.course_desc"></el-input>
 				</el-form-item>
-        <div class="clearfix"></div>
-				<el-form-item label="课程提示">
+				<div class="clearfix"></div>
+				<el-form-item label="课程提示" prop="course_tip">
 					<el-input type="textarea" :rows="3" v-model="dialog.form.course_tip"></el-input>
 				</el-form-item>
-        <div class="clearfix"></div>
-				<el-form-item label="课程图片">
+				<div class="clearfix"></div>
+				<el-form-item label="课程图片" prop="course_image_url">
 					<el-upload name="editormd-image-file" class="avatar-uploader" :action="host + `/v1/courses/images/upload`"
 					 :show-file-list="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
 						<img v-if="showImage" :src="imageUrl" class="avatar">
@@ -78,6 +79,28 @@
 						course_room: ""
 					},
 				},
+				rules: {
+					course_name: [{
+						required: true,
+						message: '请输入课程名称',
+						trigger: 'change'
+					}, ],
+					teacher_id: [{
+						required: true,
+						message: '请选择任课老师',
+						trigger: 'change'
+					}],
+					tag_id: [{
+						required: true,
+						message: '请选择课程标签',
+						trigger: 'change'
+					}],
+					course_image_url: [{
+						required: true,
+						message: '请上传课程图片',
+						trigger: 'change'
+					}]
+				},
 				teachers: [],
 				tags: [],
 				dynamicTags: ['标签一', '标签二', '标签三'],
@@ -91,7 +114,7 @@
 					currentNum: 10, //每页多少条
 					searchText: '',
 				},
-        loading:""
+				loading: "",
 			}
 		},
 		mounted() {
@@ -108,6 +131,10 @@
 			}
 		},
 		methods: {
+			dialogOpen() {
+				this.$refs.dialogForm.resetFields();
+				this.$refs.dialogForm.clearValidate();
+			},
 			setCurrentPage(num) {
 				this.page.currentPage = num;
 			},
@@ -200,13 +227,13 @@
 					type: 'warning'
 				}).then(() => {
 					this.$axios.delete("/v1/courses/" + id).then((response) => {
-						if (response.data.data) {
+            console.log("response=",response)
+						if (response.status) {
 							this.$message.success('删除成功');
 							this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
 						} else {
 							this.$message.error('删除失败');
 						}
-
 					}, (response) => {
 						this.$message.error('删除失败');
 					});
@@ -222,60 +249,65 @@
 				this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
 			},
 			onSubmit() { //处理添加或修改课程
-				let tempTagId = this.dialog.form.tag_id;
-				this.dialog.form.tag_id = this.dialog.form.tag_id.join(",");
-        const loading = this.$loading({
-        	lock: true,
-        	text: '加载中...',
-        	spinner: 'el-icon-loading',
-        	background: 'rgba(0, 0, 0, 0.7)'
-        });
-				if (!this.dialog.form.id) { //添加课程
-					this.$axios.post("/v1/courses", this.dialog.form).then((response) => {
-            loading.close()
-						if (response.status == 200) {
-							this.dialog.control = false;
-							this.$message.success('添加成功');
-							this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
-						} else {
-							this.$message.error('添加失败');
+				this.$refs['dialogForm'].validate((valid) => {
+					if (valid) {
+						let tempTagId = this.dialog.form.tag_id;
+						this.dialog.form.tag_id = this.dialog.form.tag_id.join(",");
+						const loading = this.$loading({
+							lock: true,
+							text: '加载中...',
+							spinner: 'el-icon-loading',
+							background: 'rgba(0, 0, 0, 0.7)'
+						});
+						if (!this.dialog.form.id) { //添加课程
+							this.$axios.post("/v1/courses", this.dialog.form).then((response) => {
+								loading.close()
+								if (response.status == 200) {
+									this.dialog.control = false;
+									this.$message.success('添加成功');
+									this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
+								} else {
+									this.$message.error('添加失败');
+								}
+							}, (response) => {
+								loading.close()
+								this.dialog.form.tag_id = tempTagId;
+								this.$message.error('添加失败');
+							});
+						} else { //修改课程
+							this.$axios.put("/v1/courses/" + this.dialog.form.id,
+								this.dialog.form
+							).then((response) => {
+								loading.close()
+								if (response.status == 200) {
+									this.dialog.control = false;
+									this.$message.success('修改成功');
+									this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
+								} else {
+									this.$message.error('修改失败');
+								}
+							}, (response) => {
+								loading.close()
+								this.$message.error('修改失败');
+							});
 						}
-					}, (response) => {
-            loading.close()
-						this.dialog.form.tag_id = tempTagId;
-						this.$message.error('添加失败');
-					});
-				} else { //修改课程
-					this.$axios.put("/v1/courses/" + this.dialog.form.id,
-						this.dialog.form
-					).then((response) => {
-            loading.close()
-						if (response.status == 200) {
-							this.dialog.control = false;
-							this.$message.success('修改成功');
-							this.getCourses(this.page.currentPage, this.page.currentNum, this.page.searchText);
-						} else {
-							this.$message.error('修改失败');
-						}
-					}, (response) => {
-            loading.close()
-						this.$message.error('修改失败');
-					});
-				}
-
+					} else {
+						return false;
+					}
+				});
 			},
 			handleAvatarSuccess(file) {
 				this.dialog.form.course_image_url = file;
 				this.showImage = true;
-        this.loading.close();
+				this.loading.close();
 			},
 			beforeAvatarUpload(file) {
-        this.loading = this.$loading({
-        	lock: true,
-        	text: '上传中...',
-        	spinner: 'el-icon-loading',
-        	background: 'rgba(0, 0, 0, 0.7)'
-        });
+				this.loading = this.$loading({
+					lock: true,
+					text: '上传中...',
+					spinner: 'el-icon-loading',
+					background: 'rgba(0, 0, 0, 0.7)'
+				});
 				const isLt2M = file.size / 1024 / 1024 < 4;
 				if (!isLt2M) {
 					this.$message.error('上传图片大小不能超过 4MB!');
@@ -340,8 +372,8 @@
 		.avatar-uploader-icon {
 			font-size: 28px;
 			color: #8c939d;
-			width: 100%;
-			height: 100%;
+			width: 250px;
+			height: 178px;
 			line-height: 178px;
 			text-align: center;
 		}
@@ -352,6 +384,14 @@
 			max-width: 300px;
 			max-height: 169px;
 			display: block;
+		}
+
+		.form-class .el-select .el-input__inner {
+			width: 202px;
+		}
+
+		.el-textarea .el-textarea__inner {
+			width: 520px;
 		}
 	}
 </style>

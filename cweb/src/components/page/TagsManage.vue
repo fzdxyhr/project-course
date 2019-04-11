@@ -5,19 +5,19 @@
 			<tags-list @sonGetTags="getTags" @sonDelTag="delTag" @sonAmendTag="amendTag" :sonTagsList="tagsList"></tags-list>
 
 		</div>
-		<el-dialog :title="dialog.title" :visible.sync="dialog.control" size="small" width="40%">
-			<el-form ref="dialog.form" :model="dialog.form" label-width="80px">
-				<el-form-item label="标签名">
+		<el-dialog :title="dialog.title" :visible.sync="dialog.control" size="small" width="40%" :close-on-click-modal="false">
+			<el-form ref="dialog.form" :model="dialog.form" label-width="80px" :rules="rules">
+				<el-form-item label="标签名" prop="tag_name">
 					<el-input v-model="dialog.form.tag_name"></el-input>
 				</el-form-item>
-				<el-form-item label="描述">
+				<el-form-item label="描述" prop="tag_desc">
 					<el-input type="textarea" :rows="3" v-model="dialog.form.tag_desc"></el-input>
 				</el-form-item>
 			</el-form>
 			<span slot="footer" class="dialog-footer">
-    			<el-button @click="dialog.control = false">取 消</el-button>
-    			<el-button type="primary" @click="onSubmit">确 定</el-button>
- 			 </span>
+				<el-button @click="dialog.control = false">取 消</el-button>
+				<el-button type="primary" @click="onSubmit">确 定</el-button>
+			</span>
 		</el-dialog>
 	</div>
 </template>
@@ -42,7 +42,19 @@
 					},
 				},
 				tagsList: '',
-				key:""
+				key: "",
+				rules: {
+					tag_name: [{
+						required: true,
+						message: '请输入标签名称',
+						trigger: 'change'
+					}, ],
+					tag_desc: [{
+						required: true,
+						message: '请输入标签描述',
+						trigger: 'change'
+					}]
+				}
 			}
 		},
 		created() {
@@ -50,7 +62,7 @@
 		},
 		methods: {
 			getTags() { //获取数据
-				this.$axios.get('/v1/tags?key='+this.key+"&page_no=1&page_size=10000000").then((response) => {
+				this.$axios.get('/v1/tags?key=' + this.key + "&page_no=1&page_size=10000000").then((response) => {
 					this.tagsList = response.data.items;
 				}, (response) => {
 					this.$message.error('获取标签失败');
@@ -76,8 +88,9 @@
 					cancelButtonText: '取消',
 					type: 'warning'
 				}).then(() => {
-					this.$axios.delete("/v1/tags/"+tag.id).then((response) => {
+					this.$axios.delete("/v1/tags/" + tag.id).then((response) => {
 						this.$message.error('删除标签成功');
+						this.getTags();
 					}, (response) => {
 						this.$message.error('删除标签失败');
 					});
@@ -93,25 +106,30 @@
 				this.getTags();
 			},
 			onSubmit() { //处理添加或修改标签
-				if(!this.dialog.form.id) { //添加标签
-					this.$axios.post("/v1/tags",this.dialog.form).then((response) => {
-						this.dialog.control = false;
-						this.getTags();
-						this.$message.success('添加成功');
-					}, (response) => {
-						this.$message.error('添加失败');
-					});
-				} else { //修改标签
-					this.$axios.put("/v1/tags/"+this.dialog.form.id, this.dialog.form).then((response) => {
-						this.dialog.control = false;
-						this.$message.success('修改成功');
-						this.getTags();
-					}, (response) => {
-						this.$message.error('修改失败');
-					});
-				}
-
-			},
+				this.$refs['dialog.form'].validate((valid) => {
+					if (valid) {
+              if (!this.dialog.form.id) { //添加标签
+              	this.$axios.post("/v1/tags", this.dialog.form).then((response) => {
+              		this.dialog.control = false;
+              		this.getTags();
+              		this.$message.success('添加成功');
+              	}, (response) => {
+              		this.$message.error('添加失败');
+              	});
+              } else { //修改标签
+              	this.$axios.put("/v1/tags/" + this.dialog.form.id, this.dialog.form).then((response) => {
+              		this.dialog.control = false;
+              		this.$message.success('修改成功');
+              		this.getTags();
+              	}, (response) => {
+              		this.$message.error('修改失败');
+              	});
+              }
+					} else {
+						return false;
+					}
+				});
+			}
 		},
 	}
 </script>

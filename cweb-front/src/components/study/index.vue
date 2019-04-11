@@ -2,7 +2,8 @@
 	<div class="study-index">
 		<div class="side-bar">
 			<div class="user-pic-bg">
-				<img class="img" :src="photoPath" alt="">
+				<img class="img" v-if="photoPath" :src="photoPath" alt="">
+        <img class="img" v-if="!photoPath" alt="" src="../../../static/img/carousel.jpg">
 			</div>
 			<div style="text-align: center;margin-top: 30px;">
 				<span style="font-size: 15px;font-weight: 600;">{{userName}}</span>

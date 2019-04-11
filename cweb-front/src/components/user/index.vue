@@ -10,9 +10,10 @@
 					<el-row>
 						<el-col :span="10">
 							<div class="photo-info">
-								<img :src="form.photo_path" width="200" height="220" />
+								<img :src="form.photo_path" v-if="form.photo_path" width="200" height="220" />
+                <img src="../../../static/img/carousel.jpg" v-if="!form.photo_path" width="200" height="220" />
 								<div class="user-name">{{form.user_name}}</div>
-								<fileUpload style="width: 110px;margin-left: 218px;margin-top: 15px;" @change="fileChange" buttonText="修改头像"
+								<fileUpload style="width: 110px;margin: 0 auto;margin-top: 15px;" @change="fileChange" buttonText="修改头像"
 								 :showFileList="false" :limit="2"></fileUpload>
 							</div>
 						</el-col>

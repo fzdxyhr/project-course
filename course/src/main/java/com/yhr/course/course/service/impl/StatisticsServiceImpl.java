@@ -95,8 +95,8 @@ public class StatisticsServiceImpl implements StatisticsService {
 
     private Map<String, Integer> getUserStudy() {
         List<Object> params = new ArrayList<>();
-        StringBuffer sql = new StringBuffer("SELECT us.user_name,COUNT(course_id) study_course from s_course_student cs");
-        sql.append(" LEFT JOIN s_user us on us.id=cs.student_id GROUP BY student_id");
+        StringBuffer sql = new StringBuffer("SELECT us.user_name,COUNT(cs.course_id) study_course from s_user_study_progress cs");
+        sql.append(" LEFT JOIN s_user us on us.id=cs.user_id GROUP BY cs.user_id");
         List<CourseStatisticVo> homeworkStatisticVos = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseStatisticVo.class));
         Map<String, Integer> studyCourseMap = new HashMap<>();
         if (CollectionUtils.isEmpty(homeworkStatisticVos)) {

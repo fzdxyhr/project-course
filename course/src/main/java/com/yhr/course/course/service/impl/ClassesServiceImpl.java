@@ -61,17 +61,14 @@ public class ClassesServiceImpl implements ClassesService {
             sql.append(" and class_name like ?");
             params.add("%" + key + "%");
         }
-
         //判断是否为管理员,管理员不进行过滤
         User user = userService.get(GaeaContext.getAdminUserId());
         if (!RoleEnum.ADMIN.getValue().equals(user.getRole())) {
             sql.append(" and teacher_id = ?");
             params.add(GaeaContext.getAdminUserId());
         }
-
         StringBuffer totalSql = new StringBuffer("select count(1) from (" + sql.toString() + ") a");
         Integer total = jdbcTemplate.queryForObject(totalSql.toString(), params.toArray(), Integer.class);
-
         int startIndex = (pageNo - 1) * pageSize;
         sql.append(" limit ?,?");
         params.add(startIndex);
@@ -81,7 +78,9 @@ public class ClassesServiceImpl implements ClassesService {
             Map<Integer, User> userMap = userService.getAllUserMap();
             for (Classes classes : classesList) {
                 classes.setProgress(classes.getProgress() == null ? 0 : classes.getProgress());
+                //根据教师标识查询对应的教师名称
                 classes.setTeacherName(classes.getTeacherId() == null || userMap.get(classes.getTeacherId()) == null ? "" : userMap.get(classes.getTeacherId()).getUserName());
+                //根据学生标识查询对应的学生姓名
                 classes.setMonitorName(classes.getMonitor() == null || userMap.get(classes.getMonitor()) == null ? "" : userMap.get(classes.getMonitor()).getUserName());
             }
         }
@@ -124,6 +123,12 @@ public class ClassesServiceImpl implements ClassesService {
         return tempClasses;
     }
 
+    /**
+     * 根据班级查询对应学生及签到情况
+     *
+     * @param classId
+     * @return
+     */
     @Override
     public List<StudentVo> findClassesStudent(Integer classId) {
         List<User> users = userRepository.findByClassId(classId);
@@ -143,6 +148,12 @@ public class ClassesServiceImpl implements ClassesService {
         return studentVos;
     }
 
+    /**
+     * 导出班级学生
+     *
+     * @param response
+     * @param classId
+     */
     @Override
     public void exportStudent(HttpServletResponse response, Integer classId) {
         List<UserExportVo> exportVos = new ArrayList<>();
@@ -164,6 +175,12 @@ public class ClassesServiceImpl implements ClassesService {
         exportExcelUtil.exportExcel(fileName, headers, exportVos, "yyyy-MM-dd HH:mm:ss", fileName, response, operationMap, valueMap);
     }
 
+    /**
+     * 导出班级签到学生信息
+     *
+     * @param response
+     * @param classId
+     */
     @Override
     public void exportSignStudent(HttpServletResponse response, Integer classId) {
         List<User> users = userRepository.findByClassId(classId);
