@@ -127,6 +127,9 @@
 					if (file.name.toLowerCase().indexOf("mp4") >= 0) {
 						item.chapter_type = 3;
 					}
+          if (file.name.toLowerCase().indexOf("pdf") >= 0) {
+          	item.chapter_type = 4;
+          }
 					item.chapter_file_path = file.url;
 				}
 			},

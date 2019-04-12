@@ -59,11 +59,18 @@
 			} = this.$route.params
 			return {
 				action: this.$store.state.host +`/v1/files/upload`,
-				accept: '.mp4,.doc,.docx,.ppt,.pptx,.pdf'
+				accept: '.mp4,.doc,.docx,.ppt,.pptx,.pdf',
+        loading:""
 			}
 		},
 		methods: {
 			beforeUpload(file) {
+        this.loading = this.$loading({
+        	lock: true,
+        	text: '上传中...',
+        	spinner: 'el-icon-loading',
+        	background: 'rgba(0, 0, 0, 0.7)'
+        });
 				if (this.isImg === 'img') {
 					const isImg = file.type === 'image/jpeg' ||
 						file.type === 'image/jpg' ||
@@ -72,11 +79,13 @@
 						file.type === 'image/bmp' ||
 						file.type === 'image/svg+xml';
 					if (!isImg) {
-						this.$notify.error('上传文件只能是 JPG, JPEG, PNG, GIF, BMP!')
+						this.$message.error('上传文件只能是 JPG, JPEG, PNG, GIF, BMP!')
+            this.loading.close();
 					}
 					const isLimitSize = file.size / 1024 / 1024 < 10
 					if (!isLimitSize) {
-						this.$notify.error('上传图片大小不能超过 10MB,请压缩后再传!')
+						this.$message.error('上传图片大小不能超过 10MB,请压缩后再传!')
+            this.loading.close();
 					}
 					return isImg && isLimitSize
 				}
@@ -84,38 +93,42 @@
 					const isImg = /\.mp4$/.test(file.name) || /\.doc$/.test(file.name) || /\.docx$/.test(file.name) ||
 						/\.ppt$/.test(file.name) || /\.pptx$/.test(file.name) || /\.pdf$/.test(file.name)
 					if (!isImg) {
-						this.$notify.error({
+						this.$message.error({
 							message: '上传文件只能是 mp4, doc, docx, ppt, pptx, pdf!'
 						});
+            this.loading.close();
 					}
 					const isLimitSize = file.size / 1024 / 1024 < 50
 					if (!isLimitSize) {
-						this.$notify.error('上传文件大小不能超过 50MB!')
+						this.$message.error('上传文件大小不能超过 50MB!')
+            this.loading.close();
 					}
 					return isImg && isLimitSize
 				}
 				if (this.isImg === 'vedio') {
 					const isImg = /\.mp4$/.test(file.name)
 					if (!isImg) {
-						this.$notify.error({
+						this.$message.error({
 							message: '请选择MP4视频'
 						});
+            this.loading.close();
 					}
 					const isLimitSize = file.size / 1024 / 1024 < 30
 					if (!isLimitSize) {
-						this.$notify.error('MP4视频大小不能超过 30MB!')
+						this.$message.error('MP4视频大小不能超过 30MB!')
+            this.loading.close();
 					}
 					return isImg && isLimitSize
 				}
 			},
 			handleSuccess(res, file) {
+        this.loading.close();
 				let tempImg = {};
 				tempImg.name = file.name;
 				tempImg.url = res;
 				if (this.limit === 2) {
 					this.fileList.splice(0, 1, tempImg)
 				}
-        console.log("success=",res)
 				this.$emit('change', res)
 			},
 			handleRemove(file, fileList) {

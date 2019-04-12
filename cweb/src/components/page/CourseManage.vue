@@ -311,6 +311,7 @@
 				const isLt2M = file.size / 1024 / 1024 < 4;
 				if (!isLt2M) {
 					this.$message.error('上传图片大小不能超过 4MB!');
+          this.loading.close();
 				}
 				return isLt2M;
 			},

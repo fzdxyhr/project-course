@@ -22,12 +22,13 @@
 											<i v-if="item.chapter_type === 1 " class="course-icon-doc"></i>
 											<i v-if="item.chapter_type === 2 " class="course-icon-ppt"></i>
 											<i v-if="item.chapter_type === 3 " class="course-icon-vedio"></i>
+                      <i v-if="item.chapter_type === 4 " class="course-icon-pdf"></i>
 											{{i+1}}-{{index+1}}&nbsp;&nbsp;{{item.chapter_name}}
 										</div>
 										<div class="chapter-content">
 											<span v-if="item.recent_study" style="color: #93999f;font-size: 12px;">最近学习</span>
-											<el-button style="border-radius: 0%;" v-if="!item.study" type="danger" @click="go2Start(item)" size="small">开始学习</el-button>
-											<el-button v-if="item.study" type="danger" size="small" @click="go2Start(item)">继续学习</el-button>
+											<el-button style="border-radius: 0%;" v-if="!item.study" type="danger" size="small">开始学习</el-button>
+											<el-button v-if="item.study" type="danger" size="small">继续学习</el-button>
 										</div>
 									</div>
 									<!-- <span class="getMore-articles-title" title="获取更多">
@@ -119,6 +120,10 @@
 				if (item.chapter_type === 3) {
 					type = 'vedio';
 				}
+        if (item.chapter_type === 4) {
+        	type = 'pdf';
+        }
+        console.log("aaaaaaaaaaaaaaaaaa")
 				this.$axios.put('/v1/courses/' + this.courseId + '/study?chapter_id=' + item.id).then((response) => {
 					if (response.status === 200) {
 						this.$router.push({

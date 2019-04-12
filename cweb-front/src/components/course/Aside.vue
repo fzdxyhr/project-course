@@ -69,6 +69,9 @@
 				if (firstChapter.chapter_type === 3) {
 					type = 'vedio';
 				}
+        if (firstChapter.chapter_type === 4) {
+        	type = 'pdf';
+        }
 				this.$axios.put('/v1/courses/' + this.courseId + '/study?chapter_id=' + firstChapter.id).then((response) => {
 					if (response.status === 200) {
 						this.$router.push({

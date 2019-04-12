@@ -4,13 +4,17 @@
 			<i @click="go2Course" style="cursor: pointer;padding: 10px;font-weight: 700;" class="el-icon-arrow-left"></i><span>{{chapterName}}</span>
 		</div>
 		<div v-if="resourseType == 'file'" class="left-content">
-			<iframe :src="`https://view.officeapps.live.com/op/view.aspx?src=`+filePath" width='100%' height='100%' frameborder='1'>
+			<iframe :src="`https://view.officeapps.live.com/op/view.aspx?src=`+filePath" width='100%' height='100%' frameborder='0'>
 			</iframe>
 		</div>
 		<div v-if="resourseType == 'vedio'" class="left-content">
 			<video height="100%" width="100%" :src="filePath" controls="controls" autoplay preload="auto">
 			</video>
 		</div>
+    <div v-if="resourseType == 'pdf'" class="left-content">
+    	<iframe :src="filePath" width='100%' height='100%' frameborder='0'>
+    	</iframe>
+    </div>
 		<!-- <div class="right-content">
 			1111111111111111
 		</div> -->
