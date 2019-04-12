@@ -253,7 +253,7 @@ public class CourseServiceImpl implements CourseService {
             return courseVos;
         }
         //获取课程学习最热前三条记录
-        StringBuffer sql = new StringBuffer("SELECT course_id,COUNT(student_id) student from s_course_student GROUP BY course_id ORDER BY student desc");
+        StringBuffer sql = new StringBuffer("SELECT course_id,COUNT(user_id) student from s_user_study_progress GROUP BY course_id ORDER BY student desc");
         List<Object> params = new ArrayList<>();
         sql.append(" limit ?,?");
         params.add(1);
