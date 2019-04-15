@@ -10,19 +10,25 @@ import signIndex from '@components/sign/index'
 import homework from '@components/homework/index'
 import testFrame from '@components/course/testFrame'
 import userInfo from '@components/user/index.vue'
+import test from '@components/front/index.vue'
 
 Vue.use(Router)
 
 export default new Router({
 	routes: [{
 			path: '/',
-      name:"index",
+			name: "index",
 			redirect: '/index'
 		},
 		{
 			path: '/login',
 			name: "login",
 			component: login,
+		},
+		{
+			path: '/test',
+			name: "test",
+			component: test,
 		},
 		{
 			path: '/index',
@@ -58,7 +64,7 @@ export default new Router({
 				path: 'homework',
 				name: "homework",
 				component: homework,
-			},{
+			}, {
 				path: 'userInfo',
 				name: "userInfo",
 				component: userInfo,

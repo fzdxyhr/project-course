@@ -256,7 +256,7 @@ public class CourseServiceImpl implements CourseService {
         StringBuffer sql = new StringBuffer("SELECT course_id,COUNT(user_id) student from s_user_study_progress GROUP BY course_id ORDER BY student desc");
         List<Object> params = new ArrayList<>();
         sql.append(" limit ?,?");
-        params.add(1);
+        params.add(0);
         params.add(3);
         List<CourseStudent> courseStudents = jdbcTemplate.query(sql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseStudent.class));
         if (CollectionUtils.isNotEmpty(courseStudents)) {
@@ -270,11 +270,22 @@ public class CourseServiceImpl implements CourseService {
                 }
             }
         }
+        Map<Integer, Integer> courseIdMap = new HashMap<>();
+        for (CourseVo courseVo : courseVos) {
+            courseIdMap.put(courseVo.getId(), courseVo.getId());
+        }
         //获取最新的三条课程信息
         StringBuffer newSql = new StringBuffer("select * from s_course order by create_time desc");
-        newSql.append(" limit ?,?");
-        List<CourseVo> courseVoList = jdbcTemplate.query(newSql.toString(), params.toArray(), new BeanPropertyRowMapper<>(CourseVo.class));
-        courseVos.addAll(courseVoList);
+        newSql.append(" limit 0,6");
+        List<CourseVo> courseVoList = jdbcTemplate.query(newSql.toString(), new Object[]{}, new BeanPropertyRowMapper<>(CourseVo.class));
+        if (CollectionUtils.isNotEmpty(courseVoList)) {
+            for (CourseVo courseVo : courseVoList) {
+                if (courseIdMap.containsKey(courseVo.getId())) {
+                    continue;
+                }
+                courseVos.add(courseVo);
+            }
+        }
         WhiteListCache.cache.put("coursesRecommend", courseVos);
         return courseVos;
     }
