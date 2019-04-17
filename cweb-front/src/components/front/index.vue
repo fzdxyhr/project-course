@@ -34,11 +34,15 @@
 			</div>
 		</div>
 		<div class="carousel-content">
-			<el-carousel trigger="click" height="600px">
+			<el-carousel trigger="click" height="600px" arrow="never">
 				<el-carousel-item v-for="item in imgList">
 					<img :src="item.url" height="600px" />
 				</el-carousel-item>
 			</el-carousel>
+			<div class="buttons">
+				<a class="btn" href="javascript:void(0);" onclick="videoPlay()">观看视频：搭搭云介绍-企业篇</a>
+				<a class="btn" href="/market" target="_blank">免费体验</a>
+			</div>
 		</div>
 		<div>
 			<h2 class="index-module-title">搭搭云是什么？</h2>
@@ -121,34 +125,32 @@
 		</div>
 		<div class="how-content">
 			<h2 class="index-module-title">搭搭云能做什么？</h2>
-			<div class="text">搭搭云帮助企业以零代码配置方式，低成本、快速地拥有专属于自己的个性化IT系统，包括：</div>
-			<div class="row-content">
-				<el-row :gutter="20">
-					<el-col :span="12">
-						<div class="image">
-							<img src="/static/img/front/4.png" alt="搭搭云是什么？">
-						</div>
-					</el-col>
-					<el-col :span="12">
-						<div class="text">
-							搭搭云是非常灵活的企业管理超级平台，企业只要一个云端账户就可以全面管理各种业务，如行政办公、客户、销售、采购、库存、人事、财务，甚至是制造业ERP等。软件功能允许用户修改，即改即用，手机APP免开发实时同步。
-							<br />
-							<p style="margin-top:20px">同时，搭搭云还是一个低代码PaaS平台，在服务器端、web前端和移动端，全面帮助开发人员大幅提高开发效率、降低开发成本。
-							</p>
-						</div>
-					</el-col>
-				</el-row>
-			</div>
+			<div class="text-title">搭搭云帮助企业以零代码配置方式，低成本、快速地拥有专属于自己的个性化IT系统，包括：</div>
+			<howContent></howContent>
 		</div>
+		<advantageContent></advantageContent>
+		<benefitContent></benefitContent>
+		<caseContent></caseContent>
+		<footerContent></footerContent>
 	</div>
 </template>
 
 <script>
 	import header from './header.vue'
+	import howContent from './howContent.vue'
+	import advantageContent from './advantageContent.vue'
+	import benefitContent from './benefitContent.vue'
+	import caseContent from './caseContent.vue'
+	import footerContent from './footerContent.vue'
 
 	export default {
 		components: {
-			header
+			header,
+			howContent,
+			advantageContent,
+			benefitContent,
+			caseContent,
+			footerContent
 		},
 		data() {
 			return {
@@ -170,6 +172,59 @@
 <style lang="scss">
 	.front-index {
 		width: 100%;
+
+		.carousel-content {
+			.buttons {
+				width: 1200px;
+				display: flex;
+				justify-content: flex-end;
+				position: absolute;
+				bottom: 40px;
+				left: 0;
+				right: 39px;
+				margin: auto;
+				line-height: normal;
+				font-size: 20px;
+				z-index: 100;
+
+				.btn {
+					height: 60px;
+					line-height: 40px;
+					display: flex;
+					justify-content: center;
+					align-items: center;
+					border: 1px solid #fff;
+					color: #fff;
+					margin-right: 25px;
+					border-radius: 30px;
+					font-size: 20px;
+					letter-spacing: 1px;
+					padding: 0 35px;
+				}
+			}
+
+			.btn {
+				display: inline-block;
+				padding: 6px 12px;
+				margin-bottom: 0;
+				font-size: 14px;
+				font-weight: 400;
+				line-height: 1.42857143;
+				text-align: center;
+				white-space: nowrap;
+				vertical-align: middle;
+				-ms-touch-action: manipulation;
+				touch-action: manipulation;
+				cursor: pointer;
+				-webkit-user-select: none;
+				-moz-user-select: none;
+				-ms-user-select: none;
+				user-select: none;
+				background-image: none;
+				border: 1px solid transparent;
+				border-radius: 4px;
+			}
+		}
 
 		.index-module-title {
 			display: flex;
@@ -262,7 +317,7 @@
 		}
 
 		.how-content {
-			.text {
+			.text-title {
 				font-size: 22px;
 				max-width: 1200px;
 				margin: 40px auto 0;
