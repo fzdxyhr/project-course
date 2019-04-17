@@ -35,8 +35,28 @@
 		</div>
 		<div class="carousel-content">
 			<el-carousel trigger="click" height="600px" arrow="never">
-				<el-carousel-item v-for="item in imgList">
+				<el-carousel-item v-for="(item,index) in imgList">
 					<img :src="item.url" height="600px" />
+					<div v-if="index == 0" class="main">
+						<h1>
+							<span style="margin-right: 190px;">在线灵活搭软件</span>
+							<br>
+							<span style="margin-left: 135px;">管理轻松又方便</span>
+						</h1>
+						<p style="right: 5px;top: 310px;">一个云端账户使用所有软件功能，数据互通，从此远离碎片化</p>
+					</div>
+					<div v-if="index == 1" class="main">
+						<h1 style="top: 215px;right: 80px;">边用边改,&nbsp;&nbsp;即改即用</h1>
+						<p style="top: 325px;right: 9px;">软件功能在线实时调整，移动端实时同步，随时应对业务变化</p>
+					</div>
+					<div v-if="index == 2" class="main">
+						<h1 style="top: 117px;right: 0;line-height: 80px;">移动端免开发<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实时同步PC端定制功能</h1>
+						<p style="top: 315px;right: 235px;">原生全动态解析技术，简洁流畅灵活</p>
+					</div>
+					<div v-if="index == 3" class="main">
+						<h1 style="top: 220px;right: 0;font-size: 55px;">让 SaaS 进入全面定制时代</h1>
+						<p style="top: 325px;right: 210px;">谁说 SaaS 就只能完成简单的工作呢？</p>
+					</div>
 				</el-carousel-item>
 			</el-carousel>
 			<div class="buttons">
@@ -174,6 +194,39 @@
 		width: 100%;
 
 		.carousel-content {
+			.el-carousel__button {
+				width: 148px;
+				border-radius: 15px;
+				height: 7px;
+				opacity:1;
+			}
+			.el-carousel__indicator.is-active button {
+				background: #5ec9ff;
+			}
+
+			.el-carousel__indicator {
+				padding: 30px 4px;
+			}
+
+			.main h1 {
+				color: #fff;
+				position: absolute;
+				right: 0;
+				top: 110px;
+				font-size: 50px;
+				font-weight: 300;
+				letter-spacing: 5px;
+				line-height: 80px;
+			}
+
+			.main p {
+				color: #fff;
+				position: absolute;
+				font-size: 19px;
+				letter-spacing: 2px;
+				font-weight: 200;
+			}
+
 			.buttons {
 				width: 1200px;
 				display: flex;
@@ -200,6 +253,11 @@
 					font-size: 20px;
 					letter-spacing: 1px;
 					padding: 0 35px;
+				}
+
+				.btn:hover {
+					background: #fff;
+					color: #24085f;
 				}
 			}
 
@@ -403,7 +461,7 @@
 			}
 
 			.el-menu--horizontal>.el-menu-item.is-active {
-				border-bottom: 3px solid #00b0ff;
+				border-bottom: 3px solid #00b0ff!important;
 				background: rgba(0, 0, 0, 0.1);
 				font-weight: bold;
 			}
@@ -419,6 +477,7 @@
 
 			.el-menu--horizontal>.el-menu-item {
 				border-bottom: 2px solid #333;
+				border-bottom-color: #333!important;
 			}
 		}
 	}
