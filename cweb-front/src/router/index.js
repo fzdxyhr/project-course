@@ -10,7 +10,7 @@ import signIndex from '@components/sign/index'
 import homework from '@components/homework/index'
 import testFrame from '@components/course/testFrame'
 import userInfo from '@components/user/index.vue'
-import test from '@components/front/index.vue'
+import test from '@components/front2/index.vue'
 
 Vue.use(Router)
 
