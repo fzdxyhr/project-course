@@ -50,13 +50,45 @@
 				</div>
 			</div>
 		</div>
+		<counterContent></counterContent>
+		<exploreContent></exploreContent>
+		<projectContent></projectContent>
+		<stepContent></stepContent>
+		<blogContent></blogContent>
+    <footerContent></footerContent>
 	</div>
 </template>
 
 <script>
+	import counterContent from './counterContent.vue'
+	import exploreContent from './exploreContent.vue'
+	import projectContent from './projectContent.vue'
+	import stepContent from './stepContent.vue'
+	import blogContent from './blogContent.vue'
+  import footerContent from './footerContent.vue'
+
+	export default {
+		components: {
+			counterContent,
+			exploreContent,
+			projectContent,
+			stepContent,
+			blogContent,
+      footerContent
+		},
+		data() {
+			return {
+
+			};
+		}
+	}
 </script>
 
 <style lang="scss">
+	body {
+		background: #F4F5F9;
+	}
+
 	.kmm-index {
 		.fh5co-nav {
 			position: absolute;
@@ -171,7 +203,6 @@
 			background-size: cover;
 			background-position: top center;
 			background-repeat: no-repeat;
-			position: relative;
 		}
 
 		.fh5co-cover {
@@ -242,7 +273,7 @@
 				line-height: 1.33333;
 				border-radius: 6px;
 			}
-			
+
 			.btn {
 				margin-right: 4px;
 				margin-bottom: 4px;
@@ -258,7 +289,7 @@
 				transition: 0.5s;
 				padding: 8px 20px;
 			}
-			
+
 
 			.container {
 				width: 1200px;
@@ -284,7 +315,7 @@
 				right: 0;
 				background: rgba(0, 0, 0, 0.4);
 			}
-			
+
 			.display-tc,
 			.display-t {
 				z-index: 90;

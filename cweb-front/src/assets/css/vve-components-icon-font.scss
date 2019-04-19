@@ -1,11 +1,11 @@
 @font-face {
   font-family: 'fastfont';  /* project id 1027702 */
-  src: url('//at.alicdn.com/t/font_1027702_c61chy7yl4.eot');
-  src: url('//at.alicdn.com/t/font_1027702_c61chy7yl4.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_1027702_c61chy7yl4.woff2') format('woff2'),
-  url('//at.alicdn.com/t/font_1027702_c61chy7yl4.woff') format('woff'),
-  url('//at.alicdn.com/t/font_1027702_c61chy7yl4.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_1027702_c61chy7yl4.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_1027702_yvsntmjuxsa.eot');
+  src: url('//at.alicdn.com/t/font_1027702_yvsntmjuxsa.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_1027702_yvsntmjuxsa.woff2') format('woff2'),
+  url('//at.alicdn.com/t/font_1027702_yvsntmjuxsa.woff') format('woff'),
+  url('//at.alicdn.com/t/font_1027702_yvsntmjuxsa.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_1027702_yvsntmjuxsa.svg#iconfont') format('svg');
 }
 
 i[class^="course-icon"], i[class*=" course-icon"] {
@@ -34,3 +34,7 @@ $icf-css-prefix: "course-icon";
 .#{$icf-css-prefix}-study-start:before { content: "\e64b"; }
 .#{$icf-css-prefix}-study-end:before { content: "\e60a"; }
 .#{$icf-css-prefix}-study-ing:before { content: "\e60f"; }
+.#{$icf-css-prefix}-play:before { content: "\e61a"; }
+.#{$icf-css-prefix}-user:before { content: "\e683"; }
+.#{$icf-css-prefix}-video2:before { content: "\e6c1"; }
+.#{$icf-css-prefix}-shield:before { content: "\e80b"; }
