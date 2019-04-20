@@ -1,29 +1,27 @@
 <template>
-	<div class="kmm-index">
+	<div class="header-index">
 		<div class="fh5co-nav">
 			<div class="top-menu">
 				<div class="container">
-					<div class="row">
-						<div class="col-xs-3">
-							<div id="fh5co-logo">
-								<a href="javaScript:">
-									<img src="/static/img/front2/javafast.png" style="width:45px;" />
-									快快码<span>.</span>
-								</a>
-							</div>
+					<div class="col-xs-3">
+						<div id="fh5co-logo">
+							<a href="index.html">
+								<img src="/static/img/front2/javafast.png" style="width:45px;" />
+								快快码<span>.</span>
+							</a>
 						</div>
-						<div class="col-xs-9 text-right menu-1">
-							<ul>
-								<li class="active"><a href="javaScript:">首页</a></li>
-								<!-- <li><a href="courses.html">产品介绍</a></li> -->
-								<li><a href="javaScript:" @click="go2Page('function')">功能套餐</a></li>
-								<li><a href="javaScript:" @click="go2Page('science')">技术特点</a></li>
-								<li><a href="javaScript:" @click="go2Page('question')">常见问题</a></li>
-								<li><a href="javaScript:" @click="go2Page('attach')">联系我们</a></li>
-								<li class="btn-cta"><a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1553294881&amp;site=qq&amp;menu=yes" target="_blank"><span>购买咨询</span></a></li>
-								<li class="btn-cta"><a href="http://demo.javafast.cn" target="_blank"><span>在线演示</span></a></li>
-							</ul>
-						</div>
+					</div>
+					<div class="col-xs-9 text-right menu-1">
+						<ul>
+							<li><a href="javaScript:" @click="go2Page('test')">首页</a></li>
+							<!-- <li><a href="courses.html">产品介绍</a></li> -->
+							<li :class="menu === 'function'?'active':''"><a href="javaScript:" @click="go2Page('function')">功能套餐</a></li>
+							<li :class="menu === 'science'?'active':''"><a href="javaScript:" @click="go2Page('science')">技术特点</a></li>
+							<li :class="menu === 'question'?'active':''"><a href="javaScript:" @click="go2Page('question')">常见问题</a></li>
+							<li :class="menu === 'attach'?'active':''"><a href="javaScript:" @click="go2Page('attach')">联系我们</a></li>
+							<li class="btn-cta"><a href="http://wpa.qq.com/msgrd?v=3&amp;uin=1553294881&amp;site=qq&amp;menu=yes" target="_blank"><span>购买咨询</span></a></li>
+							<li class="btn-cta"><a href="http://demo.javafast.cn" target="_blank"><span>在线演示</span></a></li>
+						</ul>
 					</div>
 				</div>
 			</div>
@@ -31,47 +29,46 @@
 		<div class="fh5co-cover" style="background-image:url(/static/img/front2/img_bg_1.jpg);background-position: 50% 0%;">
 			<div class="overlay"></div>
 			<div class="display-t">
-				<div class="display-tc animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
+				<div v-if="menu ==='function'" class="display-tc animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
 					<h1>Java智能快速开发平台</h1>
-					<p style="margin-top: 4%;">
-						<a class="btn btn-primary btn-lg btn-learn" href="http://wpa.qq.com/msgrd?v=3&amp;uin=1553294881&amp;site=qq&amp;menu=yes"
-						 target="_blank">
-							<i class="icon-qq"></i>
-							购买咨询
-						</a>
-						<a class="btn btn-primary btn-lg  btn-video" style="margin-left: 15px;" href="http://demo.javafast.cn" target="_blank">
-							<i class="icon-play"></i>
-							在线演示
-						</a>
+					<p style="margin-top: 3%;font-size: 20px;line-height: 1.5;">
+						<span style="color: white;">让软件开发极限提速</span>
+						<span class="detail-demo">查看演示</span>
+					</p>
+				</div>
+				<div v-if="menu ==='science'" class="display-tc animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
+					<h1>技术特点</h1>
+					<p style="margin-top: 3%;font-size: 20px;line-height: 1.5;">
+						<span style="color: white;">技术特点介绍</span>
+						<span class="detail-demo">联系客服</span>
+					</p>
+				</div>
+				<div v-if="menu ==='question'" class="display-tc animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
+					<h1>常见问题</h1>
+					<p style="margin-top: 3%;font-size: 20px;line-height: 1.5;">
+						<span style="color: white;">JavaFast咨询常见问题参考</span>
+						<span class="detail-demo">联系客服</span>
+					</p>
+				</div>
+				<div v-if="menu ==='attach'" class="display-tc animate-box fadeIn animated-fast" data-animate-effect="fadeIn">
+					<h1>联系我们</h1>
+					<p style="margin-top: 3%;font-size: 20px;line-height: 1.5;">
+						<span style="color: white;">让软件开发极限提速</span>
+						<span class="detail-demo">立即咨询</span>
 					</p>
 				</div>
 			</div>
 		</div>
-		<counterContent></counterContent>
-		<exploreContent></exploreContent>
-		<projectContent></projectContent>
-		<stepContent></stepContent>
-		<blogContent></blogContent>
-		<footerContent></footerContent>
 	</div>
 </template>
 
 <script>
-	import counterContent from './counterContent.vue'
-	import exploreContent from './exploreContent.vue'
-	import projectContent from './projectContent.vue'
-	import stepContent from './stepContent.vue'
-	import blogContent from './blogContent.vue'
-	import footerContent from './footerContent.vue'
-
 	export default {
-		components: {
-			counterContent,
-			exploreContent,
-			projectContent,
-			stepContent,
-			blogContent,
-			footerContent
+		props: {
+			menu: {
+				type: String,
+				default: "function"
+			},
 		},
 		data() {
 			return {
@@ -89,11 +86,7 @@
 </script>
 
 <style lang="scss">
-	body {
-		background: #F4F5F9;
-	}
-
-	.kmm-index {
+	.header-index {
 		.fh5co-nav {
 			position: absolute;
 			top: 0;
@@ -204,7 +197,7 @@
 		}
 
 		.fh5co-cover {
-			height: 800px;
+			height: 600px;
 			background-size: cover;
 			background-position: top center;
 			background-repeat: no-repeat;
@@ -237,57 +230,10 @@
 				border: none;
 			}
 
-			.display-tc .btn {
-				padding: 15px 30px;
-				color: #fff;
-				border: none !important;
-				font-size: 18px;
-			}
-
-			.display-tc .btn.btn-video {
-				background: rgba(9, 198, 171, 0.8);
-				border: none;
-			}
-
-			.btn.btn-lg {
-				padding: 18px 36px !important;
-			}
-
-			.btn-primary {
-				background: #EA9215;
-				color: #fff;
-				border: 2px solid #EA9215;
-			}
-
 			.display-tc {
 				display: table-cell !important;
 				vertical-align: middle;
 			}
-
-			.btn-lg,
-			.btn-group-lg>.btn {
-				padding: 10px 20px;
-				font-size: 18px;
-				line-height: 1.33333;
-				border-radius: 6px;
-			}
-
-			.btn {
-				margin-right: 4px;
-				margin-bottom: 4px;
-				font-family: "Work Sans", Arial, sans-serif;
-				font-size: 16px;
-				font-weight: 400;
-				-webkit-border-radius: 30px;
-				-moz-border-radius: 30px;
-				-ms-border-radius: 30px;
-				border-radius: 30px;
-				-webkit-transition: 0.5s;
-				-o-transition: 0.5s;
-				transition: 0.5s;
-				padding: 8px 20px;
-			}
-
 
 			.container {
 				width: 1200px;
@@ -325,7 +271,16 @@
 				width: 100%;
 				margin-top: 11%;
 			}
-		}
 
+			.detail-demo {
+				cursor: pointer;
+				color: #333333;
+			}
+
+			.detail-demo:hover {
+				color: #fc8080;
+				cursor: pointer;
+			}
+		}
 	}
 </style>

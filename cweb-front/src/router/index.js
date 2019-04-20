@@ -11,6 +11,10 @@ import homework from '@components/homework/index'
 import testFrame from '@components/course/testFrame'
 import userInfo from '@components/user/index.vue'
 import test from '@components/front2/index.vue'
+import functionIndex from '@components/front2/functionPackage.vue'
+import science from '@components/front2/science.vue'
+import attach from '@components/front2/attach.vue'
+import question from '@components/front2/question.vue'
 
 Vue.use(Router)
 
@@ -19,6 +23,26 @@ export default new Router({
 			path: '/',
 			name: "index",
 			redirect: '/index'
+		},
+		{
+			path: '/function',
+			name: "function",
+			component: functionIndex,
+		},
+		{
+			path: '/science',
+			name: "science",
+			component: science,
+		},
+		{
+			path: '/attach',
+			name: "attach",
+			component: attach,
+		},
+		{
+			path: '/question',
+			name: "question",
+			component: question,
 		},
 		{
 			path: '/login',
