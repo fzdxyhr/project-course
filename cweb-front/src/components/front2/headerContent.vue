@@ -274,7 +274,7 @@
 
 			.detail-demo {
 				cursor: pointer;
-				color: #333333;
+				color: #aba3a3;
 			}
 
 			.detail-demo:hover {
